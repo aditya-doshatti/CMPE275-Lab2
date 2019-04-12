@@ -57,8 +57,6 @@ public class Employee {
 	
 	public Employee(String name, String email, String title, Address address, Employer employer, Employee managerId) {
 		super();
-//		this.id = Employee.idCounter + 1;
-//		Employee.idCounter += 1;
 		this.name = name;
 		this.email = email;
 		this.title = title;

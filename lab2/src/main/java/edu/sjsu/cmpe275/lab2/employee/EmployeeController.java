@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.employer.*;
+import edu.sjsu.cmpe275.lab2.address.Address;
 import edu.sjsu.cmpe275.lab2.employee.*;
 
 @RestController
@@ -76,7 +77,46 @@ public class EmployeeController {
 	
 	@RequestMapping("/employee/{id}")
 	public ResponseEntity<Object> getEmployee(@PathVariable long id) {
-		return ResponseEntity.ok(employeeService.getEmployee(id));
+		Employee emp = employeeService.getEmployee(id);
+		EmployeeResponseMap emap = new EmployeeResponseMap();
+		emap.setId(emp.getId());
+		emap.setName(emp.getName());
+		emap.setEmail(emp.getEmail());
+		emap.setTitle(emp.getTitle());
+		EmployerResponseMap tempEmp = new EmployerResponseMap();
+		tempEmp.setName(emp.getEmployer().getName());
+		tempEmp.setId(emp.getEmployer().getId());
+		if (emp.getManager() != null) {
+			ManagerResponseMap TempMang = new ManagerResponseMap();
+			TempMang.setName(emp.getManager().getName());
+			TempMang.setId(emp.getManager().getId());
+			TempMang.setTitle(emp.getManager().getTitle());
+			emap.setManager(TempMang);
+		}
+		emap.setEmployer(tempEmp);
+		List<CollaboratorsMap> collab = new ArrayList<>();
+		for(Employee e: emp.getCollaborators()) {
+			CollaboratorsMap cb = new CollaboratorsMap();
+			cb.setId(e.getId());
+			cb.setName(e.getName());
+			cb.setTitle(e.getTitle());
+			EmployerResponseMap tempEmp1 = new EmployerResponseMap();
+			tempEmp1.setId(e.getEmployer().getId());
+			tempEmp1.setName(e.getEmployer().getName());
+			cb.setEmployer(tempEmp1);
+			collab.add(cb);
+		}
+		List<ManagerResponseMap> report = new ArrayList<>();
+		for(Employee e: emp.getReports()) {
+			ManagerResponseMap managerMap = new ManagerResponseMap();
+			managerMap.setId(e.getId());
+			managerMap.setName(e.getName());
+			managerMap.setTitle(e.getTitle());
+			report.add(managerMap);
+		}
+		emap.setCollaborators(collab);
+		emap.setReports(report);
+		return ResponseEntity.ok(emap);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/employee")
@@ -94,6 +134,7 @@ public class EmployeeController {
 		emp.setName(name);
 		emp.setEmail(email);
 		emp.setTitle(title);
+		emp.setAddress(new Address(street, city, state, zip));
 		emp.setEmployer(employerService.getEmployer(employerId));
 		emp.setManager(employeeService.getEmployee(managerId));
 		//emp.setEmployer();
