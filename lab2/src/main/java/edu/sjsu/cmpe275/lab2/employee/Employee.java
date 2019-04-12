@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -42,8 +43,8 @@ public class Employee {
     @JoinColumn(name = "MANAGER_ID")
     private Employee manager;
 	
-//	@OneToMany(mappedBy="manager")
-//    private List<Employee> reports;
+	@OneToMany(mappedBy="manager")
+    private List<Employee> reports;
 	
 	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name="Collaboration",
@@ -106,14 +107,14 @@ public class Employee {
 		this.manager = manager;
 	}
 
-//	public List<Employee> getReports() {
-//		return reports;
-//	}
-//
-//	public void setReports(Employee reports) {
-//		this.reports.add(reports);
-//	}
-//
+	public List<Employee> getReports() {
+		return reports;
+	}
+
+	public void setReports(Employee reports) {
+		this.reports.add(reports);
+	}
+
 	public List<Employee> getCollaborators() {
 		return collaborators;
 	}

@@ -58,7 +58,16 @@ public class EmployeeController {
 				cb.setEmployer(tempEmp1);
 				collab.add(cb);
 			}
+			List<ManagerResponseMap> report = new ArrayList<>();
+			for(Employee e: emp.getReports()) {
+				ManagerResponseMap managerMap = new ManagerResponseMap();
+				managerMap.setId(e.getId());
+				managerMap.setName(e.getName());
+				managerMap.setTitle(e.getTitle());
+				report.add(managerMap);
+			}
 			emap.setCollaborators(collab);
+			emap.setReports(report);
 			retVal.add(emap);
 		}
 		return ResponseEntity.ok(retVal);

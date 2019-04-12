@@ -14,6 +14,7 @@ public class EmployeeResponseMap {
     private EmployerResponseMap employer;
     private ManagerResponseMap manager;
 	private List<CollaboratorsMap> collaborators;
+	private List<ManagerResponseMap> reports;
     public Long getId() {
 		return id;
 	}
@@ -61,5 +62,11 @@ public class EmployeeResponseMap {
 	}
 	public void setCollaborators(List<CollaboratorsMap> collaborators) {
 		this.collaborators = collaborators;
+	}
+	public List<ManagerResponseMap> getReports() {
+		return reports;
+	}
+	public void setReports(List<ManagerResponseMap> reports) {
+		this.reports = reports;
 	}
 }
