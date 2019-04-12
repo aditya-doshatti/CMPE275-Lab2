@@ -1,4 +1,4 @@
-package edu.sjsu.cmpe275.lab2.employee;
+package edu.sjsu.cmpe275.lab2.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,9 +19,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.*;
-
-import edu.sjsu.cmpe275.lab2.address.Address;
-import edu.sjsu.cmpe275.lab2.employer.Employer;
 
 @Entity
 public class Employee {

@@ -1,4 +1,4 @@
-package edu.sjsu.cmpe275.lab2.employer;
+package edu.sjsu.cmpe275.lab2.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import edu.sjsu.cmpe275.lab2.address.Address;
 
 @Entity
 public class Employer {

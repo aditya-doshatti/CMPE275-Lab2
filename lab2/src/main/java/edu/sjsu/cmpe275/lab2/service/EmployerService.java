@@ -1,10 +1,13 @@
-package edu.sjsu.cmpe275.lab2.employer;
+package edu.sjsu.cmpe275.lab2.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import edu.sjsu.cmpe275.lab2.model.Employer;
+import edu.sjsu.cmpe275.lab2.repository.EmployerRepository;
 
 @Service
 public class EmployerService {

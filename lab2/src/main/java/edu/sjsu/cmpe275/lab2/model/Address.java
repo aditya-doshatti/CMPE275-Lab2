@@ -1,4 +1,4 @@
-package edu.sjsu.cmpe275.lab2.address;
+package edu.sjsu.cmpe275.lab2.model;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;

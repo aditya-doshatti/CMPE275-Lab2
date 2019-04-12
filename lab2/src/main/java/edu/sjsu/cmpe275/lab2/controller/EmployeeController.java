@@ -1,9 +1,10 @@
-package edu.sjsu.cmpe275.lab2.employee;
+package edu.sjsu.cmpe275.lab2.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sjsu.cmpe275.lab2.address.Address;
-import edu.sjsu.cmpe275.lab2.employer.*;
+import edu.sjsu.cmpe275.lab2.model.Address;
+import edu.sjsu.cmpe275.lab2.model.Employee;
+import edu.sjsu.cmpe275.lab2.service.EmployeeService;
+import edu.sjsu.cmpe275.lab2.service.EmployerService;
 
 @RestController
 public class EmployeeController {
@@ -36,7 +39,7 @@ public class EmployeeController {
 		return ResponseEntity.ok(emp);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/employee")
+	@RequestMapping(method=RequestMethod.POST, value="/employee", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> addEmployee(@RequestParam String name
             , @RequestParam String email
             , @RequestParam(required = false) String title
@@ -59,7 +62,7 @@ public class EmployeeController {
 		return ResponseEntity.ok(emp);
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/employee/{id}")
+	@RequestMapping(method=RequestMethod.PUT, value="/employee/{id}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> updateEmployee(@PathVariable long id, @RequestParam String name
             , @RequestParam String email
             , @RequestParam(required = false) String title
@@ -87,7 +90,7 @@ public class EmployeeController {
 		return ResponseEntity.ok(emp);
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value="/employee/{id}")
+	@RequestMapping(method=RequestMethod.DELETE, value="/employee/{id}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> deleteEmployer(@PathVariable long id) {
 		try {
 			employeeService.deleteEmployee(id);
@@ -104,7 +107,7 @@ public class EmployeeController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/collaborator/{id1}/{id2}")
+	@RequestMapping(method=RequestMethod.PUT, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> addCollaboration(@PathVariable long id1, @PathVariable long id2) {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);
@@ -125,7 +128,7 @@ public class EmployeeController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value="/collaborator/{id1}/{id2}")
+	@RequestMapping(method=RequestMethod.DELETE, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> removeCollaboration(@PathVariable long id1, @PathVariable long id2) {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);

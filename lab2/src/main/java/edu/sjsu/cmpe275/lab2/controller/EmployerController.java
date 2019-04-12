@@ -1,4 +1,4 @@
-package edu.sjsu.cmpe275.lab2.employer;
+package edu.sjsu.cmpe275.lab2.controller;
 
 import java.util.List;
 
@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sjsu.cmpe275.lab2.address.Address;
+import edu.sjsu.cmpe275.lab2.model.Address;
+import edu.sjsu.cmpe275.lab2.model.Employer;
+import edu.sjsu.cmpe275.lab2.service.EmployerService;
 
 @RestController
 public class EmployerController {
@@ -21,12 +23,12 @@ public class EmployerController {
 	private EmployerService employerService;
 	
 	
-	@RequestMapping("/employers")
+	@RequestMapping(value = "/employers", produces = { "application/json", "application/xml" })
 	public List<Employer> getAllEmployers() {
 		return employerService.getAllEmployers();
 	}
 	
-	@RequestMapping("/employers/{id}")
+	@RequestMapping(value = "/employers/{id}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Employer> getEmployer(@PathVariable long id) {
 		Employer emp =  employerService.getEmployer(id);
 		if(emp !=null)
@@ -35,7 +37,7 @@ public class EmployerController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);		
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/employers")
+	@RequestMapping(method=RequestMethod.POST, value="/employers", produces = { "application/json", "application/xml" })
 	public void addEmployer(@RequestParam String name
             , @RequestParam(required = false) String description
             , @RequestParam(required = false) String street
