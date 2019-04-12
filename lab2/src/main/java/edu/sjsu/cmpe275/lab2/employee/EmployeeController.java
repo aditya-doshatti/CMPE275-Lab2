@@ -7,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sjsu.cmpe275.lab2.employer.*;
 import edu.sjsu.cmpe275.lab2.address.Address;
 import edu.sjsu.cmpe275.lab2.employee.*;
+import edu.sjsu.cmpe275.lab2.employer.*;
 
 @RestController
 public class EmployeeController {
@@ -29,94 +28,14 @@ public class EmployeeController {
 	@RequestMapping("/employee")
 	public ResponseEntity<Object> getAllEmployees() {
 		List<Employee> emps = employeeService.getAllEmployees();
-		List <EmployeeResponseMap> retVal = new ArrayList<>();
-		for (Employee emp: emps) {
-			EmployeeResponseMap emap = new EmployeeResponseMap();
-			emap.setId(emp.getId());
-			emap.setName(emp.getName());
-			emap.setEmail(emp.getEmail());
-			emap.setTitle(emp.getTitle());
-			EmployerResponseMap tempEmp = new EmployerResponseMap();
-			tempEmp.setName(emp.getEmployer().getName());
-			tempEmp.setId(emp.getEmployer().getId());
-			if (emp.getManager() != null) {
-				ManagerResponseMap TempMang = new ManagerResponseMap();
-				TempMang.setName(emp.getManager().getName());
-				TempMang.setId(emp.getManager().getId());
-				TempMang.setTitle(emp.getManager().getTitle());
-				emap.setManager(TempMang);
-			}
-			emap.setEmployer(tempEmp);
-			List<CollaboratorsMap> collab = new ArrayList<>();
-			for(Employee e: emp.getCollaborators()) {
-				CollaboratorsMap cb = new CollaboratorsMap();
-				cb.setId(e.getId());
-				cb.setName(e.getName());
-				cb.setTitle(e.getTitle());
-				EmployerResponseMap tempEmp1 = new EmployerResponseMap();
-				tempEmp1.setId(e.getEmployer().getId());
-				tempEmp1.setName(e.getEmployer().getName());
-				cb.setEmployer(tempEmp1);
-				collab.add(cb);
-			}
-			List<ManagerResponseMap> report = new ArrayList<>();
-			for(Employee e: emp.getReports()) {
-				ManagerResponseMap managerMap = new ManagerResponseMap();
-				managerMap.setId(e.getId());
-				managerMap.setName(e.getName());
-				managerMap.setTitle(e.getTitle());
-				report.add(managerMap);
-			}
-			emap.setCollaborators(collab);
-			emap.setReports(report);
-			retVal.add(emap);
-		}
-		return ResponseEntity.ok(retVal);
+		return ResponseEntity.ok(emps);
 		//return emps;
 	}
 	
 	@RequestMapping("/employee/{id}")
 	public ResponseEntity<Object> getEmployee(@PathVariable long id) {
 		Employee emp = employeeService.getEmployee(id);
-		EmployeeResponseMap emap = new EmployeeResponseMap();
-		emap.setId(emp.getId());
-		emap.setName(emp.getName());
-		emap.setEmail(emp.getEmail());
-		emap.setTitle(emp.getTitle());
-		EmployerResponseMap tempEmp = new EmployerResponseMap();
-		tempEmp.setName(emp.getEmployer().getName());
-		tempEmp.setId(emp.getEmployer().getId());
-		if (emp.getManager() != null) {
-			ManagerResponseMap TempMang = new ManagerResponseMap();
-			TempMang.setName(emp.getManager().getName());
-			TempMang.setId(emp.getManager().getId());
-			TempMang.setTitle(emp.getManager().getTitle());
-			emap.setManager(TempMang);
-		}
-		emap.setEmployer(tempEmp);
-		List<CollaboratorsMap> collab = new ArrayList<>();
-		for(Employee e: emp.getCollaborators()) {
-			CollaboratorsMap cb = new CollaboratorsMap();
-			cb.setId(e.getId());
-			cb.setName(e.getName());
-			cb.setTitle(e.getTitle());
-			EmployerResponseMap tempEmp1 = new EmployerResponseMap();
-			tempEmp1.setId(e.getEmployer().getId());
-			tempEmp1.setName(e.getEmployer().getName());
-			cb.setEmployer(tempEmp1);
-			collab.add(cb);
-		}
-		List<ManagerResponseMap> report = new ArrayList<>();
-		for(Employee e: emp.getReports()) {
-			ManagerResponseMap managerMap = new ManagerResponseMap();
-			managerMap.setId(e.getId());
-			managerMap.setName(e.getName());
-			managerMap.setTitle(e.getTitle());
-			report.add(managerMap);
-		}
-		emap.setCollaborators(collab);
-		emap.setReports(report);
-		return ResponseEntity.ok(emap);
+		return ResponseEntity.ok(emp);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/employee")
@@ -191,8 +110,8 @@ public class EmployeeController {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);
 			Employee emp2 = employeeService.getEmployee(id2);
-			emp1.getPersons().add(emp2);
-			emp2.getPersons().add(emp1);
+			emp1.setCollaborators(emp2);
+			emp2.setCollaborators(emp1);
 			employeeService.addCollaboration(emp1, emp2);
 		}
 		catch(Exception e) {
@@ -212,8 +131,8 @@ public class EmployeeController {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);
 			Employee emp2 = employeeService.getEmployee(id2);
-			emp1.getPersons().remove(emp2);
-			emp2.getPersons().remove(emp1);
+			emp1.getCollaborators().remove(emp2);
+			emp2.getCollaborators().remove(emp1);
 			employeeService.addCollaboration(emp1, emp2);
 		}
 		catch(Exception e) {

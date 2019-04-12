@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.*;
@@ -25,7 +26,6 @@ import edu.sjsu.cmpe275.lab2.employer.Employer;
 @Entity
 public class Employee {
 	
-	private static long idCounter = 0;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="EMP_ID")
@@ -37,22 +37,23 @@ public class Employee {
     private Address address;
 
 	@ManyToOne
+	@JsonIgnoreProperties(value = {"address", "description"})
     private Employer employer;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MANAGER_ID")
+	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "employer", "email"})
     private Employee manager;
 	
 	@OneToMany(mappedBy="manager")
+	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "employer", "email"})
     private List<Employee> reports;
 	
 	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name="Collaboration",
-	joinColumns={@JoinColumn(name="EMP_ID")},
-	inverseJoinColumns={@JoinColumn(name="COLLAB_ID")})
-	private Set<Employee> persons = new HashSet<Employee>();
-	
-	@ManyToMany(mappedBy="persons", fetch = FetchType.LAZY)
+	joinColumns={@JoinColumn(name="COLLABORATION_FROM", referencedColumnName="EMP_ID")},
+	inverseJoinColumns={@JoinColumn(name="COLLABORATION_TO", referencedColumnName="EMP_ID")})
+	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "email"})
     private List<Employee> collaborators;
 	
 	public Employee(String name, String email, String title, Address address, Employer employer, Employee managerId) {
@@ -119,14 +120,6 @@ public class Employee {
 	
 	public void setCollaborators(Employee collaborators) {
 		this.collaborators.add(collaborators);
-	}
-
-	public Set<Employee> getPersons() {
-		return persons;
-	}
-
-	public void setPersons(Set<Employee> persons) {
-		this.persons = persons;
 	}
 
 	public String getTitle() {
