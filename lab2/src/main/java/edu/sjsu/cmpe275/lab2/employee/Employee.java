@@ -31,6 +31,7 @@ public class Employee {
 	@Column(name="EMP_ID")
 	private Long id;
     private String name;
+    @Column(unique=true)
     private String email;
     private String title;
     @Embedded

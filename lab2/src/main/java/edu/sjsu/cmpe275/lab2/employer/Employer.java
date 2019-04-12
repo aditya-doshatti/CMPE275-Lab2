@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.lab2.employer;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,12 +12,11 @@ import edu.sjsu.cmpe275.lab2.address.Address;
 
 @Entity
 public class Employer {
-	
-	private static Long EmployerCounter = (long) 0.0;
-	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@Column(unique=true)
     private String name;
     private String description;
     @Embedded

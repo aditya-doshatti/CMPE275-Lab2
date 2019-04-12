@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe275.lab2.employee;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.address.Address;
-import edu.sjsu.cmpe275.lab2.employee.*;
 import edu.sjsu.cmpe275.lab2.employer.*;
 
 @RestController
@@ -39,7 +37,7 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/employee")
-	public void addEmployee(@RequestParam String name
+	public ResponseEntity<Object> addEmployee(@RequestParam String name
             , @RequestParam String email
             , @RequestParam(required = false) String title
             , @RequestParam(required = false) String street
@@ -58,9 +56,10 @@ public class EmployeeController {
 		emp.setManager(employeeService.getEmployee(managerId));
 		//emp.setEmployer();
 		employeeService.addEmployee(emp);
+		return ResponseEntity.ok(emp);
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/employers/{employerId}/employee/{id}")
+	@RequestMapping(method=RequestMethod.PUT, value="/employee/{id}")
 	public ResponseEntity<Object> updateEmployee(@PathVariable long id, @RequestParam String name
             , @RequestParam String email
             , @RequestParam(required = false) String title
