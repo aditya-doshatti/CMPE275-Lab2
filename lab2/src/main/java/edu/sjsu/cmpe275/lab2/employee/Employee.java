@@ -32,7 +32,7 @@ public class Employee {
     private String name;
     private String email;
     private String title;
-    @ManyToOne
+    @Embedded
     private Address address;
 
 	@ManyToOne
@@ -45,13 +45,13 @@ public class Employee {
 //	@OneToMany(mappedBy="manager")
 //    private List<Employee> reports;
 	
-	@ManyToMany(cascade={CascadeType.ALL})
+	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name="Collaboration",
 	joinColumns={@JoinColumn(name="EMP_ID")},
 	inverseJoinColumns={@JoinColumn(name="COLLAB_ID")})
 	private Set<Employee> persons = new HashSet<Employee>();
 	
-	@ManyToMany(mappedBy="persons")
+	@ManyToMany(mappedBy="persons", fetch = FetchType.LAZY)
     private List<Employee> collaborators;
 	
 	public Employee(String name, String email, String title, Address address, Employer employer, Employee managerId) {

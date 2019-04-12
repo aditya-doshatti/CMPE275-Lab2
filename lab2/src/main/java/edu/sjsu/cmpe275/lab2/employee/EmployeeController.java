@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.lab2.employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sjsu.cmpe275.lab2.address.Address;
-import edu.sjsu.cmpe275.lab2.address.AddressService;
-import edu.sjsu.cmpe275.lab2.employer.Employer;
-import edu.sjsu.cmpe275.lab2.employer.EmployerService;
+import edu.sjsu.cmpe275.lab2.employer.*;
+import edu.sjsu.cmpe275.lab2.employee.*;
 
 @RestController
 public class EmployeeController {
@@ -23,19 +22,52 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
-	private AddressService addressService;
-	@Autowired
 	private EmployerService employerService;
 	
 	
 	@RequestMapping("/employee")
-	public List<Employee> getAllEmployees() {
-		return employeeService.getAllEmployees();
+	public ResponseEntity<Object> getAllEmployees() {
+		List<Employee> emps = employeeService.getAllEmployees();
+		List <EmployeeResponseMap> retVal = new ArrayList<>();
+		for (Employee emp: emps) {
+			EmployeeResponseMap emap = new EmployeeResponseMap();
+			emap.setId(emp.getId());
+			emap.setName(emp.getName());
+			emap.setEmail(emp.getEmail());
+			emap.setTitle(emp.getTitle());
+			EmployerResponseMap tempEmp = new EmployerResponseMap();
+			tempEmp.setName(emp.getEmployer().getName());
+			tempEmp.setId(emp.getEmployer().getId());
+			if (emp.getManager() != null) {
+				ManagerResponseMap TempMang = new ManagerResponseMap();
+				TempMang.setName(emp.getManager().getName());
+				TempMang.setId(emp.getManager().getId());
+				TempMang.setTitle(emp.getManager().getTitle());
+				emap.setManager(TempMang);
+			}
+			emap.setEmployer(tempEmp);
+			List<CollaboratorsMap> collab = new ArrayList<>();
+			for(Employee e: emp.getCollaborators()) {
+				CollaboratorsMap cb = new CollaboratorsMap();
+				cb.setId(e.getId());
+				cb.setName(e.getName());
+				cb.setTitle(e.getTitle());
+				EmployerResponseMap tempEmp1 = new EmployerResponseMap();
+				tempEmp1.setId(e.getEmployer().getId());
+				tempEmp1.setName(e.getEmployer().getName());
+				cb.setEmployer(tempEmp1);
+				collab.add(cb);
+			}
+			emap.setCollaborators(collab);
+			retVal.add(emap);
+		}
+		return ResponseEntity.ok(retVal);
+		//return emps;
 	}
 	
 	@RequestMapping("/employee/{id}")
-	public Employee getEmployee(@PathVariable long id) {
-		return employeeService.getEmployee(id);
+	public ResponseEntity<Object> getEmployee(@PathVariable long id) {
+		return ResponseEntity.ok(employeeService.getEmployee(id));
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/employee")
@@ -53,9 +85,6 @@ public class EmployeeController {
 		emp.setName(name);
 		emp.setEmail(email);
 		emp.setTitle(title);
-		if (street != null) {
-			emp.setAddress(addressService.getAddress(street));
-		}
 		emp.setEmployer(employerService.getEmployer(employerId));
 		emp.setManager(employeeService.getEmployee(managerId));
 		//emp.setEmployer();
@@ -82,9 +111,6 @@ public class EmployeeController {
 			emp.setEmail(email);
 		if (title != null)
 			emp.setTitle(title);
-		if (street != null) {
-			emp.setAddress(addressService.getAddress(street));
-		}
 		if (employerId != null)
 			emp.setEmployer(employerService.getEmployer(employerId));
 		if (managerId != null)
@@ -116,7 +142,7 @@ public class EmployeeController {
 			Employee emp1 = employeeService.getEmployee(id1);
 			Employee emp2 = employeeService.getEmployee(id2);
 			emp1.getPersons().add(emp2);
-			//emp2.getPersons().add(emp1);
+			emp2.getPersons().add(emp1);
 			employeeService.addCollaboration(emp1, emp2);
 		}
 		catch(Exception e) {
@@ -137,7 +163,7 @@ public class EmployeeController {
 			Employee emp1 = employeeService.getEmployee(id1);
 			Employee emp2 = employeeService.getEmployee(id2);
 			emp1.getPersons().remove(emp2);
-			//emp2.getPersons().add(emp1);
+			emp2.getPersons().remove(emp1);
 			employeeService.addCollaboration(emp1, emp2);
 		}
 		catch(Exception e) {

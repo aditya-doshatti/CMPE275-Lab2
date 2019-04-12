@@ -19,7 +19,7 @@ public class Employer {
 	private Long id;
     private String name;
     private String description;
-    @ManyToOne
+    @Embedded
     private Address address;
 	
 	public Employer() {

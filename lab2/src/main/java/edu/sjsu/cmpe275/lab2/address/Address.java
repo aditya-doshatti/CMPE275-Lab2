@@ -1,12 +1,12 @@
 package edu.sjsu.cmpe275.lab2.address;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+@Embeddable
 public class Address {
-	
-	@Id
+
     private String street; // e.g., 100 Main ST
     private String city;
     private String state;
