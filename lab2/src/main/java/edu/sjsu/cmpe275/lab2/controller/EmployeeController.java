@@ -28,13 +28,13 @@ public class EmployeeController {
 	private EmployerService employerService;
 	
 	
-	@RequestMapping("/employee")
+	@RequestMapping(value = "/employee",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> getAllEmployees() {
 		List<Employee> emps = employeeService.getAllEmployees();
 		return ResponseEntity.ok(emps);
 	}
 	
-	@RequestMapping("/employee/{id}")
+	@RequestMapping(value = "/employee/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> getEmployee(@PathVariable long id) {
 		Employee emp =  employeeService.getEmployee(id);
 		if (emp!=null)
@@ -124,6 +124,9 @@ public class EmployeeController {
 			else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			}
+		}
+		else {
+			emp.setManager(null);
 		}
 		employeeService.updateEmployee(emp);
 		return ResponseEntity.ok(emp);

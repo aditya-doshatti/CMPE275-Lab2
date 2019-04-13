@@ -51,7 +51,7 @@ public class EmployerController {
 		employerService.addEmployer(emp);
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/employers/{id}")
+	@RequestMapping(method=RequestMethod.PUT, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> updateEmployer(@PathVariable long id, @RequestParam String name
             , @RequestParam(required = false) String description
             , @RequestParam(required = false) String street
@@ -77,7 +77,7 @@ public class EmployerController {
 		return ResponseEntity.ok(emp);
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{id}")
+	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Void> deleteEmployer(@PathVariable long id) {
 		try {
 			employerService.deleteEmployer(id);	
