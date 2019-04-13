@@ -40,18 +40,18 @@ public class Employee {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MANAGER_ID")
-	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "employer", "email"})
+	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "employer", "email", "hibernateLazyInitializer", "handler"})
     private Employee manager;
 	
 	@OneToMany(mappedBy="manager")
-	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "employer", "email"})
+	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "employer", "email","hibernateLazyInitializer", "handler"})
     private List<Employee> reports;
 	
 	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name="Collaboration",
 	joinColumns={@JoinColumn(name="COLLABORATION_FROM", referencedColumnName="EMP_ID")},
 	inverseJoinColumns={@JoinColumn(name="COLLABORATION_TO", referencedColumnName="EMP_ID")})
-	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "email"})
+	@JsonIgnoreProperties(value = {"manager", "reports", "collaborators", "address", "email","hibernateLazyInitializer", "handler"})
     private List<Employee> collaborators;
 	
 	public Employee(String name, String email, String title, Address address, Employer employer, Employee managerId) {
