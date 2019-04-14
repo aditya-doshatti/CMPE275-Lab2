@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe275.lab2.model;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Embeddable
 public class Address {

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +37,7 @@ public class EmployerController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/employers", produces = { "application/json", "application/xml" })
-	public void addEmployer(@RequestParam String name
+	public ResponseEntity<Employer> addEmployer(@RequestParam String name
             , @RequestParam(required = false) String description
             , @RequestParam(required = false) String street
             , @RequestParam(required = false) String city
@@ -49,6 +48,7 @@ public class EmployerController {
 		emp.setDescription(description);
 		emp.setAddress(new Address(street, city, state, zip));
 		employerService.addEmployer(emp);
+		return ResponseEntity.ok(emp);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/employers/{id}",  produces = { "application/json", "application/xml" })

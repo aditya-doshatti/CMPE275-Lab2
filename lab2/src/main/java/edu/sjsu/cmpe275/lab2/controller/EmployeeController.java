@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +25,6 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 	@Autowired
 	private EmployerService employerService;
-	
 	
 	@RequestMapping(value = "/employee",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> getAllEmployees() {
@@ -118,6 +116,7 @@ public class EmployeeController {
 					emp.setManager(tempMang);
 				}
 				else {
+					System.out.println("This emp and and new mgr do not belong to diff employers");
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 				}
 			}
@@ -160,6 +159,7 @@ public class EmployeeController {
 		return ResponseEntity.ok().build();
 	}
 	
+	/*
 	@RequestMapping(method=RequestMethod.PUT, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> addCollaboration(@PathVariable long id1, @PathVariable long id2) {
 		try {
@@ -201,5 +201,5 @@ public class EmployeeController {
 		}
 		return ResponseEntity.ok().build();
 	}
-
+	*/
 }
