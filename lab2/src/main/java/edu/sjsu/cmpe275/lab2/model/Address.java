@@ -10,7 +10,13 @@ public class Address {
     private String state;
     private String zip;
 
-	
+	/**
+	 * Constructor
+	 * @param street Street name
+	 * @param city City name
+	 * @param state State name
+	 * @param zip Zip code
+	 */
 	public Address(String street, String city, String state, String zip) {
 		super();
 		this.street = street;
@@ -19,18 +25,34 @@ public class Address {
 		this.zip = zip;
 	}
 
+	/**
+	 * Returns street name
+	 * @return street name
+	 */
 	public String getStreet() {
 		return street;
 	}
 
+	/**
+	 * sets street name
+	 * @param street name
+	 */
 	public void setStreet(String street) {
 		this.street = street;
 	}
 
+	/**
+	 * Returns city name
+	 * @return city name
+	 */
 	public String getCity() {
 		return city;
 	}
 
+	/**
+	 * Sets city name
+	 * @param city name
+	 */
 	public void setCity(String city) {
 		this.city = city;
 	}

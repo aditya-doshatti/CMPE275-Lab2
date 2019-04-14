@@ -48,6 +48,10 @@ public class CollaboratorController {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);
 			Employee emp2 = employeeService.getEmployee(id2);
+			if(emp1 == null || emp2 == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			if(!emp1.getCollaborators().contains(emp2) || !emp2.getCollaborators().contains(emp1))
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			emp1.getCollaborators().remove(emp2);
 			emp2.getCollaborators().remove(emp1);
 			employeeService.addCollaboration(emp1, emp2);
@@ -59,7 +63,6 @@ public class CollaboratorController {
 			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			}
-			
 		}
 		return ResponseEntity.ok().build();
 	}

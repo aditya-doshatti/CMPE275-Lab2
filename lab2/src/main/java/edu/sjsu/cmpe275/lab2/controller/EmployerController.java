@@ -89,6 +89,9 @@ public class EmployerController {
 	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Void> deleteEmployer(@PathVariable long id) {
 		try {
+			if(employerService.getEmployer(id) == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			
 			List<Employee> list = employeeService.getAllEmployees();
 			boolean foundEmployee = false;
 			for(Employee e: list) {

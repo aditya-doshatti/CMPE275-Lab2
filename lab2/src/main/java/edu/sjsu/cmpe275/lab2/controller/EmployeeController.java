@@ -18,6 +18,10 @@ import edu.sjsu.cmpe275.lab2.model.Employer;
 import edu.sjsu.cmpe275.lab2.service.EmployeeService;
 import edu.sjsu.cmpe275.lab2.service.EmployerService;
 
+/**
+ * Class to handle /employee request-path
+ *
+ */
 @RestController
 public class EmployeeController {
 
@@ -100,7 +104,7 @@ public class EmployeeController {
 		if (title != null)
 			emp.setTitle(title);
 		if (employerId != null) {
-			if (emp.getEmployer().getId() != employerId) {
+			if (emp.getEmployer() != null && emp.getEmployer().getId() != employerId) {
 				Employee thisManager = emp.getManager();
 				List<Employee> thisReports = emp.getReports();
 				for (Employee e : thisReports) {
@@ -116,7 +120,6 @@ public class EmployeeController {
 					emp.setManager(tempMang);
 				}
 				else {
-					System.out.println("This emp and and new mgr do not belong to diff employers");
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 				}
 			}
@@ -135,6 +138,8 @@ public class EmployeeController {
 	@RequestMapping(method=RequestMethod.DELETE, value="/employee/{id}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> deleteEmployer(@PathVariable long id) {
 		try {
+			if(employeeService.getEmployee(id) == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			if (employeeService.getEmployee(id).getReports().size() > 0)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			Employee emp1 = employeeService.getEmployee(id);
@@ -146,6 +151,7 @@ public class EmployeeController {
 			emp1.getCollaborators().clear();
 			employeeService.updateEmployee(emp1);
 			employeeService.deleteEmployee(id);
+			return ResponseEntity.ok(emp1);
 		}
 		catch(Exception e) {
 			if (e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
