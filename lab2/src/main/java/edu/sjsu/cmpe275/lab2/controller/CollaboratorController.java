@@ -19,7 +19,7 @@ public class CollaboratorController {
 	private EmployeeService employeeService;
 	
 	@Transactional
-	@RequestMapping(method=RequestMethod.PUT, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.PUT, value="/collaborators/{id1}/{id2}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> addCollaboration(@PathVariable long id1, @PathVariable long id2) {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);
@@ -43,7 +43,7 @@ public class CollaboratorController {
 	}
 	
 	@Transactional
-	@RequestMapping(method=RequestMethod.DELETE, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.DELETE, value="/collaborators/{id1}/{id2}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> removeCollaboration(@PathVariable long id1, @PathVariable long id2) {
 		try {
 			Employee emp1 = employeeService.getEmployee(id1);

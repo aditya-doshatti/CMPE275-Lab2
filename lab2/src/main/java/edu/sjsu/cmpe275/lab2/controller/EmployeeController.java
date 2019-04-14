@@ -158,48 +158,4 @@ public class EmployeeController {
 		}
 		return ResponseEntity.ok().build();
 	}
-	
-	/*
-	@RequestMapping(method=RequestMethod.PUT, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<Object> addCollaboration(@PathVariable long id1, @PathVariable long id2) {
-		try {
-			Employee emp1 = employeeService.getEmployee(id1);
-			Employee emp2 = employeeService.getEmployee(id2);
-			emp1.setCollaborators(emp2);
-			emp2.setCollaborators(emp1);
-			employeeService.addCollaboration(emp1, emp2);
-		}
-		catch(Exception e) {
-			if (e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			}
-			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-			}
-			
-		}
-		return ResponseEntity.ok().build();
-	}
-	
-	@RequestMapping(method=RequestMethod.DELETE, value="/collaborator/{id1}/{id2}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<Object> removeCollaboration(@PathVariable long id1, @PathVariable long id2) {
-		try {
-			Employee emp1 = employeeService.getEmployee(id1);
-			Employee emp2 = employeeService.getEmployee(id2);
-			emp1.getCollaborators().remove(emp2);
-			emp2.getCollaborators().remove(emp1);
-			employeeService.addCollaboration(emp1, emp2);
-		}
-		catch(Exception e) {
-			if (e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			}
-			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-			}
-			
-		}
-		return ResponseEntity.ok().build();
-	}
-	*/
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.lab2.model.Address;
+import edu.sjsu.cmpe275.lab2.model.Employee;
 import edu.sjsu.cmpe275.lab2.model.Employer;
+import edu.sjsu.cmpe275.lab2.service.EmployeeService;
 import edu.sjsu.cmpe275.lab2.service.EmployerService;
 
 @RestController
@@ -20,6 +23,9 @@ public class EmployerController {
 
 	@Autowired
 	private EmployerService employerService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 	
 	
 	@RequestMapping(value = "/employers", produces = { "application/json", "application/xml" })
@@ -36,6 +42,7 @@ public class EmployerController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);		
 	}
 	
+	@Transactional
 	@RequestMapping(method=RequestMethod.POST, value="/employers", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Employer> addEmployer(@RequestParam String name
             , @RequestParam(required = false) String description
@@ -51,6 +58,7 @@ public class EmployerController {
 		return ResponseEntity.ok(emp);
 	}
 	
+	@Transactional
 	@RequestMapping(method=RequestMethod.PUT, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> updateEmployer(@PathVariable long id, @RequestParam String name
             , @RequestParam(required = false) String description
@@ -77,9 +85,22 @@ public class EmployerController {
 		return ResponseEntity.ok(emp);
 	}
 	
+	@Transactional
 	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Void> deleteEmployer(@PathVariable long id) {
 		try {
+			List<Employee> list = employeeService.getAllEmployees();
+			boolean foundEmployee = false;
+			for(Employee e: list) {
+				if(e.getEmployer().getId() == id) {
+					foundEmployee = true;
+					break;
+				}
+			}
+			
+			if(foundEmployee)
+				return ResponseEntity.badRequest().build();
+				
 			employerService.deleteEmployer(id);	
 		}
 		catch(Exception e) {
