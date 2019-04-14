@@ -115,6 +115,8 @@ public class Employee {
 	}
 	
 	public void setCollaborators(Employee collaborators) {
+		if(this.collaborators.contains(collaborators))
+			return;
 		this.collaborators.add(collaborators);
 	}
 
