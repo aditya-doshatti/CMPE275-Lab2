@@ -2,6 +2,9 @@ package edu.sjsu.cmpe275.lab2.model;
 
 import javax.persistence.Embeddable;
 
+/**
+ * Class for defining the structure of Address object
+ */
 @Embeddable
 public class Address {
 
@@ -57,22 +60,40 @@ public class Address {
 		this.city = city;
 	}
 
+	/**
+	 * Returns name of the state
+	 * @return
+	 */
 	public String getState() {
 		return state;
 	}
 
+	/**
+	 * function for setting the state 
+	 * @param state
+	 */
 	public void setState(String state) {
 		this.state = state;
 	}
 
+	/**
+	 * function for fetching ZIP code
+	 * @return
+	 */
 	public String getZip() {
 		return zip;
 	}
 
+	/**
+	 * function for setting the ZIP code
+	 * @param zip
+	 */
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
 
 	public Address() {
+		
 	}
+	
 }

@@ -24,18 +24,32 @@ import edu.sjsu.cmpe275.lab2.service.EmployerService;
  */
 @RestController
 public class EmployeeController {
-
+	/**
+	 * EmployeeService and EmployerService objects are autowired for implicit dependency injection 
+	 */
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
 	private EmployerService employerService;
 	
+	/**
+	 * This function is to handle the API call for getting information of all employees along with appropriate response code
+	 * @return ResponseEntity Object
+	 */
 	@RequestMapping(value = "/employee",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> getAllEmployees() {
 		List<Employee> emps = employeeService.getAllEmployees();
 		return ResponseEntity.ok(emps);
 	}
 	
+	/**
+	 * This function is to handle the API call for fetching information of a single employee
+	 * The function accepts the ID of the employee for whom the information needs to be fetched 
+	 * The employee information and a success response code of 200 is returned for valid input
+	 * A response code 400 is returned in case the employee doesn't exist
+	 * @param id
+	 * @return ResponseEntity 
+	 */
 	@RequestMapping(value = "/employee/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> getEmployee(@PathVariable long id) {
 		Employee emp =  employeeService.getEmployee(id);
@@ -45,6 +59,23 @@ public class EmployeeController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
 	}
 	
+	/**
+	 * This function is to handle the API call for adding an employee to the employee table.
+	 * The function accepts the below mentioned parameters which specify data for the fields in employee table.
+	 * The ID is not passed as a parameter as it is auto generated 
+	 * Name, employer ID, and email are cumpulsory, other parameters are not.
+	 * If the required paramters are missing a 400 is returned, otherwise a success code of 200 is returned.
+	 * @param name employee name
+	 * @param email employee email
+	 * @param title employee title
+	 * @param street employee street
+	 * @param city employee city
+	 * @param state employee state
+	 * @param zip employee zip
+	 * @param employerId employee employerId
+	 * @param managerId employee managerId
+	 * @return relevant response code
+	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.POST, value="/employee", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> addEmployee(@RequestParam String name
@@ -81,7 +112,21 @@ public class EmployeeController {
 		employeeService.addEmployee(emp);
 		return ResponseEntity.ok(emp);
 	}
-	
+
+	/**
+	 * This function is to handle the API call for updating the information of employee
+	 * @param id employee ID 
+	 * @param name employee name
+	 * @param email employee email
+	 * @param title employee title
+	 * @param street employee street
+	 * @param city employee city
+	 * @param state employee state
+	 * @param zip employee zip
+	 * @param employerId employee employerId
+	 * @param managerId employee managerId
+	 * @return relevant response code
+	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.PUT, value="/employee/{id}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> updateEmployee(@PathVariable long id, @RequestParam String name
@@ -134,9 +179,14 @@ public class EmployeeController {
 		return ResponseEntity.ok(emp);
 	}
 	
+	/**
+	 * This function is to handle the API call for deleting an employee 
+	 * @param id ID of the employee to be deleted is passed
+	 * @return the relevant response code is returned.
+	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.DELETE, value="/employee/{id}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<Object> deleteEmployer(@PathVariable long id) {
+	public ResponseEntity<Object> deleteEmployee(@PathVariable long id) {
 		try {
 			if(employeeService.getEmployee(id) == null)
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

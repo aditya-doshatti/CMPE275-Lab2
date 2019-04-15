@@ -18,6 +18,9 @@ import edu.sjsu.cmpe275.lab2.model.Employer;
 import edu.sjsu.cmpe275.lab2.service.EmployeeService;
 import edu.sjsu.cmpe275.lab2.service.EmployerService;
 
+/**
+ * Class  to handle the API  calls associated with employer 
+ */
 @RestController
 public class EmployerController {
 
@@ -28,11 +31,20 @@ public class EmployerController {
 	private EmployeeService employeeService;
 	
 	
+	/**
+	 * function to handle API call for fetching information of all employees
+	 * @return relevant response code is returned
+	 */
 	@RequestMapping(value = "/employers", produces = { "application/json", "application/xml" })
 	public List<Employer> getAllEmployers() {
 		return employerService.getAllEmployers();
 	}
 	
+	/**
+	 * This function handles the API call for fetching information a particular employer
+	 * @param id function accepts the employer id as its sole parameter
+	 * @return relevant response code is returned along with requested information
+	 */
 	@RequestMapping(value = "/employers/{id}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Employer> getEmployer(@PathVariable long id) {
 		Employer emp =  employerService.getEmployer(id);
@@ -42,6 +54,17 @@ public class EmployerController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);		
 	}
 	
+	/**
+	 * This function handles the API call to add an employer 
+	 * function takes below parameters for creating the employer object
+	 * @param name employer name
+	 * @param description employer description
+	 * @param street employer street
+	 * @param city employer city
+	 * @param state employer state
+	 * @param zip employer zip
+	 * @return appropriate response code is returned 
+	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.POST, value="/employers", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Employer> addEmployer(@RequestParam String name
@@ -58,6 +81,17 @@ public class EmployerController {
 		return ResponseEntity.ok(emp);
 	}
 	
+	/**
+	 * This function handles the API call to update employer information 
+	 * @param id employer id
+	 * @param name employer name
+	 * @param description employer description
+	 * @param street employer street
+	 * @param city employer city
+	 * @param state employer state
+	 * @param zip employer zip
+	 * @return appropriate response code is returned depending on success or failure
+	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.PUT, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Object> updateEmployer(@PathVariable long id, @RequestParam String name
@@ -85,6 +119,11 @@ public class EmployerController {
 		return ResponseEntity.ok(emp);
 	}
 	
+	/**
+	 * This function handles the API call to delete a specific employer 
+	 * @param id the function accepts the employer id as its sole parameter
+	 * @return relevant response code
+	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Void> deleteEmployer(@PathVariable long id) {
