@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import edu.sjsu.cmpe275.lab2.model.Employee;
 import edu.sjsu.cmpe275.lab2.service.EmployeeService;
 
@@ -55,7 +57,7 @@ public class CollaboratorController {
 			}
 			
 		}
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(new ObjectMapper().createObjectNode().put("msg", "Collaboration added"));
 	}
 	
 	/**
@@ -91,6 +93,6 @@ public class CollaboratorController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			}
 		}
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(new ObjectMapper().createObjectNode().put("msg", "Collaboration removed"));
 	}
 }

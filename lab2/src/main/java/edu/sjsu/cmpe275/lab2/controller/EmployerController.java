@@ -126,9 +126,10 @@ public class EmployerController {
 	 */
 	@Transactional
 	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{id}",  produces = { "application/json", "application/xml" })
-	public ResponseEntity<Void> deleteEmployer(@PathVariable long id) {
+	public ResponseEntity<Object> deleteEmployer(@PathVariable long id) {
+		Employer emp = employerService.getEmployer(id);
 		try {
-			if(employerService.getEmployer(id) == null)
+			if(emp == null)
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 			
 			List<Employee> list = employeeService.getAllEmployees();
@@ -154,7 +155,7 @@ public class EmployerController {
 			}
 			
 		}
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(emp);
 	}
 
 }
