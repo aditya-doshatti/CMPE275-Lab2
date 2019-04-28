@@ -157,5 +157,132 @@ public class EmployerController {
 		}
 		return ResponseEntity.ok(emp);
 	}
+	
+	/**
+	 * function to handle API call for fetching information of all employees
+	 * @return relevant response code is returned
+	 */
+	@RequestMapping(value = "/employer", produces = { "application/json", "application/xml" })
+	public List<Employer> getAllEmployer() {
+		return employerService.getAllEmployers();
+	}
+	
+	/**
+	 * This function handles the API call for fetching information a particular employer
+	 * @param id function accepts the employer id as its sole parameter
+	 * @return relevant response code is returned along with requested information
+	 */
+	@RequestMapping(value = "/employer/{id}", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Employer> getOneEmployer(@PathVariable long id) {
+		Employer emp =  employerService.getEmployer(id);
+		if(emp !=null)
+			return ResponseEntity.ok(emp);
+		else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);		
+	}
+	
+	/**
+	 * This function handles the API call to add an employer 
+	 * function takes below parameters for creating the employer object
+	 * @param name employer name
+	 * @param description employer description
+	 * @param street employer street
+	 * @param city employer city
+	 * @param state employer state
+	 * @param zip employer zip
+	 * @return appropriate response code is returned 
+	 */
+	@Transactional
+	@RequestMapping(method=RequestMethod.POST, value="/employer", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Employer> addOneEmployer(@RequestParam String name
+            , @RequestParam(required = false) String description
+            , @RequestParam(required = false) String street
+            , @RequestParam(required = false) String city
+            , @RequestParam(required = false) String state
+            , @RequestParam(required = false) String zip) {
+		Employer emp = new Employer();
+		emp.setName(name);
+		emp.setDescription(description);
+		emp.setAddress(new Address(street, city, state, zip));
+		employerService.addEmployer(emp);
+		return ResponseEntity.ok(emp);
+	}
+	
+	/**
+	 * This function handles the API call to update employer information 
+	 * @param id employer id
+	 * @param name employer name
+	 * @param description employer description
+	 * @param street employer street
+	 * @param city employer city
+	 * @param state employer state
+	 * @param zip employer zip
+	 * @return appropriate response code is returned depending on success or failure
+	 */
+	@Transactional
+	@RequestMapping(method=RequestMethod.PUT, value="/employer/{id}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Object> updateOneEmployer(@PathVariable long id, @RequestParam String name
+            , @RequestParam(required = false) String description
+            , @RequestParam(required = false) String street
+            , @RequestParam(required = false) String city
+            , @RequestParam(required = false) String state
+            , @RequestParam(required = false) String zip) {
+		Employer emp =  employerService.getEmployer(id);
+		if(emp ==null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		if(name != null)
+			emp.setName(name);
+		if(description != null)
+			emp.setDescription(description);
+		if(street != null)
+			emp.getAddress().setStreet(street);
+		if(city != null)
+			emp.getAddress().setStreet(city);
+		if(state != null)
+			emp.getAddress().setStreet(state);
+		if(zip != null)
+			emp.getAddress().setStreet(zip);
+		employerService.updateEmployer(emp, id);
+		return ResponseEntity.ok(emp);
+	}
+	
+	/**
+	 * This function handles the API call to delete a specific employer 
+	 * @param id the function accepts the employer id as its sole parameter
+	 * @return relevant response code
+	 */
+	@Transactional
+	@RequestMapping(method=RequestMethod.DELETE, value="/employer/{id}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Object> deleteOneEmployer(@PathVariable long id) {
+		Employer emp = employerService.getEmployer(id);
+		try {
+			if(emp == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			
+			List<Employee> list = employeeService.getAllEmployees();
+			boolean foundEmployee = false;
+			for(Employee e: list) {
+				if(e.getEmployer().getId() == id) {
+					foundEmployee = true;
+					break;
+				}
+			}
+			
+			if(foundEmployee)
+				return ResponseEntity.badRequest().build();
+				
+			employerService.deleteEmployer(id);	
+		}
+		catch(Exception e) {
+			if (e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			
+		}
+		return ResponseEntity.ok(emp);
+	}
 
 }
