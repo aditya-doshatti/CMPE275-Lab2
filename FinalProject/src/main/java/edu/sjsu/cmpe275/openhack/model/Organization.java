@@ -1,11 +1,14 @@
 package edu.sjsu.cmpe275.openhack.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -26,6 +29,9 @@ public class Organization {
 	private User owner;
 	private String description;
 	
+	@OneToMany
+	private List<User> orgUsers;
+
 	@Embedded
 	private Address address;
 	
@@ -88,5 +94,16 @@ public class Organization {
 		this.address = address;
 	}
 	
+	public List<User> getOrgUsers() {
+		return orgUsers;
+	}
+
+	public void setOrgUsers(List<User> orgUsers) {
+		this.orgUsers = orgUsers;
+	}
+	
+	public void addOrgUser(User user) {
+		this.orgUsers.add(user);
+	}
 	
 }
