@@ -13,6 +13,7 @@ const config = {
   };
 
 const fire=firebase.initializeApp(config);
+const url="http://localhost:8080"
 
 class Signup extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class Signup extends Component {
             this.setState({error_message:"Sceen Name should be atleast 3 characters"})
         }else{
         this.setState({error_message:" "})
-        axios.get(`http://localhost:8077/user/profile/sn/${e.target.value}`)
+        axios.get(url+`/user/profile/sn/${e.target.value}`)
         .then((response) => {
             if(response.status==201){
               this.setState({error_message:" Screen Name is available"})
@@ -102,13 +103,13 @@ class Signup extends Component {
             var user = firebase.auth().currentUser;
             user.sendEmailVerification().then(function() {
                 console.log("Email successfully sent")
-                    axios.post('http://localhost:8077/user/signup', data)
+                    axios.post(url+'/user/signup', data)
                     .then((response) => {
                         console.log("Response received",response)
                      });
             }).catch(function(error) {
                 console.log("error occured",error)
-                window.alert(error.code)
+                //window.alert(error.code)
             });
 
         })

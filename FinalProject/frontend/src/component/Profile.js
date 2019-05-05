@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+const url="http://localhost:8080"
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -40,7 +41,7 @@ class Profile extends Component {
             portraitUrl:this.state.portraitUrl
         })
         
-        axios.put(`http://localhost:8077/user/profile/${this.state.id}`,data)
+        axios.put(url+`/user/profile/${this.state.id}`,data)
         .then((response) => {
                 this.setState({
                     name:response.data.name,
@@ -57,7 +58,7 @@ class Profile extends Component {
     componentWillMount(){
         console.log("localStorage",localStorage.getItem('user'))
         const email=JSON.parse(localStorage.getItem('user'));
-        axios.get(`http://localhost:8077/user/profile/${email}`)
+        axios.get(url+`/user/profile/${email}`)
         .then((response) => {
                 this.setState({
                     id:response.data.id,

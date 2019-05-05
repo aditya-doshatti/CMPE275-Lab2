@@ -44,7 +44,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/user/profile/{id}",  produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.GET, value="/user/profile/{id:.+}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<User> getProfile(@PathVariable String id ) {
 		User user = userService.getProfile(id);
 		if  (user != null) {
