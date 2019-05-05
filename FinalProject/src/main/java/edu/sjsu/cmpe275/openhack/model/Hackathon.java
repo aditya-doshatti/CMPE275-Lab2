@@ -31,7 +31,7 @@ public class Hackathon {
 	private String name;
 	
 	@Column(nullable=false)
-	private String desc;
+	private String disc;
 	
 	@Column(nullable=false)
 	private Date startDate;
@@ -47,10 +47,10 @@ public class Hackathon {
 	
 	private int maxTeamSize;
 	
-	@ManyToMany(targetEntity=User.class, cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_judge",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
-		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
+		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
 	private List<User> judges;
 	
 	public Hackathon() { }
@@ -87,14 +87,14 @@ public class Hackathon {
 	 * @return the desc
 	 */
 	public String getDesc() {
-		return desc;
+		return disc;
 	}
 
 	/**
 	 * @param desc the desc to set
 	 */
 	public void setDesc(String desc) {
-		this.desc = desc;
+		this.disc = desc;
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class Hackathon {
 	public Hackathon(String name, String desc, Date startDate, Date endDate, int regFees, int minTeamSize,
 			int maxTeamSize) {
 		this.name = name;
-		this.desc = desc;
+		this.disc = desc;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.regFees = regFees;
@@ -223,7 +223,7 @@ public class Hackathon {
 	
 	public Hackathon(Hackathon obj) {
 		this.name = obj.name;
-		this.desc = obj.desc;
+		this.disc = obj.disc;
 		this.startDate = obj.startDate;
 		this.endDate = obj.endDate;
 		this.regFees = obj.regFees;
