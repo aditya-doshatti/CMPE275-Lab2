@@ -2,7 +2,6 @@ package edu.sjsu.cmpe275.openhack.controller;
 
 import java.util.List;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,7 +92,7 @@ public class OrganizationController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/join/{userId}",  produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/leave/{userId}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Organization> leaveOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
 		try {
 			Organization tempOrg = organizationService.getAnOrganizations(orgId);
