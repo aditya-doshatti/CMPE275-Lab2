@@ -38,7 +38,7 @@ class Login extends Component {
                   if(firebase.auth().currentUser.emailVerified==false){
                     this.props.history.push('/notAuthorized')
                   } else{
-                     window.localStorage.setItem('user', email);
+                     window.localStorage.setItem('user', JSON.stringify(email));
                      this.props.history.push('/profile');
                   }
             })
