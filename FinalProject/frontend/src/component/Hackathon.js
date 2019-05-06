@@ -7,6 +7,10 @@ class Hackathon extends Component {
         super(props);
         this.state = {  }
     }
+    onUploadClick(e) {
+        let files = e.target.files;
+        console.log("Data files", files);
+    }
     render() { 
         return ( 
             <div>
@@ -30,8 +34,8 @@ class Hackathon extends Component {
 
                                 </samp>
                                 <hr></hr>
-                                <a href="#" class="card-link">Upload Solution</a>
-                                <a href="#" class="card-link">Another link</a>
+                                {/* <a href="#" class="card-link">Upload Solution</a> */}
+                                <input type="file" name="file"  onChange={(e)=>this.onUploadClick(e)}></input>
                             </div>
                         </div>
                     </div>
