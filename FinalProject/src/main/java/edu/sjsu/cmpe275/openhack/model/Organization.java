@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 
  * @author adityadoshatti
@@ -29,10 +31,13 @@ public class Organization {
 	private String name;
 	
 	@OneToOne
+	@JsonIgnoreProperties(value = {"organization"})
 	private User owner;
+	
 	private String description;
 	
-	@OneToMany
+	@OneToMany(mappedBy="organization")
+	@JsonIgnoreProperties(value = {"organization"})
 	private List<User> orgUsers;
 
 	@Embedded

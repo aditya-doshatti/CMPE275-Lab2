@@ -6,6 +6,8 @@ import Profile from  './Profile';
 import NotAuthorized from  './NotAuthorized';
 import Hackathon from './Hackathon';
 import CreateHackathon from './createHackathon';
+import Organization from './Organization';
+
 
 
 
@@ -22,6 +24,7 @@ class Main extends Component {
                 <Route path="/notAuthorized" component={NotAuthorized}/>
                 <Route path="/hackathon" component={Hackathon}/>
                 <Route path="/create/hackathon" component={CreateHackathon} />
+                <Route path="/organization" component={Organization}/>
 
             </div>
         )

@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +24,14 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	
 	@RequestMapping(method=RequestMethod.GET,value = "/user/ping")
 	public String pingHandler() {
 		return "Hello! User here!";
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/users", produces = { "application/json", "application/xml" })
+	public List<User> getAllUsers() {
+		return userService.getAllUsers();
 	}
 	
 	@CrossOrigin(origins="*",allowedHeaders="*")
@@ -76,6 +82,7 @@ public class UserController {
 			tmpuser.setBusinessTitle(user.getBusinessTitle());
 			tmpuser.setAddress(user.getAddress());
 			tmpuser.setAboutMe(user.getAboutMe());
+			tmpuser.setOrganization(user.getOrganization());
 			userService.updateProfile(tmpuser);
 			return ResponseEntity.ok(tmpuser);
 		}
