@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-responsive-modal'
-import Organization from './Organization';
+//import Organization from './Organization';
 import Autosuggest from 'react-autosuggest';
 
 const url="http://localhost:8080"
