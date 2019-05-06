@@ -2,12 +2,16 @@ package edu.sjsu.cmpe275.openhack.service;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.repository.UserRepository;
 
@@ -22,6 +26,11 @@ public class UserService {
 	@Autowired
 	private EntityManager entityManager;
 	
+	public List<User> getAllUsers() {
+		List<User> userList = new ArrayList<User>();
+		userRepository.findAll().forEach(userList::add);
+		return userList;
+	}
 	
 	
 	public User getUser(Long id) {
