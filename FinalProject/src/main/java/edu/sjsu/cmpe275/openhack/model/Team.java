@@ -16,10 +16,24 @@ public class Team {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="TEAM_ID")
-	private long teamId;
+	private Long teamId;
 	
 	@Column(nullable=false, unique=true)
 	String name;
+	
+	public Team() { }
+	
+	public Team(String name) {
+		this.name = name;
+	}
+	
+	public Team(Team obj) {
+		this.name = obj.name;
+	}
+	
+	public Long getId() {
+		return teamId;
+	}
 
 	/**
 	 * @return the name
@@ -33,15 +47,5 @@ public class Team {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public Team() { }
-	
-	public Team(String name) {
-		this.name = name;
-	}
-	
-	public Team(Team obj) {
-		this.name = obj.name;
 	}
 }

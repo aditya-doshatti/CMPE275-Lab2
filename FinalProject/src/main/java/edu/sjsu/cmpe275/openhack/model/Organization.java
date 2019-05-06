@@ -1,6 +1,8 @@
 package edu.sjsu.cmpe275.openhack.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -23,6 +25,7 @@ public class Organization {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ORGANIZATION_ID")
 	private Long id;
 	@Column(unique=true)
 	private String name;
@@ -39,6 +42,9 @@ public class Organization {
 
 	@Embedded
 	private Address address;
+	
+	@OneToMany(mappedBy = "organization")
+	private Set<HackathonSponsorAssoc> hackathons = new HashSet<HackathonSponsorAssoc>();
 	
 	public Organization () {	
 	}
@@ -109,6 +115,20 @@ public class Organization {
 	
 	public void addOrgUser(User user) {
 		this.orgUsers.add(user);
+	}
+
+	/**
+	 * @return the hackathons
+	 */
+	public Set<HackathonSponsorAssoc> getHackathons() {
+		return hackathons;
+	}
+
+	/**
+	 * @param hackathons the hackathons to set
+	 */
+	public void setHackathons(Set<HackathonSponsorAssoc> hackathons) {
+		this.hackathons = hackathons;
 	}
 	
 }
