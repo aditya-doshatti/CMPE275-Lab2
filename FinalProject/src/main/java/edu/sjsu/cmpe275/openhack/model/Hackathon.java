@@ -2,7 +2,9 @@ package edu.sjsu.cmpe275.openhack.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * 
@@ -22,29 +27,36 @@ import javax.persistence.ManyToMany;
  */
 @Entity
 public class Hackathon {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="HACKATHON_ID")
-	private long id;
+	private Long id;
 	
 	@Column(unique=true, nullable=false)
 	private String name;
 	
 	@Column(nullable=false)
-	private String disc;
+	private String description;
 	
 	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
 	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
-	private int regFees;
+	@Column(nullable=false)
+	private Double regFees;
 	
+	@Column(nullable=false)
 	private boolean isOpen;
 	
+	@Column(nullable=false)
 	private int minTeamSize;
 	
+	@Column(nullable=false)
 	private int maxTeamSize;
 	
 	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
@@ -53,19 +65,36 @@ public class Hackathon {
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
 	private List<User> judges;
 	
+	@OneToMany(mappedBy = "hackathon")
+	private Set<HackathonSponsorAssoc> sponsors = new HashSet<HackathonSponsorAssoc>();
+	
+	/**
+	 * @return the sponsors
+	 */
+	public Set<HackathonSponsorAssoc> getSponsors() {
+		return sponsors;
+	}
+
+	/**
+	 * @param sponsors the sponsors to set
+	 */
+	public void setSponsors(Set<HackathonSponsorAssoc> sponsors) {
+		this.sponsors = sponsors;
+	}
+
 	public Hackathon() { }
 
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -86,15 +115,15 @@ public class Hackathon {
 	/**
 	 * @return the desc
 	 */
-	public String getDesc() {
-		return disc;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
 	 * @param desc the desc to set
 	 */
-	public void setDesc(String desc) {
-		this.disc = desc;
+	public void setDescription(String desc) {
+		this.description = desc;
 	}
 
 	/**
@@ -128,14 +157,14 @@ public class Hackathon {
 	/**
 	 * @return the regFees
 	 */
-	public int getRegFees() {
+	public Double getRegFees() {
 		return regFees;
 	}
 
 	/**
 	 * @param regFees the regFees to set
 	 */
-	public void setRegFees(int regFees) {
+	public void setRegFees(Double regFees) {
 		this.regFees = regFees;
 	}
 
@@ -184,15 +213,19 @@ public class Hackathon {
 	/**
 	 * @return the judges
 	 */
-	public List<User> getJudges() {
-		return judges;
-	}
+	/*
+	 * public List<User> getJudges() { return judges; }
+	 */
 
 	/**
 	 * @param judges the judges to set
 	 */
 	public void setJudges(List<User> judges) {
 		this.judges = judges;
+	}
+	
+	public List<User> getJudges() {
+		return this.judges;
 	}
 	
 	public void addJudge(User judge) {
@@ -210,10 +243,11 @@ public class Hackathon {
 	 * @param minTeamSize
 	 * @param maxTeamSize
 	 */
-	public Hackathon(String name, String desc, Date startDate, Date endDate, int regFees, int minTeamSize,
+	public Hackathon(String name, String desc, Date startDate, Date endDate, Double regFees, int minTeamSize,
 			int maxTeamSize) {
+		super();
 		this.name = name;
-		this.disc = desc;
+		this.description = desc;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.regFees = regFees;
@@ -222,13 +256,16 @@ public class Hackathon {
 	}
 	
 	public Hackathon(Hackathon obj) {
+		super();
 		this.name = obj.name;
-		this.disc = obj.disc;
+		this.description = obj.description;
 		this.startDate = obj.startDate;
 		this.endDate = obj.endDate;
 		this.regFees = obj.regFees;
 		this.minTeamSize = obj.minTeamSize;
 		this.maxTeamSize = obj.maxTeamSize;
 	}
+
+	
 	
 }
