@@ -20,7 +20,16 @@ class Hackathon extends Component {
                                 <h6 class="card-subtitle mb-2 text-muted">2 Sum Problem</h6>
                                 <p class="card-text">Given an array of integers, return indices of the two numbers such that they add up to a specific target.</p>
                                 <p class="card-text">You may assume that each input would have exactly one solution, and you may not use the same element twice.</p>
-                                
+                                <hr></hr>
+                                <samp>
+                                    <h6><b>Example</b></h6>
+                                    <h6>Input</h6>
+                                    nums = [2, 7, 11, 15], target = 9 <br></br><br></br>
+                                    <h6>Output</h6>
+                                    [0, 1]
+
+                                </samp>
+                                <hr></hr>
                                 <a href="#" class="card-link">Upload Solution</a>
                                 <a href="#" class="card-link">Another link</a>
                             </div>
