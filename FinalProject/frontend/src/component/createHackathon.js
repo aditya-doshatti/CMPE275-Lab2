@@ -1,11 +1,66 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import "../css/createHackathon.css"
 
+const url="http://localhost:8080"
 class CreateHackathon extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = { 
+            inputHackathonName:'',
+            inputStartTime:'',
+            inputendTime:'',
+            inputDescription:'',
+            inputfee:0,
+            inputJudgeOne:'',
+            inputJudgeTwo:'',
+            inputMaxSize:0,
+            inputMinSize:0,
+            inputSponsor:'',
+            inputSponsorDiscount:0
+         }
+         this.setField=this.setField.bind(this);
+         this.submitForm=this.submitForm.bind(this);
     }
+
+    setField(e){
+        let target=e.target
+        let name=target.name;
+        this.setState({
+            [name]:target.value    
+        });
+        console.log("set field for hackathon event")
+    }
+
+    submitForm(e){
+        e.preventDefault();
+
+        const id=this.state.id
+
+        const data=({
+            "name": this.state.inputHackathonName,
+            "description": this.state.inputDescription,
+            "startDate": this.state.inputStartTime,
+            "endDate": this.state.inputendTime,
+            "regFees": this.state.inputfee,
+            "isOpen":0,
+            "minTeamSize":this.state.inputMaxSize,
+            "maxTeamSize": this.state.inputMinSize,
+        })
+        
+        axios.post(url+'/hackathon',data)
+        .then((response) => {
+                // this.setState({
+                //     name:response.data.name,
+                //     aboutMe:response.data.aboutMe,
+                //     address:response.data.address,
+                //     businessTitle:response.data.businessTitle,
+                //     portraitUrl:response.data.portraitUrl
+                // })
+                console.log(response);
+        });
+    }
+
     render() { 
         return ( 
         <div>
@@ -18,13 +73,14 @@ class CreateHackathon extends Component {
             </div>
             <br></br>
             <br></br>
-            <form>
+            <form onSubmit={this.submitForm}>
                 <div class="form-row">
                     <div class="form-group col-md-3 input-labels" id="hackathonNameLabel">
                     <label for="inputHackathonName">Hackathon Name</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="text" class="form-control hackInputs" id="inputHackathonName" placeholder="Hackathon Name" ></input>
+                    <input type="text" class="form-control hackInputs" name="inputHackathonName" id="inputHackathonName" placeholder="Hackathon Name"
+                    onChange={this.setField} ></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -32,7 +88,7 @@ class CreateHackathon extends Component {
                     <label for="inputStartTime">Hackathon Name</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="date" class="form-control hackInputs" id="inputStartTime" placeholder="Time"></input>
+                    <input type="date" class="form-control hackInputs" id="inputStartTime" name="inputStartTime" placeholder="Time" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -40,7 +96,7 @@ class CreateHackathon extends Component {
                     <label for="inputendTime">Hackathon Name</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="date" class="form-control hackInputs" id="inputendTime" placeholder="Time"></input>
+                    <input type="date" class="form-control hackInputs" id="inputendTime" name="inputendTime" placeholder="Time" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -48,15 +104,15 @@ class CreateHackathon extends Component {
                     <label for="inputDescription">Hackathon Name</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <textarea class="form-control" id="inputDescription" rows="3"></textarea>
+                    <textarea class="form-control" id="inputDescription" name="inputDescription" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-3 input-labels" id="feeLabel">
-                    <label for="inputfee">Hackathon Name</label>                
+                    <label for="inputfee">Participation Fee</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="number" class="form-control hack-inputs" id="inputfee" placeholder="participation fee"></input>
+                    <input type="number" class="form-control hack-inputs" id="inputfee" name="inputfee" placeholder="participation fee"></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -64,7 +120,7 @@ class CreateHackathon extends Component {
                     <label for="inputJudgeOne">First Judge</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="email" class="form-control hack-inputs" id="inputJudgeOne" placeholder="email id of judge"></input>
+                    <input type="email" class="form-control hack-inputs" id="inputJudgeOne" name="inputJudgeOne" placeholder="email id of judge"></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -72,7 +128,7 @@ class CreateHackathon extends Component {
                     <label for="inputJudgeTwo">Second Judge</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="email" class="form-control hack-inputs" id="inputJudgeTwo" placeholder="email id of judge"></input>
+                    <input type="email" class="form-control hack-inputs" id="inputJudgeTwo" name="inputJudgeTwo" placeholder="email id of judge"></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -80,7 +136,7 @@ class CreateHackathon extends Component {
                     <label for="inputMaxSize">Maximum team size</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="number" class="form-control hack-inputs" id="inputMaxSize" placeholder="max"></input>
+                    <input type="number" class="form-control hack-inputs" id="inputMaxSize" name="inputMaxSize" placeholder="max"></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -88,7 +144,7 @@ class CreateHackathon extends Component {
                     <label for="inputMinSize">Minimum team size</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="number" class="form-control hack-inputs" id="inputMinSize" placeholder="min"></input>
+                    <input type="number" class="form-control hack-inputs" id="inputMinSize" name="inputMinSize" placeholder="min"></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -96,7 +152,13 @@ class CreateHackathon extends Component {
                     <label for="inputSponsor">Sponsor Organization</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="text" class="form-control hack-inputs" id="inputSponsor" placeholder="Sponsor"></input>
+                    <select class="form-control" id="inputSponsor" name="inputSponsor" multiple>
+                        <option>Google</option>
+                        <option>Facebook</option>
+                        <option>Atlassian</option>
+                        <option>LinkedIn</option>
+                        <option>Github</option>
+                    </select>
                     </div>
                 </div>
                 <div class="form-row">
@@ -104,9 +166,11 @@ class CreateHackathon extends Component {
                     <label for="inputSponsorDiscount">Sponsor Discount</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="text" class="form-control hack-inputs" id="inputSponsorDiscount" placeholder="Discount"></input>
+                    <input type="text" class="form-control hack-inputs" id="inputSponsorDiscount" name="inputSponsorDiscount" placeholder="Discount"></input>
                     </div>
                 </div>
+
+                <button className="btn btn-primary">Create Hackathon</button>
             </form>
             
         </div> 
