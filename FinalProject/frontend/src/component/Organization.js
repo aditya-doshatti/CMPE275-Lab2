@@ -41,7 +41,7 @@ class Organization extends Component {
 
     render() { 
         const items = this.state.orgUsers.map((item, key) =>
-        <span className="text-info font-weight-bold">{item.name}</span>
+        <span className="text-info font-weight-bold">{item.name}<br></br></span> 
         );
         return ( 
             <div>

@@ -69,6 +69,7 @@ class CreateHackathon extends Component {
         this.setState({
             [name]:target.value    
         });
+        console.log(target.value)
         console.log("set field for hackathon event")
     }
 

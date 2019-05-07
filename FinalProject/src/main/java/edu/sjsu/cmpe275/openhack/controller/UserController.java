@@ -34,6 +34,17 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/user/{id}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<User> getProfile(@PathVariable Long id ) {
+		User user = userService.getUser(id);
+		if  (user != null) {
+			return ResponseEntity.ok(user);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+	
 	@CrossOrigin(origins="*",allowedHeaders="*")
 	@RequestMapping(method=RequestMethod.POST, value="/user/signup",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<User> addUser(@RequestBody User user) {
@@ -110,7 +121,4 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
-	
-	
-
 }
