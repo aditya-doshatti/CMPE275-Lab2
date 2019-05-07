@@ -32,19 +32,20 @@ public class Organization {
 	private String name;
 	
 	@OneToOne
-	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private User owner;
 	
 	private String description;
 	
 	@OneToMany
-	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private Set<User> orgUsers;
 	
 	@OneToMany
-	@JsonIgnoreProperties(value = {"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private Set<User> pendingApprovals;
 
 	@Embedded

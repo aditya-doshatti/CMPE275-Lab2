@@ -105,6 +105,25 @@ public class OrganizationController {
 		}
 	}
 	
+	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/reject/{userId}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Organization> rejectJoinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
+		try {
+			Organization tempOrg = organizationService.getAnOrganizations(orgId);
+			Set<User> pendingList = tempOrg.getPendingApprovals();
+			User currUser = userService.getUser(userId);
+			pendingList.remove(currUser);
+			tempOrg.setPendingApprovals(pendingList);
+			organizationService.updateOrganization(tempOrg);
+			return ResponseEntity.ok(tempOrg);
+		}
+		catch(Exception e) {
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
 	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/join/{userId}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<Organization> requestJoinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
 		try {

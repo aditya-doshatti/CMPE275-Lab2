@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 const url="http://localhost:8080"
 
@@ -18,10 +19,15 @@ class ApproveRequests extends Component {
         .then((response) => {
             console.log(response)
         });
+        swal("Approved the join request","User added to the organization","success")
     }
 
     handleReject = (id) => {
-
+        axios.put(url+`/organization/${this.state.orgId}/reject/${id}`)
+        .then((response) => {
+            console.log(response)
+        });
+        swal("Rejected the join request","User not added to the organization","success")
     }
 
     componentWillMount(){
@@ -47,10 +53,10 @@ class ApproveRequests extends Component {
     render() { 
         var items
         if(this.state.pendingApprovals!=null) {
-        items = this.state.pendingApprovals.map((item, key) => <div>
-        <span className="text-info font-weight-bold">{item.name}</span>
-        <button onClick={()=>this.handleApprove(item.id)} className='btn-lg ml-3 col-lg-7 pull-right btn-link'>Approve</button>
-        <button onClick={()=>this.handleReject(item.id)} className='btn-lg ml-3 col-lg-7 pull-right btn-link'>Reject</button>
+        items = this.state.pendingApprovals.map((item, key) => <div className="row text-center mt-4 ml-5">
+            <span className="text-info pull-right font-weight-bold">{item.name}</span>
+            <button onClick={()=>this.handleApprove(item.id)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Approve</button>
+            <button onClick={()=>this.handleReject(item.id)} className="mb-4 ml-5 btn btn-submit bg-danger text-white btn-lg ">Reject</button>
         </div>
         );
         }

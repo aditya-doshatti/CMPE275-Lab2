@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-responsive-modal'
 import { Link } from 'react-router-dom'
-//import Organization from './Organization';
 import Autosuggest from 'react-autosuggest';
+var swal = require('sweetalert')
 
 const url="http://localhost:8080"
 class Profile extends Component {
@@ -174,6 +174,7 @@ class Profile extends Component {
         );
 
         this.onCloseCreateModal(e);
+        swal("Created Organization","You are member of this organization","success")
     }
 
     leaveOrganizationEvent(e){
@@ -185,6 +186,7 @@ class Profile extends Component {
         });
 
         this.onCloseLeaveModal(e);
+        swal("Left Organization","You are no more member of any organization","success")
 
     }
 
@@ -205,6 +207,7 @@ class Profile extends Component {
         });
 
         this.onCloseJoinModal(e);
+        swal("Join organization request sent to owner","Once approved organization will be visible in your profile","success")
 
     }
 
@@ -247,7 +250,6 @@ class Profile extends Component {
             orgaName =  <div className="btn-lg ml-3 col-lg-7 pull-right" disabled>Not part of any organization</div> //<input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value='Use the buttons below' disabled/>
         }
         else {
-            //orgaName =  <Link className="btn-lg ml-3 col-lg-7 pull-right" to="/organization">{this.state.organization.name} </Link>
             orgaName = <div className='btn-lg ml-3 col-lg-7 pull-right btn-link' onClick={this.goToOrg}>{this.state.organization.name}</div>
         }
         const { value, suggestions } = this.state;

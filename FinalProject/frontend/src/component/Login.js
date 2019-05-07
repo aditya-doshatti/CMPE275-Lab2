@@ -51,7 +51,7 @@ class Login extends Component {
                           //window.alert(error.code)
                       });
 
-                     this.props.history.push('/profile');
+                     this.props.history.push('/dashboard');
                   }
             })
             .catch((error) => {
