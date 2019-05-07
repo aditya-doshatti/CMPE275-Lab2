@@ -1,11 +1,8 @@
 package edu.sjsu.cmpe275.openhack.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -53,33 +53,82 @@ public class Hackathon {
 	@Column(nullable=false)
 	private boolean isOpen;
 	
+	/**
+	 * @return the admin
+	 */
+	public User getAdmin() {
+		return admin;
+	}
+
+	/**
+	 * @param admin the admin to set
+	 */
+	public void setAdmin(User admin) {
+		this.admin = admin;
+	}
+
 	@Column(nullable=false)
 	private int minTeamSize;
 	
 	@Column(nullable=false)
 	private int maxTeamSize;
 	
+	@Column(nullable=true)
+	private Double discount;
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="USER_ID")
+	User admin;
+	
+	/**
+	 * @return the discount
+	 */
+	public Double getDiscount() {
+		return discount;
+	}
+
+	/**
+	 * @param discount the discount to set
+	 */
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+
+	// Many to many relationship 'Hackathon-Judges' between "Hackathon" and "User"
 	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_judge",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
-	private List<User> judges;
+	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+			"judgesHackathons", "organization", "teams", "hibernateLazyInitializer", "handler"})
+	private Set<User> judges = new HashSet<User>();
 	
+	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
+	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@JoinTable(name="hackathon_sponsor",
+		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
+		inverseJoinColumns={@JoinColumn(name="ORGANIZATION_ID", referencedColumnName="ORGANIZATION_ID")})
+	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
+	private Set<Organization> sponsors = new HashSet<Organization>();
+	
+	// Hackathon-Teams mapping
 	@OneToMany(mappedBy = "hackathon")
-	private Set<HackathonSponsorAssoc> sponsors = new HashSet<HackathonSponsorAssoc>();
-	
-	/**
-	 * @return the sponsors
-	 */
-	public Set<HackathonSponsorAssoc> getSponsors() {
+	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
+	private Set<HackathonTeamAssoc> teams = new HashSet<HackathonTeamAssoc>();
+
+	public Set<Organization> getSponsors() {
 		return sponsors;
 	}
 
 	/**
 	 * @param sponsors the sponsors to set
 	 */
-	public void setSponsors(Set<HackathonSponsorAssoc> sponsors) {
+	public void setSponsors(Set<Organization> sponsors) {
 		this.sponsors = sponsors;
+	}
+	
+	public void addSponsors(Organization org) {
+		this.sponsors.add(org);
 	}
 
 	public Hackathon() { }
@@ -211,26 +260,19 @@ public class Hackathon {
 	}
 
 	/**
-	 * @return the judges
-	 */
-	/*
-	 * public List<User> getJudges() { return judges; }
-	 */
-
-	/**
 	 * @param judges the judges to set
 	 */
-	public void setJudges(List<User> judges) {
+	public void setJudges(Set<User> judges) {
 		this.judges = judges;
 	}
 	
-	public List<User> getJudges() {
+	public Set<User> getJudges() {
 		return this.judges;
 	}
 	
 	public void addJudge(User judge) {
 		if(judges == null)
-			judges = new ArrayList<User>();
+			judges = new HashSet<User>();
 		judges.add(judge);
 	}
 
@@ -244,7 +286,7 @@ public class Hackathon {
 	 * @param maxTeamSize
 	 */
 	public Hackathon(String name, String desc, Date startDate, Date endDate, Double regFees, int minTeamSize,
-			int maxTeamSize) {
+			int maxTeamSize, Double discount) {
 		super();
 		this.name = name;
 		this.description = desc;
@@ -253,6 +295,7 @@ public class Hackathon {
 		this.regFees = regFees;
 		this.minTeamSize = minTeamSize;
 		this.maxTeamSize = maxTeamSize;
+		this.discount = discount;
 	}
 	
 	public Hackathon(Hackathon obj) {
@@ -264,8 +307,20 @@ public class Hackathon {
 		this.regFees = obj.regFees;
 		this.minTeamSize = obj.minTeamSize;
 		this.maxTeamSize = obj.maxTeamSize;
+		this.discount = obj.discount;
 	}
 
-	
-	
+	/**
+	 * @return the teams
+	 */
+	public Set<HackathonTeamAssoc> getTeams() {
+		return teams;
+	}
+
+	/**
+	 * @param teams the teams to set
+	 */
+	public void setTeams(Set<HackathonTeamAssoc> teams) {
+		this.teams = teams;
+	}
 }

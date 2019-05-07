@@ -26,6 +26,10 @@ public class TeamService {
 		return teamList;
 	}
 	
+	public Team getTeamById(Long id) {
+		return teamRepository.findOne(id);
+	}
+	
 	public void addTeam(Team t) {
 		teamRepository.save(t);
 	}

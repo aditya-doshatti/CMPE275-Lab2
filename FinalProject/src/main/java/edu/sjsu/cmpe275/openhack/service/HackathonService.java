@@ -3,6 +3,9 @@ package edu.sjsu.cmpe275.openhack.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,9 @@ public class HackathonService {
 
 	@Autowired
 	private HackathonRepository hackathonRepository;
+	
+	@Autowired
+	private EntityManager entityManager;
 	
 	/**
 	 * Fetches all hackathons
@@ -47,21 +53,11 @@ public class HackathonService {
 	public void deleteHackathonById(Long id) {
 		hackathonRepository.delete(id);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Hackathon> getAllFutureOngoingHAckathons() {
+		Query query = entityManager.createQuery("from Hackathon where curdate() between startDate AND endDate");
+	    return  (List<Hackathon>) query.getResultList();
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
