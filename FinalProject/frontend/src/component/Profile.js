@@ -34,30 +34,37 @@ class Profile extends Component {
          this.submitEvent=this.submitEvent.bind(this);
          this.submitCreateOrgEvent=this.submitCreateOrgEvent.bind(this);
          this.leaveOrganizationEvent=this.leaveOrganizationEvent.bind(this);
+         this.joinOrganizationEvent=this.joinOrganizationEvent.bind(this);
          this.getSuggestions=this.getSuggestions.bind(this)
     }
 
-    onOpenCreateModal = () => {
+    onOpenCreateModal = (e) => {
+        e.preventDefault();
         this.setState({ openCreate: true });
       };
     
-    onCloseCreateModal = () => {
-    this.setState({ openCreate: false });
+    onCloseCreateModal = (e) => {
+        e.preventDefault();
+        this.setState({ openCreate: false });
     };
 
-    onOpenLeaveModal = () => {
+    onOpenLeaveModal = (e) => {
+        e.preventDefault();
         this.setState({ openLeave: true });
       };
     
-    onCloseLeaveModal = () => {
+    onCloseLeaveModal = (e) => {
+        e.preventDefault();
         this.setState({ openLeave: false });
     };
 
-    onOpenJoinModal = () => {
+    onOpenJoinModal = (e) => {
+        e.preventDefault();
         this.setState({ openJoin: true });
       };
     
-    onCloseJoinModal = () => {
+    onCloseJoinModal = (e) => {
+        e.preventDefault();
         this.setState({ openJoin: false });
     };
 
@@ -83,8 +90,8 @@ class Profile extends Component {
         const inputValue = value.trim().toLowerCase();
         const inputLength = inputValue.length;
       
-        return inputLength === 0 ? [] : this.state.organizations.filter(lang =>
-          lang.name.toLowerCase().slice(0, inputLength) === inputValue
+        return inputLength === 0 ? [] : this.state.organizations.filter(org =>
+          org.name.toLowerCase().slice(0, inputLength) === inputValue
         );
       };
       
@@ -164,6 +171,8 @@ class Profile extends Component {
                 console.log(response.data);
             }
         );
+
+        this.onCloseCreateModal(e);
     }
 
     leaveOrganizationEvent(e){
@@ -173,6 +182,40 @@ class Profile extends Component {
         .then((response) => {
                 console.log(response.data);
         });
+
+        this.onCloseLeaveModal(e);
+
+    }
+
+    joinOrganizationEvent(e){
+        e.preventDefault();
+
+        const inputValue = this.state.value.trim().toLowerCase();
+        const inputLength = inputValue.length;
+      
+        const currVal = inputLength === 0 ? [] : this.state.organizations.filter(org =>
+          org.name.toLowerCase().slice(0, inputLength) === inputValue
+        );
+        console.log(currVal)
+
+        axios.put(url+`/organization/${currVal[0].id}/join/${this.state.id}`)
+        .then((response) => {
+            const data=({
+                id:this.state.id,
+                email:this.state.email,
+                name:this.state.name,
+                aboutMe:this.state.aboutMe,
+                address:this.state.address,
+                businessTitle:this.state.businessTitle,
+                portraitUrl:this.state.portraitUrl,
+                organization:response.data
+            });
+            axios.put(url+`/user/profile/${this.state.id}`,data)
+            .then();
+            console.log(response.data);
+        });
+
+        this.onCloseJoinModal(e);
 
     }
 
@@ -202,9 +245,16 @@ class Profile extends Component {
         });
     }
     render() { 
+        var orgaName
+        if (this.state.organization == null) {
+            orgaName =  <input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value='Use the buttons below' disabled/>
+        }
+        else {
+            orgaName =  <input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value={this.state.organization.name} disabled/>
+        }
         const { value, suggestions } = this.state;
         const inputProps = {
-            placeholder: 'Type a org name',
+            placeholder: 'Type an organization name',
             value,
             onChange: this.onChangeValue
           };
@@ -213,7 +263,6 @@ class Profile extends Component {
             <div className="row">
                 <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light" >
                     <form onSubmit={this.submitEvent}>
-
                         <h3 className="text-left mt-4 ">Profile Information</h3>
                         <hr></hr>   
                         <div className="mt-4 mr-5"   >
@@ -250,22 +299,27 @@ class Profile extends Component {
                          <span className="text-info font-weight-bold">Address</span>
                             <input type="text" className="btn-lg ml-3 col-lg-7 pull-right" onChange={this.handleEvent} placeholder={this.state.address} name="address" id="address" defaultValue={this.state.address} />
                         </div><br></br>
+
+                        <div className="mt-4 mr-5 mb-4"  >
+                         <span className="text-info font-weight-bold">Organization</span>
+                            {orgaName}
+                        </div><br></br>
+                        <div className="row text-center mt-4 ml-5">
+                            <button className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenCreateModal}>
+                                Create organization
+                            </button>
+                            <button className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenJoinModal}>
+                                Join organization
+                            </button>
+                            <button className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenLeaveModal}>
+                                Leave organization
+                            </button>
+                        </div>
                     
                     <div className="row text-center mt-4 ml-5">
                          <button type="submit" className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg ">Save Changes</button>
                     </div>
                     </form>
-                    <div>
-                        <button onClick={this.onOpenCreateModal}>
-                            Create organization
-                        </button>
-                        <button onClick={this.onOpenJoinModal}>
-                            Join organization
-                        </button>
-                        <button onClick={this.onOpenLeaveModal}>
-                            Leave organization
-                        </button>
-                    </div>
                 </div>
                 <Modal open={this.state.openCreate} onClose={this.onCloseCreateModal} focusTrapped>
                 <h2>Create a new Organization</h2>
@@ -302,13 +356,15 @@ class Profile extends Component {
                 </Modal>
 
                 <Modal open={this.state.openJoin} onClose={this.onCloseJoinModal} focusTrapped>
-                <Autosuggest 
-                    suggestions={suggestions}
-                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                    getSuggestionValue={this.getSuggestionValue}
-                    renderSuggestion={this.renderSuggestion}
-                    inputProps={inputProps} />
+                    <h2>Select Orgnization</h2>
+                    <Autosuggest 
+                        suggestions={suggestions}
+                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                        getSuggestionValue={this.getSuggestionValue}
+                        renderSuggestion={this.renderSuggestion}
+                        inputProps={inputProps} />
+                    <button onClick={this.joinOrganizationEvent} className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg "> Yes </button>
                 </Modal>
 
 

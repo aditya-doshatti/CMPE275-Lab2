@@ -31,13 +31,13 @@ public class Organization {
 	private String name;
 	
 	@OneToOne
-	@JsonIgnoreProperties(value = {"organization"})
+	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
 	private User owner;
 	
 	private String description;
 	
-	@OneToMany(mappedBy="organization")
-	@JsonIgnoreProperties(value = {"organization"})
+	@OneToMany
+	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
 	private List<User> orgUsers;
 
 	@Embedded

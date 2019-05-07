@@ -50,6 +50,7 @@ public class User {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORGANIZATION_ID")
+	
 	private Organization organization;
 	
 	public User() {

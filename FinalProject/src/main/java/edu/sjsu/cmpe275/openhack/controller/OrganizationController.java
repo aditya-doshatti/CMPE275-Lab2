@@ -82,6 +82,7 @@ public class OrganizationController {
 			List<edu.sjsu.cmpe275.openhack.model.User> tempList = tempOrg.getOrgUsers();
 			tempList.add(userService.getUser(userId));
 			tempOrg.setOrgUsers(tempList);
+			organizationService.updateOrganization(tempOrg);
 			return ResponseEntity.ok(tempOrg);
 		}
 		catch(Exception e) {
@@ -99,6 +100,7 @@ public class OrganizationController {
 			List<edu.sjsu.cmpe275.openhack.model.User> tempList = tempOrg.getOrgUsers();
 			tempList.remove(userService.getUser(userId));
 			tempOrg.setOrgUsers(tempList);
+			organizationService.updateOrganization(tempOrg);
 			return ResponseEntity.ok(tempOrg);
 		}
 		catch(Exception e) {
