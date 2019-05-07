@@ -47,5 +47,12 @@ public class OrganizationService {
 		organizationRepository.save(org);
 	}
 	
+	/**
+	 * update organization
+	 * @param org
+	 */
+	public void updateOrganization(Organization org) {
+		organizationRepository.save(org);
+	}
 
 }

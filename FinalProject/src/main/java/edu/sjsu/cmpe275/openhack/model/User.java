@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * 
@@ -47,9 +46,18 @@ public class User {
 	@Column(name="address")
 	private String address;
 	
+	@Column(name="isVerified")
+	@org.hibernate.annotations.ColumnDefault("false")
+	private String isVerified;
+	
+	@Column(name="role")
+//	@org.hibernate.annotations.ColumnDefault("hacker")
+	private String role;
+	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORGANIZATION_ID")
+	
 	private Organization organization;
 	
 	public User() {
@@ -61,6 +69,7 @@ public class User {
 		this.screenName=user.screenName;
 		this.name = user.name;
 		this.email=user.email;
+		this.isVerified="false";
 		this.password=user.password;
 		this.aboutMe=user.aboutMe;
 		this.businessTitle=user.businessTitle;
@@ -86,6 +95,23 @@ public class User {
 
 	public String getName() {
 		return name;
+	}
+
+	
+	public String getIsVerified() {
+		return isVerified;
+	}
+
+	public void setIsVerified(String isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public void setName(String name) {
