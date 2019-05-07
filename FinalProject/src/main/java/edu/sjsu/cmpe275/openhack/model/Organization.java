@@ -41,11 +41,11 @@ public class Organization {
 	@OneToMany
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
-	private List<User> orgUsers;
+	private Set<User> orgUsers;
 	
 	@OneToMany
-	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
-	private List<User> pendingApprovals;
+	@JsonIgnoreProperties(value = {"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+	private Set<User> pendingApprovals;
 
 	@Embedded
 	private Address address;
@@ -114,11 +114,11 @@ public class Organization {
 		this.address = address;
 	}
 	
-	public List<User> getOrgUsers() {
+	public Set<User> getOrgUsers() {
 		return orgUsers;
 	}
 
-	public void setOrgUsers(List<User> orgUsers) {
+	public void setOrgUsers(Set<User> orgUsers) {
 		this.orgUsers = orgUsers;
 	}
 	
@@ -126,11 +126,11 @@ public class Organization {
 		this.orgUsers.add(user);
 	}
 
-	public List<User> getPendingApprovals() {
+	public Set<User> getPendingApprovals() {
 		return pendingApprovals;
 	}
 
-	public void setPendingApprovals(List<User> pendingApprovals) {
+	public void setPendingApprovals(Set<User> pendingApprovals) {
 		this.pendingApprovals = pendingApprovals;
 	}
 

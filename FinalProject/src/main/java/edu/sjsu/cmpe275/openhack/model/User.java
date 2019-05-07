@@ -71,6 +71,9 @@ public class User {
 	@JsonIgnoreProperties(value = {"team", "user", "hibernateLazyInitializer", "handler"})
 	private Set<TeamUserAssoc> teams = new HashSet<TeamUserAssoc>();
 	
+	@Column(name="isOwner",nullable = true)
+	private boolean isOwner=false;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORGANIZATION_ID")
 	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
@@ -221,4 +224,13 @@ public class User {
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
+
+	public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean isOwner) {
+		this.isOwner = isOwner;
+	}
+	
 }

@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,10 @@ public class OrganizationController {
 	public ResponseEntity<Organization> addOrganization(@RequestBody Organization org) {
 		try {
 			Organization tempOrg = new Organization(org);
-			tempOrg.setOwner(userService.getUser(org.getOwner().getId()));
+			User tempUser = userService.getUser(org.getOwner().getId());
+			tempUser.setOwner(true);
+			tempOrg.setOwner(tempUser);
+			
 			organizationService.addOrganization(tempOrg);
 			return ResponseEntity.ok(tempOrg);
 		}
@@ -80,9 +84,13 @@ public class OrganizationController {
 	public ResponseEntity<Organization> approveJoinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
 		try {
 			Organization tempOrg = organizationService.getAnOrganizations(orgId);
-			List<User> tempList = tempOrg.getOrgUsers();
-			tempList.add(userService.getUser(userId));
+			Set<User> tempList = tempOrg.getOrgUsers();
+			Set<User> pendingList = tempOrg.getPendingApprovals();
+			User currUser = userService.getUser(userId);
+			tempList.add(currUser);
+			pendingList.remove(currUser);
 			tempOrg.setOrgUsers(tempList);
+			tempOrg.setPendingApprovals(pendingList);
 			organizationService.updateOrganization(tempOrg);
 			User tempUser =  userService.getUser(userId);
 			tempUser.setOrganization(tempOrg);
@@ -101,7 +109,7 @@ public class OrganizationController {
 	public ResponseEntity<Organization> requestJoinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
 		try {
 			Organization tempOrg = organizationService.getAnOrganizations(orgId);
-			List<User> tempList = tempOrg.getPendingApprovals();
+			Set<User> tempList = tempOrg.getPendingApprovals();
 			tempList.add(userService.getUser(userId));
 			tempOrg.setPendingApprovals(tempList);
 			organizationService.updateOrganization(tempOrg);
@@ -119,7 +127,7 @@ public class OrganizationController {
 	public ResponseEntity<Organization> leaveOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
 		try {
 			Organization tempOrg = organizationService.getAnOrganizations(orgId);
-			List<edu.sjsu.cmpe275.openhack.model.User> tempList = tempOrg.getOrgUsers();
+			Set<User> tempList = tempOrg.getOrgUsers();
 			tempList.remove(userService.getUser(userId));
 			tempOrg.setOrgUsers(tempList);
 			organizationService.updateOrganization(tempOrg);
@@ -136,10 +144,10 @@ public class OrganizationController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/organization/{id}/getPendingRequests",  produces = { "application/json", "application/xml" })
-	public ResponseEntity<List<User>> getJoinReqauests(@PathVariable Long id) {
+	@RequestMapping(method=RequestMethod.GET, value="/organization/{id}/getPendingRequests",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Set<User>> getJoinRequests(@PathVariable Long id) {
 		try {
-			List<User> users = organizationService.getPendingUsers(id);
+			Set<User> users = organizationService.getPendingUsers(id);
 			return ResponseEntity.ok(users);
 		}
 		catch(Exception e) {

@@ -9,6 +9,7 @@ import CreateHackathon from './createHackathon';
 import AdminDashboard from './AdminDashboard';
 import HackerDashboard from './HackerDashboard';
 import Organization from './Organization';
+import ApproveRequests from './ApproveRequests';
 
 
 
@@ -29,6 +30,7 @@ class Main extends Component {
                 <Route path="/admin/dashboard" component={AdminDashboard} />
                 <Route path="/dashboard" component={HackerDashboard} />
                 <Route path="/organization" component={Organization}/>
+                <Route path="/approveRequests" component={ApproveRequests}/>
 
             </div>
         )
