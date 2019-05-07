@@ -56,7 +56,7 @@ public class HackathonService {
 	
 	@SuppressWarnings("unchecked")
 	public List<Hackathon> getAllFutureOngoingHAckathons() {
-		Query query = entityManager.createQuery("from Hackathon where curdate() between startDate AND endDate");
+		Query query = entityManager.createQuery("from Hackathon where curdate() between startDate AND endDate OR curdate()<=startDate");
 	    return  (List<Hackathon>) query.getResultList();
 	}
 }

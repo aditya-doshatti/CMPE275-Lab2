@@ -50,8 +50,11 @@ class Login extends Component {
                           console.log("error occured",error)
                           //window.alert(error.code)
                       });
-
-                     this.props.history.push('/profile');
+                      console.log("before routing",email)
+                     if(email.endsWith("@sjsu.edu"))
+                       this.props.history.push('/admin/maindashboard');
+                     else
+                       this.props.history.push('/dashboard');
                   }
             })
             .catch((error) => {

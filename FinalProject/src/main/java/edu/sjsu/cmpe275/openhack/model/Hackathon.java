@@ -52,20 +52,6 @@ public class Hackathon {
 	
 	@Column(nullable=false)
 	private boolean isOpen;
-	
-	/**
-	 * @return the admin
-	 */
-	public User getAdmin() {
-		return admin;
-	}
-
-	/**
-	 * @param admin the admin to set
-	 */
-	public void setAdmin(User admin) {
-		this.admin = admin;
-	}
 
 	@Column(nullable=false)
 	private int minTeamSize;
@@ -76,15 +62,21 @@ public class Hackathon {
 	@Column(nullable=true)
 	private Double discount;
 	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="USER_ID")
-	User admin;
+	Long adminId;
 	
 	/**
 	 * @return the discount
 	 */
 	public Double getDiscount() {
 		return discount;
+	}
+
+	public Long getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(Long adminId) {
+		this.adminId = adminId;
 	}
 
 	/**
@@ -305,9 +297,11 @@ public class Hackathon {
 		this.startDate = obj.startDate;
 		this.endDate = obj.endDate;
 		this.regFees = obj.regFees;
+		this.isOpen=true;
 		this.minTeamSize = obj.minTeamSize;
 		this.maxTeamSize = obj.maxTeamSize;
 		this.discount = obj.discount;
+		this.adminId = obj.adminId;
 	}
 
 	/**
