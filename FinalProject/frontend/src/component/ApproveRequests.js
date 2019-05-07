@@ -54,15 +54,21 @@ class ApproveRequests extends Component {
         var items
         if(this.state.pendingApprovals!=null) {
         items = this.state.pendingApprovals.map((item, key) => <div className="row text-center mt-4 ml-5">
-            <span className="text-info pull-right font-weight-bold">{item.name}</span>
+            <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
             <button onClick={()=>this.handleApprove(item.id)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Approve</button>
             <button onClick={()=>this.handleReject(item.id)} className="mb-4 ml-5 btn btn-submit bg-danger text-white btn-lg ">Reject</button>
         </div>
         );
         }
-        return ( <div> <h1>Pending Approvals</h1>
-                    {items}
+        return ( <div> 
+                    <div className="container-fluid">
+                    <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
+                    <h1 class="ml-9">Pending Approvals</h1>
+                            {items}
                     </div>
+                    </div>
+
+                </div>
                 );
         }
 }
