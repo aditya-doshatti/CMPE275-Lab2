@@ -1,5 +1,9 @@
 package edu.sjsu.cmpe275.openhack.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,7 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -53,13 +60,54 @@ public class User {
 	@Column(name="role")
 //	@org.hibernate.annotations.ColumnDefault("hacker")
 	private String role;
-	
+
+	// List of all hackathons judged by this user
+	@ManyToMany(mappedBy = "judges")
+	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
+			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
+	private List<Hackathon> judgesHackathons = new ArrayList<Hackathon>();
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnoreProperties(value = {"team", "user", "hibernateLazyInitializer", "handler"})
+	private Set<TeamUserAssoc> teams = new HashSet<TeamUserAssoc>();
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORGANIZATION_ID")
-	
+	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
 	private Organization organization;
+
+	/**
+	 * @return the teams
+	 */
+	public Set<TeamUserAssoc> getTeams() {
+		return teams;
+	}
+
+	/**
+	 * @param teams the teams to set
+	 */
+	public void setTeams(Set<TeamUserAssoc> teams) {
+		this.teams = teams;
+	}
+
+	/**
+	 * @return the judgesHackathons
+	 */
+	public List<Hackathon> getJudgesHackathons() {
+		return judgesHackathons;
+	}
+
+	/**
+	 * @param judgesHackathons the judgesHackathons to set
+	 */
+	public void setJudgesHackathons(List<Hackathon> judgesHackathons) {
+		this.judgesHackathons = judgesHackathons;
+	}
 	
+	public void addJudgesHackathons(Hackathon obj) {
+		this.judgesHackathons.add(obj);
+	}
+
 	public User() {
 		
 	}
@@ -173,7 +221,4 @@ public class User {
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
-	
-	
-
 }

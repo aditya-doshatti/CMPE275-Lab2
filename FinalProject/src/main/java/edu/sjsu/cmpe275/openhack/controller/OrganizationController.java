@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.openhack.model.Organization;
+import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.OrganizationService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
 
@@ -75,13 +76,34 @@ public class OrganizationController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/join/{userId}",  produces = { "application/json", "application/xml" })
-	public ResponseEntity<Organization> joinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
+	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/approve/{userId}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Organization> approveJoinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
 		try {
 			Organization tempOrg = organizationService.getAnOrganizations(orgId);
-			List<edu.sjsu.cmpe275.openhack.model.User> tempList = tempOrg.getOrgUsers();
+			List<User> tempList = tempOrg.getOrgUsers();
 			tempList.add(userService.getUser(userId));
 			tempOrg.setOrgUsers(tempList);
+			organizationService.updateOrganization(tempOrg);
+			User tempUser =  userService.getUser(userId);
+			tempUser.setOrganization(tempOrg);
+			userService.updateProfile(tempUser);
+			return ResponseEntity.ok(tempOrg);
+		}
+		catch(Exception e) {
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value="/organization/{orgId}/join/{userId}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Organization> requestJoinOrganization(@PathVariable Long orgId, @PathVariable Long userId) {
+		try {
+			Organization tempOrg = organizationService.getAnOrganizations(orgId);
+			List<User> tempList = tempOrg.getPendingApprovals();
+			tempList.add(userService.getUser(userId));
+			tempOrg.setPendingApprovals(tempList);
 			organizationService.updateOrganization(tempOrg);
 			return ResponseEntity.ok(tempOrg);
 		}
@@ -101,6 +123,9 @@ public class OrganizationController {
 			tempList.remove(userService.getUser(userId));
 			tempOrg.setOrgUsers(tempList);
 			organizationService.updateOrganization(tempOrg);
+			User tempUser =  userService.getUser(userId);
+			tempUser.setOrganization(null);
+			userService.updateProfile(tempUser);
 			return ResponseEntity.ok(tempOrg);
 		}
 		catch(Exception e) {
@@ -109,6 +134,18 @@ public class OrganizationController {
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value="/organization/{id}/getPendingRequests",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<List<User>> getJoinReqauests(@PathVariable Long id) {
+		try {
+			List<User> users = organizationService.getPendingUsers(id);
+			return ResponseEntity.ok(users);
+		}
+		catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
 	}
 
 }

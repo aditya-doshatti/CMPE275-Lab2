@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+const url="http://localhost:8080"
 class Organization extends Component {
     constructor(props) {
         super(props);
@@ -8,7 +9,9 @@ class Organization extends Component {
             name:'',
             owner:'',
             description:'',
-            address:''
+            address:'',
+            orgOwner:'',
+            orgUsers:[]
          }
 
          this.submitEvent=this.submitEvent.bind(this)
@@ -21,23 +24,70 @@ class Organization extends Component {
         })
     }
 
+    componentWillMount(){
+        console.log(this.props.location.state.detail)
+        axios.get(url+`/organizations/${this.props.location.state.detail}`)
+        .then((response)=> {
+            this.setState({
+                name:response.data.name,
+                description:response.data.description,
+                address:response.data.address,
+                orgOwner:response.data.owner,
+                orgUsers:response.data.orgUsers
+            })
+            console.log(response.data);
+        });
+    }
+
     render() { 
+        const items = this.state.orgUsers.map((item, key) =>
+        <span className="text-info font-weight-bold">{item.name}</span>
+        );
         return ( 
             <div>
                 <div className="container-fluid">
-                    <div className="row">
                     <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
-                    <form onSubmit={this.submitEvent}>
-                        <h3 className="text-left mt-4 ">Organization Information</h3>
-                        <hr></hr>
-                        <div className="mt-4 mr-5">
-                        <span className="text-info font-weight-bold">Organization Name:</span>
-                            <input type="text" className=" ml-4 btn-lg col-lg-7 pull-right"  value={this.state.screenName} disabled/>
-                        </div>
-                    </form>
+                    <h2>{this.state.name}</h2>
+                    <div className="mt-4 mr-5" >
+                        <span className="text-info font-weight-bold">
+                            {this.state.description}
+                        </span> <br></br>
+                        <span className="text-info font-weight-bold">
+                            {this.state.address.street}
+                        </span> <br></br>
+                        <span className="text-info font-weight-bold">
+                            {this.state.address.city}
+                        </span> 
+                        <span className="text-info font-weight-bold">
+                            {this.state.address.state}
+                        </span> <br></br>               
                     </div>
                     </div>
-                </div>                
+                </div>  
+                <br></br>   
+
+                <div className="container-fluid">
+                    <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
+                    <h2>Owner</h2>
+                    <div className="mt-4 mr-5" >
+                        <span className="text-info font-weight-bold">
+                            {this.state.orgOwner.name}
+                        </span> <br></br>               
+                    </div>
+                    </div>
+                </div>  
+
+                <br></br>
+                <div className="container-fluid">
+                    <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
+                    <h2>Users</h2>
+                    <div className="mt-4 mr-5" >
+                        <span className="text-info font-weight-bold">
+                            {items}
+                        </span> <br></br>               
+                    </div>
+                    </div>
+                </div>           
             </div>
          );
     }

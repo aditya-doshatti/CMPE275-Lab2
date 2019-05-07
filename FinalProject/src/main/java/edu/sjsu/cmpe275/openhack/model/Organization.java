@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -31,20 +32,28 @@ public class Organization {
 	private String name;
 	
 	@OneToOne
-	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
+	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private User owner;
 	
 	private String description;
 	
 	@OneToMany
-	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
+	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private List<User> orgUsers;
+	
+	@OneToMany
+	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
+	private List<User> pendingApprovals;
 
 	@Embedded
 	private Address address;
 	
-	@OneToMany(mappedBy = "organization")
-	private Set<HackathonSponsorAssoc> hackathons = new HashSet<HackathonSponsorAssoc>();
+	@ManyToMany(mappedBy = "sponsors")
+	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
+			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
+	private Set<Hackathon> hackathons = new HashSet<Hackathon>();
 	
 	public Organization () {	
 	}
@@ -117,18 +126,29 @@ public class Organization {
 		this.orgUsers.add(user);
 	}
 
+	public List<User> getPendingApprovals() {
+		return pendingApprovals;
+	}
+
+	public void setPendingApprovals(List<User> pendingApprovals) {
+		this.pendingApprovals = pendingApprovals;
+	}
+
 	/**
 	 * @return the hackathons
 	 */
-	public Set<HackathonSponsorAssoc> getHackathons() {
+	public Set<Hackathon> getHackathons() {
 		return hackathons;
 	}
 
 	/**
 	 * @param hackathons the hackathons to set
 	 */
-	public void setHackathons(Set<HackathonSponsorAssoc> hackathons) {
+	public void setHackathons(Set<Hackathon> hackathons) {
 		this.hackathons = hackathons;
 	}
 	
+	public void addHackathon(Hackathon hackathon) {
+		this.hackathons.add(hackathon);
+	}	
 }

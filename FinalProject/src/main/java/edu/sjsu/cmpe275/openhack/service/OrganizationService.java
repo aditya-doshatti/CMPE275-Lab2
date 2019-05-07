@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.sjsu.cmpe275.openhack.model.Organization;
+import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.repository.OrganizationRepository;
 
 /**
@@ -53,6 +54,11 @@ public class OrganizationService {
 	 */
 	public void updateOrganization(Organization org) {
 		organizationRepository.save(org);
+	}
+	
+	public List<User> getPendingUsers(Long id) {
+		Organization org = organizationRepository.findOne(id);
+		return org.getPendingApprovals();
 	}
 
 }
