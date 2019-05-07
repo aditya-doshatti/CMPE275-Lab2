@@ -29,6 +29,7 @@ class CreateHackathon extends Component {
         this.setState({
             [name]:target.value    
         });
+        console.log(target.value)
         console.log("set field for hackathon event")
     }
 
@@ -104,7 +105,7 @@ class CreateHackathon extends Component {
                     <label for="inputDescription">Hackathon Name</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <textarea class="form-control" id="inputDescription" name="inputDescription" rows="3"></textarea>
+                    <textarea class="form-control" id="inputDescription" name="inputDescription" rows="3" onChange={this.setField}></textarea>
                     </div>
                 </div>
                 <div class="form-row">
@@ -112,7 +113,7 @@ class CreateHackathon extends Component {
                     <label for="inputfee">Participation Fee</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="number" class="form-control hack-inputs" id="inputfee" name="inputfee" placeholder="participation fee"></input>
+                    <input type="number" class="form-control hack-inputs" id="inputfee" name="inputfee" placeholder="participation fee" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -120,7 +121,7 @@ class CreateHackathon extends Component {
                     <label for="inputJudgeOne">First Judge</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="email" class="form-control hack-inputs" id="inputJudgeOne" name="inputJudgeOne" placeholder="email id of judge"></input>
+                    <input type="email" class="form-control hack-inputs" id="inputJudgeOne" name="inputJudgeOne" placeholder="email id of judge" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -128,7 +129,7 @@ class CreateHackathon extends Component {
                     <label for="inputJudgeTwo">Second Judge</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="email" class="form-control hack-inputs" id="inputJudgeTwo" name="inputJudgeTwo" placeholder="email id of judge"></input>
+                    <input type="email" class="form-control hack-inputs" id="inputJudgeTwo" name="inputJudgeTwo" placeholder="email id of judge" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -136,7 +137,7 @@ class CreateHackathon extends Component {
                     <label for="inputMaxSize">Maximum team size</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="number" class="form-control hack-inputs" id="inputMaxSize" name="inputMaxSize" placeholder="max"></input>
+                    <input type="number" class="form-control hack-inputs" id="inputMaxSize" name="inputMaxSize" placeholder="max" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -144,7 +145,7 @@ class CreateHackathon extends Component {
                     <label for="inputMinSize">Minimum team size</label>                
                     </div>
                     <div class="form-group col-md-9">
-                    <input type="number" class="form-control hack-inputs" id="inputMinSize" name="inputMinSize" placeholder="min"></input>
+                    <input type="number" class="form-control hack-inputs" id="inputMinSize" name="inputMinSize" placeholder="min" onChange={this.setField}></input>
                     </div>
                 </div>
                 <div class="form-row">
