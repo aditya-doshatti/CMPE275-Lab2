@@ -78,4 +78,20 @@ public User updateProfile(User user) {
     userRepository.save(user);
     return user;
 }
+
+
+public User getProfileVerify(String id) {
+	User user = null;
+	 Query query = entityManager.createQuery("from User as u WHERE u.email=:email");
+	    query.setParameter("email",id);
+	    System.out.println(query.getParameterValue("email"));
+	    try {
+	    	user =  (User) query.getSingleResult();
+	    	user.setIsVerified("true");
+	    	userRepository.save(user);
+	    } catch (Exception e) {
+	        System.out.println("Here! Inside changing status of profile verification status");
+	    }
+	 return user;
+}
 }

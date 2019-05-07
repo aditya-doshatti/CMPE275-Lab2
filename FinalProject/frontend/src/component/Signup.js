@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import {NavLink} from 'react-router-dom';
 import axios from 'axios';
+import Navbar from './Navbas';
+import swal from 'sweetalert';
 
 const config = {
     apiKey: "AIzaSyCi3JYLWPtBMR6kxxRF-D8MisQVqEVu1DY",
@@ -14,6 +16,7 @@ const config = {
 
 const fire=firebase.initializeApp(config);
 const url="http://localhost:8080"
+
 
 class Signup extends Component {
     constructor(props) {
@@ -69,7 +72,7 @@ class Signup extends Component {
             }
          }).catch(function(error) {
             console.log("error occured",error)
-            window.alert(error.code)
+            // window.alert(error.code)
         });
 
         }
@@ -98,14 +101,15 @@ class Signup extends Component {
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
             console.log("User(Register)",user)
-                 window.alert("Register Successful")
             // this.props.history.push('/');
             var user = firebase.auth().currentUser;
             user.sendEmailVerification().then(function() {
                 console.log("Email successfully sent")
+
                     axios.post(url+'/user/signup', data)
                     .then((response) => {
                         console.log("Response received",response)
+                        swal("Registration Successful","Verify the email link sent before Login!","success")
                      });
             }).catch(function(error) {
                 console.log("error occured",error)
@@ -116,18 +120,20 @@ class Signup extends Component {
         .catch((error) => {
             console.log("error in sign up",error.code);
             if(error.code=="auth/email-already-in-use")
-                window.alert("Account already exists with this account!")
+               swal("Account already exists with this account!","Please try again!","error")
             else if(error.code=="auth/invalid-email")
-                window.alert("Invalid Email format!")
+                swal("Invalid Email format!","Please try again!","error")
             else if(error.code=="auth/weak-password")
-                window.alert("Weak Password")
+                swal("Weak Password","Please try again!","error")
             else
-                window.alert(error.code)
+                console.log(error.code)
         });
     }
 
     render() { 
         return ( 
+            <div>
+                 <Navbar />
             <div className="text-center mt-5">
                <h1 class="title pt-2">Sign up for Hackathon</h1>
                 Already have an account?<strong><NavLink to="/login"> Log in!</NavLink></strong>
@@ -171,6 +177,7 @@ class Signup extends Component {
                
              </form>
 
+            </div>
             </div>
          );
     }
