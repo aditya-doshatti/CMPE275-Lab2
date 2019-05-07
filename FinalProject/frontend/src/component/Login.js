@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import {NavLink} from 'react-router-dom';
+import Navbar from './Navbas';
+import axios from 'axios';
+var swal = require('sweetalert')
 // import fire from '../config/fire'
-
+const url="http://localhost:8080"
 
 class Login extends Component {
     constructor(props) {
@@ -24,7 +27,7 @@ class Login extends Component {
         })
     }
 
-    submitEvent(e){
+    async submitEvent(e){
         var headers = new Headers();
         console.log("I am here inside login submit event")
         e.preventDefault();
@@ -32,29 +35,40 @@ class Login extends Component {
         var password=this.state.password
 
         //firebase authentication
-        firebase.auth().signInWithEmailAndPassword(email, password)
+       await firebase.auth().signInWithEmailAndPassword(email, password)
             .then((user) => {
                   console.log("User(Login)",user)
                   if(firebase.auth().currentUser.emailVerified==false){
                     this.props.history.push('/notAuthorized')
                   } else{
-                     window.localStorage.setItem('user', JSON.stringify(email));
+                    window.localStorage.setItem('user', JSON.stringify(email));
+  
+                        axios.put(url+`/user/profileVerify/${email}`)
+                        .then((response) => {
+                            console.log("Response received",response)
+                        }).catch(function(error) {
+                          console.log("error occured",error)
+                          //window.alert(error.code)
+                      });
+
                      this.props.history.push('/profile');
                   }
             })
             .catch((error) => {
                   console.log("error code(Login)",error.code)
                   if(error.code=="auth/user-not-found")
-                    window.alert("No account exists with given email")
+                   swal("No account exists with given email","Signup first!","error")
                   else if(error.code="auth/wrong-password")
-                    window.alert("Wrong/Invalid password")
+                   swal("Wrong/Invalid password","Login Again!","error")
                   else
-                    window.alert(error.code)
+                    console.log(error.code)
             });
     }
 
     render() { 
         return ( 
+          <div>
+            <Navbar />
             <div className="text-center mt-5">
               <form onSubmit={this.submitEvent}>
                <h1 class="title pt-2">Login to Hackathon</h1>
@@ -71,6 +85,7 @@ class Login extends Component {
                 <button class="btn btn-submit text-white btn-large mt-4 custom" onSubmit={this.submitEvent}><strong>Login</strong></button> 
                 </form>
             </div>
+           </div>
          );
     }
 }

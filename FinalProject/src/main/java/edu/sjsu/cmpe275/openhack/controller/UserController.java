@@ -39,6 +39,11 @@ public class UserController {
 	public ResponseEntity<User> addUser(@RequestBody User user) {
 		try {
 			User tempUser=new User(user);
+			String email=tempUser.getEmail();
+			if(email.endsWith("@sjsu.edu"))
+				tempUser.setRole("admin");
+			else
+				tempUser.setRole("hacker");
 			userService.addUser(tempUser);
 			return ResponseEntity.ok(tempUser);
 		}
@@ -91,6 +96,18 @@ public class UserController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	
+	@RequestMapping(method=RequestMethod.PUT, value="/user/profileVerify/{id:.+}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<User> updateProfile(@PathVariable String id) {
+		User user = userService.getProfileVerify(id);
+		if  (user != null) {
+			return ResponseEntity.ok(user);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	
