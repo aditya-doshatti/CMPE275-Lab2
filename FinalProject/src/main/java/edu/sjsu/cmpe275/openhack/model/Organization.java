@@ -39,6 +39,10 @@ public class Organization {
 	@OneToMany
 	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
 	private List<User> orgUsers;
+	
+	@OneToMany
+	@JsonIgnoreProperties(value = {"organization"}, allowSetters = true)
+	private List<User> pendingApprovals;
 
 	@Embedded
 	private Address address;
@@ -115,6 +119,14 @@ public class Organization {
 	
 	public void addOrgUser(User user) {
 		this.orgUsers.add(user);
+	}
+
+	public List<User> getPendingApprovals() {
+		return pendingApprovals;
+	}
+
+	public void setPendingApprovals(List<User> pendingApprovals) {
+		this.pendingApprovals = pendingApprovals;
 	}
 
 	/**

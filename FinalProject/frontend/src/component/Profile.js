@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-responsive-modal'
+import { Link } from 'react-router-dom'
 //import Organization from './Organization';
 import Autosuggest from 'react-autosuggest';
 
@@ -200,18 +201,6 @@ class Profile extends Component {
 
         axios.put(url+`/organization/${currVal[0].id}/join/${this.state.id}`)
         .then((response) => {
-            const data=({
-                id:this.state.id,
-                email:this.state.email,
-                name:this.state.name,
-                aboutMe:this.state.aboutMe,
-                address:this.state.address,
-                businessTitle:this.state.businessTitle,
-                portraitUrl:this.state.portraitUrl,
-                organization:response.data
-            });
-            axios.put(url+`/user/profile/${this.state.id}`,data)
-            .then();
             console.log(response.data);
         });
 
@@ -244,13 +233,22 @@ class Profile extends Component {
             console.log(response.data);
         });
     }
+
+    goToOrg = (e) => {
+        this.props.history.push({
+            pathname: '/organization',
+            state: { detail: this.state.organization.id }
+          })
+    }
+
     render() { 
         var orgaName
         if (this.state.organization == null) {
-            orgaName =  <input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value='Use the buttons below' disabled/>
+            orgaName =  <div className="btn-lg ml-3 col-lg-7 pull-right" disabled>Not part of any organization</div> //<input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value='Use the buttons below' disabled/>
         }
         else {
-            orgaName =  <input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value={this.state.organization.name} disabled/>
+            //orgaName =  <Link className="btn-lg ml-3 col-lg-7 pull-right" to="/organization">{this.state.organization.name} </Link>
+            orgaName = <div className='btn-lg ml-3 col-lg-7 pull-right btn-link' onClick={this.goToOrg}>{this.state.organization.name}</div>
         }
         const { value, suggestions } = this.state;
         const inputProps = {
