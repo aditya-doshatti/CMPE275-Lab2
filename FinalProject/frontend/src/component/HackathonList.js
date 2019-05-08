@@ -21,7 +21,8 @@ class HackathonList extends Component {
             currentHackathonId:0,
             allUsers:[],
             owner:{id:0, name:""},
-            lenMatch:false
+            lenMatch:false,
+            teams:[]
          }
     }
 
@@ -41,8 +42,12 @@ class HackathonList extends Component {
         axios.get(url+`/user/profile/${email}`)
         .then((response) => {
                 this.setState({
-                    owner:{id:response.data.id,
-                        name:response.data.name}
+                    owner:{
+                        id:response.data.id,
+                        name:response.data.name,
+                        teams:response.data.participantTeam
+                    },
+                    teams:response.data.participantTeam
                 })
                 console.log(response.data);
         });
@@ -73,7 +78,7 @@ class HackathonList extends Component {
       };
     
     handleShareholderNameChange = idx => evt => {
-        //console.log("in change button",this.state.users.length)
+        //console.log("in change button",this.state.users.length, this.state.currentHackathonMaxTeamSize, this.state.currentHackathonMinTeamSize, this.state.lenMatch)
         const newShareholders = this.state.users.map((users, sidx) => {
             if (idx !== sidx) return users;
             return { ...users, id: evt.target.value };
@@ -81,10 +86,11 @@ class HackathonList extends Component {
 
     this.setState({ 
         users: newShareholders,
-        lenMatch : this.state.users.length >= this.state.currentHackathonMinTeamSize && this.state.users.length <= this.state.currentHackathonMaxTeamSize
-
-    });
+        lenMatch : (this.state.users.length >= this.state.currentHackathonMinTeamSize) && (this.state.users.length <= this.state.currentHackathonMaxTeamSize)
+        });
+        //console.log("CHange check", this.state.users.length >= this.state.currentHackathonMinTeamSize, this.state.users.length <= this.state.currentHackathonMaxTeamSize)
     };
+
 
     handleSubmit = evt => {
         evt.preventDefault()
@@ -109,20 +115,46 @@ class HackathonList extends Component {
     };
 
     handleAddShareholder = () => {
-        //console.log("in Add button",this.state.users.length)
+        console.log("in Add button",this.state.users.length, this.state.currentHackathonMaxTeamSize, this.state.currentHackathonMinTeamSize, this.state.lenMatch)
         this.setState({
-            users: this.state.users.concat([{ id: "" }])
-
+            users: this.state.users.concat([{ id: "" }]),
+            lenMatch : (this.state.users.length-1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length-1 <= this.state.currentHackathonMaxTeamSize)
         });
+        console.log("Add check", this.state.users.length >= this.state.currentHackathonMinTeamSize, this.state.users.length <= this.state.currentHackathonMaxTeamSize)
     };
 
     handleRemoveShareholder = idx => () => {
-        //console.log("in Close button",this.state.users.length)
+        console.log("in Close button",this.state.users.length, this.state.currentHackathonMaxTeamSize, this.state.currentHackathonMinTeamSize, this.state.lenMatch)
         this.setState({
             users: this.state.users.filter((s, sidx) => idx !== sidx),
-            lenMatch : this.state.users.length-1 >= this.state.currentHackathonMinTeamSize && this.state.users.length-1 <= this.state.currentHackathonMaxTeamSize
+            lenMatch : (this.state.users.length-1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length-1 <= this.state.currentHackathonMaxTeamSize)
         });
+        console.log("Close check", this.state.users.length >= this.state.currentHackathonMinTeamSize, this.state.users.length <= this.state.currentHackathonMaxTeamSize)
     };
+
+    handleCode = key => {
+        this.props.history.push({
+                pathname:'/hackathon',
+                state: { 
+                    hackId: this.state.hackathonlist[key].id
+                }
+        })
+    }
+
+    isTeamInHack = val => {
+        return this.state.teams.some(item => val.teamId === item.teamId);
+    }
+
+    shouldJoin = (teams, key) => {
+        var retVal = <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join Kartot</button>
+        teams.map((team, key) => {
+            if (this.isTeamInHack(team)) {
+                retVal = <button onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                return retVal
+            }
+        })
+        return retVal
+    }
 
     render() { 
         let redirectVar = null;
@@ -131,10 +163,12 @@ class HackathonList extends Component {
         }
 
         var items
+        var shoulJoin
         if(this.state.hackathonlist!=null) {
         items = this.state.hackathonlist.map((item, key) => <div className="row text-center mt-4 ml-5">
             <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-            <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+            {/* <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button> */}
+            {this.shouldJoin(item.teams, key)}
         </div>
         );}
 
