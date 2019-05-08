@@ -35,7 +35,14 @@ class Hackathon extends Component {
                                 </samp>
                                 <hr></hr>
                                 {/* <a href="#" class="card-link">Upload Solution</a> */}
-                                <input type="file" name="file"  onChange={(e)=>this.onUploadClick(e)}></input>
+                                {/* <input type="file" name="file"  onChange={(e)=>this.onUploadClick(e)}></input> */}
+                                
+                                    <div class="form-group row">
+                                    <input type="text" name="submission" class="form-control col-md-8" id="githublinkinput" placeholder="github link for submission"></input>
+                                    <button class="btn btn-primary col-md-4"  id="submitbutton">Submit</button>
+                                    </div>
+                                        
+                               
                             </div>
                         </div>
                     </div>
