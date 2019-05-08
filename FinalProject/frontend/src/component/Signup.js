@@ -6,12 +6,13 @@ import Navbar from './Navbas';
 import swal from 'sweetalert';
 
 const config = {
-    apiKey: "AIzaSyCi3JYLWPtBMR6kxxRF-D8MisQVqEVu1DY",
-    authDomain: "zhang-a2fe9.firebaseapp.com",
-    databaseURL: "https://zhang-a2fe9.firebaseio.com",
-    projectId: "zhang-a2fe9",
-    storageBucket: "zhang-a2fe9.appspot.com",
-    messagingSenderId: "122985196639"
+    apiKey: "AIzaSyB3Zwh6ZNXExXKzsnQWmCcw9C8em0Sq0A4",
+    authDomain: "cmpe275-922ad.firebaseapp.com",
+    databaseURL: "https://cmpe275-922ad.firebaseio.com",
+    projectId: "cmpe275-922ad",
+    storageBucket: "cmpe275-922ad.appspot.com",
+    messagingSenderId: "681106181388",
+    appId: "1:681106181388:web:3f1e42b24333fe8a"
   };
 
 const fire=firebase.initializeApp(config);

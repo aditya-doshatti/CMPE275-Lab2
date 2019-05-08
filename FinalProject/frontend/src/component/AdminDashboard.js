@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-responsive-modal'
+import AdminNavbar from './AdminNavbar';
 import {NavLink} from 'react-router-dom';
+import {Redirect} from 'react-router';
 
 import "../css/hackathonTable.css"
 
@@ -70,6 +72,10 @@ class AdminDashboard extends Component {
 
 
     render() {   
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         var a,b
         let listdetails = this.state.listed.map((row) => {
            a=row.judges.map(detail=>{return(<h5 className="text-background">{detail.name} <span className="text-muted">  Screen Name:</span>{detail.screenName}</h5>)})
@@ -98,36 +104,9 @@ class AdminDashboard extends Component {
 
         return ( 
         <div>
+            {redirectVar}
+            <AdminNavbar />
             <div>               
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">
-                    <img src={require('../images/2.png')} class="d-inline-block align-top" alt=""></img>
-                    
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>      
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>             
-                    </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                    
-                    </form>
-                </div>
-                </nav>
                 <div class="card">
                 
                     <table class="table mt-4 bg w-100 border rounded shadow-lg">

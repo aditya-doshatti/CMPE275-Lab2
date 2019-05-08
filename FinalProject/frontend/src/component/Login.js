@@ -72,18 +72,18 @@ class Login extends Component {
         return ( 
           <div>
             <Navbar />
-            <div className="text-center  pull-center mt-5">
+            <div className="text-center pull-center mt-5">
               <form onSubmit={this.submitEvent}>
                <h1 class="title pt-2">Login to Hackathon</h1>
                     Need an account?<strong><NavLink to="/signup"> Sign Up!</NavLink></strong>
               
-                <div>
+                <div >
                 
-                <input type="email" name="email" id="email" class="panel-input mt-3 w-25" onChange={this.setField} placeholder="Email address" required />
+                <input type="email" name="email" id="email" class="panel-input mt-3 w-25 text-center" onChange={this.setField} placeholder="Email address" required />
                 </div>
                
                 <div>
-               <input type="password" name="password" id="password" class="panel-input mt-3 w-25" onChange={this.setField}   placeholder="Password" required />
+               <input type="password" name="password" id="password" class="panel-input text-center mt-3 w-25 float-center" onChange={this.setField}   placeholder="Password" required />
                 </div> 
                 <button class="btn btn-submit text-white btn-large mt-4 custom" onSubmit={this.submitEvent}><strong>Login</strong></button> 
                 </form>

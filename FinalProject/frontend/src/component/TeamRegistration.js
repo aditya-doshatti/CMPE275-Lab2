@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import '../css/teamRegistration.css'
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 
 class TeamRegistration extends Component {
     constructor(props) {
@@ -7,8 +9,14 @@ class TeamRegistration extends Component {
         this.state = {  }
     }
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         return ( 
             <div>
+                 {redirectVar}
+                <UserNavbar />
                 <div id="registrationDiv">
                     <h1>
                         Team Registration Form

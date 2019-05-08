@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import "../css/createHackathon.css"
-import Navbar from './Navbas';
+import AdminNavbar from './AdminNavbar';
 import swal from 'sweetalert';
+import {Redirect} from 'react-router';
 
 const url="http://localhost:8080"
 class CreateHackathon extends Component {
@@ -171,6 +172,10 @@ class CreateHackathon extends Component {
     }
 
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         var organizationList
         console.log("here in render")
         console.log(this.state.organization)
@@ -197,7 +202,8 @@ class CreateHackathon extends Component {
 
         return ( 
         <div>
-            <Navbar />
+             {redirectVar}
+            <AdminNavbar />
         <div className="container bg-light mb-4">
                     <br></br>
                     <h2 className="text-primary text-center ">
@@ -303,29 +309,6 @@ class CreateHackathon extends Component {
                 </div>
             </form>
 
-            <ul>
- <li onclick="this.parentNode.removeChild(this);">
-  <input type="hidden" name="ingredients[]" value="Cheese" />
-  Cheese
- </li>
- <li onclick="this.parentNode.removeChild(this);">
-  <input type="hidden" name="ingredients[]" value="Ham" />
-  Ham
- </li>
- <li onclick="this.parentNode.removeChild(this);">
-  <input type="hidden" name="ingredients[]" value="Mushrooms" />
-  Mushrooms
- </li>
-</ul>
-<select onchange="selectIngredient(this);">
- <option value="Cheese">Cheese</option>
- <option value="Olives">Olives</option>
- <option value="Pepperoni">Pepperoni</option>
- ...
-</select>
-
-            
-            
         </div> 
         </div>
         );

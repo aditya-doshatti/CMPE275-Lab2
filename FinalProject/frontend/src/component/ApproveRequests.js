@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 
 const url="http://localhost:8080"
 
@@ -51,6 +53,10 @@ class ApproveRequests extends Component {
 
 
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         var items
         if(this.state.pendingApprovals!=null) {
         items = this.state.pendingApprovals.map((item, key) => <div className="row text-center mt-4 ml-5">
@@ -61,6 +67,7 @@ class ApproveRequests extends Component {
         );
         }
         return ( <div> 
+             {redirectVar}
                     <div className="container-fluid">
                     <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
                     <h1 class="ml-9">Pending Approvals</h1>

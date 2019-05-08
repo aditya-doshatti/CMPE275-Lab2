@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {NavLink} from 'react-router-dom';
-import Navbar from './Navbas';
+import UserNavbar from './UserNavbar';
 import Modal from 'react-responsive-modal'
 import axios from 'axios';
 import "../css/hackathonTeam.css";
+import {Redirect} from 'react-router';
 
 var swal = require('sweetalert')
 
@@ -125,6 +126,10 @@ class HackathonList extends Component {
     };
 
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
 
         var items
         if(this.state.hackathonlist!=null) {
@@ -143,6 +148,8 @@ class HackathonList extends Component {
                     )
             });}
         return ( <div> 
+                  {redirectVar}
+                  <UserNavbar />
                     <div className="container-fluid">
                     <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
                     <h1 class="ml-9">Join Hackathon</h1>

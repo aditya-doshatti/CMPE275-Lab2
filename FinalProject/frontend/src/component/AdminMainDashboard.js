@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Navbar from './Navbas';
 import {Link} from 'react-router-dom';
+import AdminNavbar from './AdminNavbar';
+import {Redirect} from 'react-router';
 
 class AdminMainDashboard extends Component {
     constructor(props) {
@@ -8,10 +10,14 @@ class AdminMainDashboard extends Component {
         this.state = {  }
     }
     render() { 
-
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         return ( 
             <div>
-                <Navbar />
+                 {redirectVar}
+                <AdminNavbar />
                 <div>
                   <div class = "row">  
                   <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">
@@ -19,7 +25,7 @@ class AdminMainDashboard extends Component {
                  </ul>
 
                  <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">
-                       <Link to="/admin/maindashboard" className="text-white text-center"><h3> View Hackathons </h3></Link>
+                       <Link to="/admin/dashboard" className="text-white text-center"><h3> View Hackathons </h3></Link>
                  </ul>
 
                  <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">

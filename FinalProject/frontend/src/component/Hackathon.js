@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 
 import "../css/card.css"
 
@@ -12,9 +14,14 @@ class Hackathon extends Component {
         console.log("Data files", files);
     }
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         return ( 
             <div>
-                
+                 {redirectVar}
+                <UserNavbar />
                 <div class="row">
                     
                     <div class="col-md-9">

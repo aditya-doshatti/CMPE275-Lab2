@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../css/hackathonPayment.css'
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 
 var swal = require('sweetalert')
 
@@ -61,6 +63,11 @@ class HackathonPayment extends Component {
     }
 
     render() { 
+       
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         // if(this.state.hackathon!=null)
         //     a=this.state.hackathon.sponsors[0].id
         var sponsors = this.state.sponsorList.map((item, key) =>
@@ -80,6 +87,8 @@ class HackathonPayment extends Component {
         }
         return ( 
         <div>
+             {redirectVar}
+            <UserNavbar />
             <div id = "paymentDiv">
                 <h1>
                     Hackathon Payment Form

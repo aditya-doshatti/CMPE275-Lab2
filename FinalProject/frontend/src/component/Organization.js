@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 
 const url="http://localhost:8080"
 class Organization extends Component {
@@ -40,11 +42,17 @@ class Organization extends Component {
     }
 
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         const items = this.state.orgUsers.map((item, key) =>
         <span className="text-info font-weight-bold">{item.name}<br></br></span> 
         );
         return ( 
             <div>
+                 {redirectVar}
+                <UserNavbar />
                 <div className="container-fluid">
                     <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
                     <h2>{this.state.name}</h2>

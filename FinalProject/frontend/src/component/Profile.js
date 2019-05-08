@@ -3,7 +3,11 @@ import axios from 'axios';
 import Modal from 'react-responsive-modal'
 import { Link } from 'react-router-dom'
 import Autosuggest from 'react-autosuggest';
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 var swal = require('sweetalert')
+
+
 
 const url="http://localhost:8080"
 class Profile extends Component {
@@ -245,6 +249,10 @@ class Profile extends Component {
     }
 
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         var orgaName
         if (this.state.organization == null) {
             orgaName =  <div className="btn-lg ml-3 col-lg-7 pull-right" disabled>Not part of any organization</div> //<input type="text" className="btn-lg ml-3 col-lg-7 pull-right" value='Use the buttons below' disabled/>
@@ -259,6 +267,8 @@ class Profile extends Component {
             onChange: this.onChangeValue
           };
         return ( <div>
+             {redirectVar}
+            <UserNavbar />
                    <div className="container-fluid">
             <div className="row">
                 <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light" >

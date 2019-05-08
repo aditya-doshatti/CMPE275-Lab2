@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
+
 class AdminNavbar extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +15,7 @@ class AdminNavbar extends Component {
     render() { 
         return ( 
         <div>
-              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <nav class="navbar navbar-expand-lg navbar-light">
                 <a class="navbar-brand" href="#">
                     <img src={require('../images/2.png')} class="d-inline-block align-top" alt=""></img>
                     
@@ -41,13 +42,14 @@ class AdminNavbar extends Component {
                         <a class="nav-link" href="/admin/maindashboard"><b>|  Dashboard</b></a>
                     </li>
                     <li class="nav-item">
-                        <button class="btn ml-5 p-2 border text-dark" href="#" onClick = {this.handleLogout}><b>LogOut</b></button>
+                        <Link to="/login" class="btn ml-5 p-2 border text-dark" href="#" onClick = {this.handleLogout}><b>LogOut</b></Link>
                     </li>             
                     </ul>
                    
                 </div>
+             
                 </nav>
-
+                <hr></hr>
 
         </div>
 

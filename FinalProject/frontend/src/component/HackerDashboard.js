@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Navbar from './Navbas';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import UserNavbar from './UserNavbar';
+import {Redirect} from 'react-router';
 
 const url="http://localhost:8080"
 
@@ -25,6 +27,10 @@ class HackerDashboard extends Component {
         });
     }
     render() { 
+        let redirectVar = null;
+        if(!localStorage.getItem("user")){
+            redirectVar = <Redirect to= "/login"/>
+        }
         var isOwnerSection
          if (this.state.isOwner) {
          isOwnerSection = <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">
@@ -34,7 +40,8 @@ class HackerDashboard extends Component {
 
         return ( 
             <div>
-                <Navbar />
+                 {redirectVar}
+               <UserNavbar />
                 <div>
                   <div class = "row">  
                   <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">

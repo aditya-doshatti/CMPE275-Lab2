@@ -8,7 +8,6 @@ class UserNavbar extends Component {
     }
     handleLogout = () => {
        localStorage.removeItem('user')
-       this.props.history.push("/login")
     }
 
     render() { 
@@ -41,14 +40,13 @@ class UserNavbar extends Component {
                         <a class="nav-link" href="/dashboard"><b>|  Dashboard</b></a>
                     </li>
                     <li class="nav-item">
-                        <button class="btn ml-5 p-2 border text-dark" href="#" onClick = {this.handleLogout}><b>LogOut</b></button>
+                        <Link to="/login" class="btn ml-5 p-2 border text-dark" href="#" onClick = {this.handleLogout}><b>LogOut</b></Link>
                     </li>             
                     </ul>
                    
                 </div>
                 </nav>
-
-
+            <hr></hr>
         </div>
 
 
