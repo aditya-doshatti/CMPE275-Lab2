@@ -155,4 +155,15 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	
+	// Set payment DONE for given user
+	@RequestMapping(method=RequestMethod.GET, value = "/user/{userId}/pay", produces = { "application/json", "application/xml" })
+	public ResponseEntity<HttpStatus> setPaymentDone(@PathVariable Long userId) {
+		User u = userService.getUser(userId);
+		if(u == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		if(u.isPaid() == true) return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+		u.setPaid(true);
+		userService.addUser(u);
+		return ResponseEntity.status(HttpStatus.OK).build();		
+	}
 }
