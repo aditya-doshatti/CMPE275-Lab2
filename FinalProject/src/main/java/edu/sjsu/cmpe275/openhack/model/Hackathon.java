@@ -87,7 +87,7 @@ public class Hackathon {
 	}
 
 	// Many to many relationship 'Hackathon-Judges' between "Hackathon" and "User"
-	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_judge",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
@@ -96,7 +96,7 @@ public class Hackathon {
 	private Set<User> judges = new HashSet<User>();
 	
 	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
-	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_sponsor",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="ORGANIZATION_ID", referencedColumnName="ORGANIZATION_ID")})
@@ -302,6 +302,8 @@ public class Hackathon {
 		this.maxTeamSize = obj.maxTeamSize;
 		this.discount = obj.discount;
 		this.adminId = obj.adminId;
+		this.judges=obj.judges;
+		this.sponsors=obj.sponsors;
 	}
 
 	/**
