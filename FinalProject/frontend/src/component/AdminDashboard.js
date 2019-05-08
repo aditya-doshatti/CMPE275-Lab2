@@ -20,8 +20,9 @@ class AdminDashboard extends Component {
             openCreate: false,
             openLeave: false,
             openJoin: false,
-            openSponsor:true,
-            openHack:true
+            openSponsor:false,
+            openHack:true,
+            openTeams:false
         }
         this.setCloseFunction=this.setCloseFunction.bind(this)
     }
@@ -95,6 +96,16 @@ class AdminDashboard extends Component {
         this.setState({ openSponsor: false });
     };
 
+    onOpenTeamsModal = (e) => {
+        e.preventDefault();
+        this.setState({ openTeams: true });
+      };
+
+      onCloseTeamsModal = (e) => {
+        e.preventDefault();
+        this.setState({ openTeams: false });
+    };
+
       onCloseCreateModal = (e) => {
         e.preventDefault();
         this.setState({ openJoin: false });
@@ -106,10 +117,11 @@ class AdminDashboard extends Component {
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
         }
-        var a,b,c
+        var a,b,c,teams
         let listdetails = this.state.listed.map((row) => {
            a=row.judges.map(detail=>{return(<h5 className="text-background">{detail.name} <span className="text-muted">  Screen Name:</span>{detail.screenName}</h5>)})
            b=row.sponsors.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
+           teams = row.teams.map(detail=>{return(<h5 className="text-background">{detail}</h5>)})
             if(row.open===true){
                 c=<td className="text-primary">
                 <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,false)} >Close</button>
@@ -122,6 +134,8 @@ class AdminDashboard extends Component {
                  </td> 
             }
 
+
+
             return(                
                 
                 <tr>                    
@@ -132,7 +146,7 @@ class AdminDashboard extends Component {
                     <td>
                         <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
                         <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button>
-                        <button className="btn btn-info ml-2" onClick={this.onOpenCloseHackModal}>Teams</button>
+                        <button className="btn btn-info ml-2" onClick={this.onOpenTeamsModal}>Teams</button>
                     </td> 
                        {c}         
                 </tr>
@@ -177,10 +191,10 @@ class AdminDashboard extends Component {
                 </div>
                 </Modal>
 
-                <Modal className="w-75" open={this.state.openHack} onClose={this.onCloseHackModal} focusTrapped>
+                <Modal className="w-75" open={this.state.openTeams} onClose={this.onCloseTeamsModal} focusTrapped>
                 <div className="w-25" >
-                <h4 className="text-info">View Organizations:</h4><hr></hr>
-                     {b}
+                <h4 className="text-info">View teams:</h4><hr></hr>
+                     {teams}
                 </div>
                 </Modal>
 

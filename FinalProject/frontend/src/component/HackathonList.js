@@ -155,7 +155,7 @@ class HackathonList extends Component {
     }
 
     shouldJoin = (teams, key) => {
-        var retVal = <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join Kartot</button>
+        var retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
         teams.map((team, key12) => {
             if (this.isTeamInHack(team)) {
                 retVal = <div>
