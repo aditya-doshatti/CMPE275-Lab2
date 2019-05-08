@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.sjsu.cmpe275.openhack.model.Hackathon;
+import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.User;
+import edu.sjsu.cmpe275.openhack.service.HackathonService;
+import edu.sjsu.cmpe275.openhack.service.TeamUserAssocService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
 
 @RestController
@@ -23,6 +28,12 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	TeamUserAssocService teamUserAssocService;
+	
+	@Autowired
+	HackathonService hackathonService;
 	
 	@RequestMapping(method=RequestMethod.GET,value = "/user/ping")
 	public String pingHandler() {
@@ -119,6 +130,30 @@ public class UserController {
 		}
 		else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/user/{userId}/teams", produces = { "application/json", "application/xml" })
+	public List<Team> getTeamsOfAUser(@PathVariable Long userId) {
+		return teamUserAssocService.getTeamsOfUser(userId);
+	}
+	
+	// Return all hackathons created by given admin [userId]
+	@RequestMapping(method=RequestMethod.GET, value = "/user/{userId}/hackathons", produces = { "application/json", "application/xml" })
+	public ResponseEntity<List<Hackathon>> getHackathonByAdminId(@PathVariable Long userId) {
+		List<Hackathon> hackathons = null;
+		try {
+			hackathons = new ArrayList<Hackathon>(hackathonService.getHackathonByAdminId(userId));
+			return ResponseEntity.ok(hackathons);
+		}
+		catch (Exception e) {
+			if(e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }

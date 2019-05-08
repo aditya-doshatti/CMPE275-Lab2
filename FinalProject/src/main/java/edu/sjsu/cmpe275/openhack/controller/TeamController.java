@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.TeamUserAssoc;
 import edu.sjsu.cmpe275.openhack.model.User;
-import edu.sjsu.cmpe275.openhack.repository.TeamUserAssocRepository;
 import edu.sjsu.cmpe275.openhack.service.TeamService;
+import edu.sjsu.cmpe275.openhack.service.TeamUserAssocService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
 
 /**
@@ -32,7 +31,7 @@ public class TeamController {
 	UserService userService;
 	
 	@Autowired
-	TeamUserAssocRepository teamUserAssocRepo;
+	TeamUserAssocService teamUserAssocService;
 	
 	@RequestMapping(method=RequestMethod.GET,value = "/teams", produces = { "application/json", "application/xml" })
 	public List<Team> getAllTeams() {
@@ -51,6 +50,16 @@ public class TeamController {
 		Team t = teamService.getTeamById(teamId);
 		User u = userService.getUser(userId);
 		TeamUserAssoc obj = new TeamUserAssoc(t, u, "Other");
-		teamUserAssocRepo.save(obj);	
+		teamUserAssocService.addTeamUserAssoc(obj);	
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/team/{teamId}", produces = { "application/json", "application/xml" })
+	public Team getTeamByTeamId(@PathVariable Long teamId) {
+		return teamService.getTeamById(teamId);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/team/{teamId}/users", produces = { "application/json", "application/xml" })
+	public List<User> getUsersInATeam(@PathVariable Long teamId) {
+		return teamUserAssocService.getUsersInTeam(teamId);
 	}
 }

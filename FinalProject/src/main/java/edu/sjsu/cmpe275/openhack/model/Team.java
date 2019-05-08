@@ -48,9 +48,9 @@ public class Team {
 	/**
 	 * @return the hackathons
 	 */
-	/*public Set<HackathonTeamAssoc> getHackathons() {
+	public Set<HackathonTeamAssoc> getHackathons() {
 		return hackathons;
-	}*/
+	}
 
 	/**
 	 * @param hackathons the hackathons to set

@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
 import edu.sjsu.cmpe275.openhack.model.HackathonTeamAssoc;
 import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.User;
-import edu.sjsu.cmpe275.openhack.repository.HackathonTeamAssocRepository;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
+import edu.sjsu.cmpe275.openhack.service.HackathonTeamAssocService;
 import edu.sjsu.cmpe275.openhack.service.OrganizationService;
 import edu.sjsu.cmpe275.openhack.service.TeamService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
@@ -42,7 +43,7 @@ public class HackathonController {
 	TeamService teamService;
 	
 	@Autowired
-	HackathonTeamAssocRepository hackTeamAssocRepo;
+	HackathonTeamAssocService hackTeamAssocService;
 	
 	// Get ALL hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathons", produces = { "application/json", "application/xml" })
@@ -50,10 +51,10 @@ public class HackathonController {
 		return hackathonService.getAllHackathons();
 	}
 	
-	// Get ALL future and ongoing hackathons
+	// Get ALL ongoing hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathonsByDate", produces = { "application/json", "application/xml" })
 	public List<Hackathon> getAllOpenHackathons() {
-		return hackathonService.getAllFutureOngoingHAckathons();
+		return hackathonService.getAllFutureOngoingHackathons();
 	}
 	
 	// Create a new hackathon
@@ -102,8 +103,8 @@ public class HackathonController {
 	}
 	
 	// Fetch hackathon details by ID [hackId]
-	@RequestMapping(method=RequestMethod.GET, value = "/hackathon/{teamId}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<Hackathon> getTeams(@PathVariable Long teamId) {
+	@RequestMapping(method=RequestMethod.GET, value = "/hackathon/{hackId}", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Hackathon> getTeams(@PathVariable Long hackId) {
 		try {
 			Hackathon obj = hackathonService.getHackathonById(teamId);
 			if(obj == null) 
@@ -123,3 +124,4 @@ public class HackathonController {
 	
 	
 }
+
