@@ -31,8 +31,42 @@ public class Team {
 	private Long teamId;
 	
 	@Column(nullable=false, unique=true)
-	String name;
+	private String name;
 	
+	@ManyToOne
+	@JsonIgnoreProperties(value= {"judgesHackathons", "ownsTeams"})
+	private User owner;
+	
+	private int paidCount = 0;
+	
+	/**
+	 * @return the owner
+	 */
+	public User getOwner() {
+		return owner;
+	}
+
+	/**
+	 * @param owner the owner to set
+	 */
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	/**
+	 * @return the paidCount
+	 */
+	public int getPaidCount() {
+		return paidCount;
+	}
+
+	/**
+	 * @param paidCount the paidCount to set
+	 */
+	public void setPaidCount(int paidCount) {
+		this.paidCount = paidCount;
+	}
+
 	public Team() { }
 	
 	public Team(String name) {
