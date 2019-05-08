@@ -39,10 +39,18 @@ public class UserController {
 		return "Hello! User here!";
 	}
 	
+	//Get users without admin status
+	
 	@RequestMapping(method=RequestMethod.GET,value = "/users", produces = { "application/json", "application/xml" })
 	public List<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/users/hacker", produces = { "application/json", "application/xml" })
+	public List<User> getAllUserWithoutAdmin() {
+		return userService.getUsersWithoutAdmin();
+	}
+	
 	
 	@RequestMapping(method=RequestMethod.GET, value="/user/{id}",  produces = { "application/json", "application/xml" })
 	public ResponseEntity<User> getProfile(@PathVariable Long id ) {

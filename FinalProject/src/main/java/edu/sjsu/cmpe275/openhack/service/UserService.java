@@ -33,6 +33,18 @@ public class UserService {
 		return userList;
 	}
 	
+	public List<User> getUsersWithoutAdmin() {
+		List<User> userList = new ArrayList<User>();
+		List<User> finalUserList = new ArrayList<User>();
+		userRepository.findAll().forEach(userList::add);
+		for(User user:userList){
+			System.out.println(user.getRole());
+			if(user.getRole().equals("hacker"))
+				finalUserList.add(user);
+		}
+		return finalUserList;
+	}
+	
 	
 	public User getUser(Long id) {
 		return userRepository.findOne(id);

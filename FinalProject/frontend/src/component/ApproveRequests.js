@@ -67,6 +67,7 @@ class ApproveRequests extends Component {
         }
         return ( <div> 
              {redirectVar}
+                    <UserNavbar />
                     <div className="container-fluid">
                     <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
                     <h1 class="ml-9">Pending Approvals</h1>

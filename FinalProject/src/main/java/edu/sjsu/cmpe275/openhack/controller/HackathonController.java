@@ -137,9 +137,9 @@ public class HackathonController {
 	}
 	
 	// Open/close a hackathon
-	@RequestMapping(method=RequestMethod.PUT, value = "/hackathon/{hackId}/open", produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.PUT, value = "/hackathon/{hackId}/open/{status}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Hackathon> openHackathon(@PathVariable Long hackId,
-			@RequestParam(required=true) boolean status) {
+			@PathVariable boolean status) {
 		try {
 			Hackathon h = hackathonService.getHackathonById(hackId);
 			h.setOpen(status);

@@ -138,6 +138,7 @@ class Profile extends Component {
                     portraitUrl:response.data.portraitUrl
                 })
                 console.log(response.data);
+                swal("Profile updated","Updated","success")
         });
     }
 

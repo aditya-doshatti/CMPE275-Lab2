@@ -5,8 +5,8 @@ import AdminNavbar from './AdminNavbar';
 import {NavLink} from 'react-router-dom';
 import { frontend, url } from '../config/config';
 import {Redirect} from 'react-router';
-
 import "../css/hackathonTable.css"
+var swal = require('sweetalert')
 
 
 
@@ -20,8 +20,10 @@ class AdminDashboard extends Component {
             openCreate: false,
             openLeave: false,
             openJoin: false,
-            openSponsor:true
+            openSponsor:true,
+            openHack:true
         }
+        this.setCloseFunction=this.setCloseFunction.bind(this)
     }
 
     async componentDidMount() {
@@ -50,6 +52,34 @@ class AdminDashboard extends Component {
 
     }
 
+    setCloseFunction(id,stat){
+        console.log("inside close hackathoin",id,stat)
+        var hackId=id
+        var status=stat
+        axios.put(url+`/hackathon/${hackId}/open/${status}`)
+        .then((response, error) => {
+            if(stat==true)
+                swal("Hackathon has been opened successfully!","Status changed!","success")
+            else
+                swal("Hackathon has been closed successfully!","Status changed!","success")
+            console.log(response.data)
+        }).catch((error) => {
+            console.log("Error",error.code)
+        }); 
+
+    }
+
+    onOpenCloseHackModal = (e) => {
+        e.preventDefault();
+        this.setState({ openHack: true });
+      };
+
+      onCloseHackModal = (e) => {
+        e.preventDefault();
+        this.setState({ openHack: false });
+      };
+
+
     onOpenJoinModal = (e) => {
         e.preventDefault();
         this.setState({ openJoin: true });
@@ -76,28 +106,35 @@ class AdminDashboard extends Component {
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
         }
-        var a,b
+        var a,b,c
         let listdetails = this.state.listed.map((row) => {
            a=row.judges.map(detail=>{return(<h5 className="text-background">{detail.name} <span className="text-muted">  Screen Name:</span>{detail.screenName}</h5>)})
            b=row.sponsors.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
-
+            if(row.open===true){
+                c=<td className="text-primary">
+                <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,false)} >Close</button>
+                <button className="btn btn-secondary ml-2">Finalize</button>
+            </td> 
+            }else{
+               c= <td className="text-primary">
+                     <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,true)} >Open</button>
+                      <button className="btn btn-secondary ml-2">Finalize</button>
+                 </td> 
+            }
 
             return(                
                 
                 <tr>                    
-                    <td className="text-primary">{row.name}</td>
+                    <td className="text-primary">{row.name}{row.open}</td>
                     <td className="text-primary">({row.startDate}) - ({row.endDate})</td>
                     <td className="text-primary">{row.regFees}/{row.discount}</td>
                     <td className="text-primary">{row.minTeamSize}/{row.maxTeamSize}</td> 
                     <td>
                         <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
                         <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button>
-                        <button className="btn btn-info ml-2">Teams</button>
+                        <button className="btn btn-info ml-2" onClick={this.onOpenCloseHackModal}>Teams</button>
                     </td> 
-                    <td className="text-primary">
-                        <button className="btn btn-secondary">Close</button>
-                        <button className="btn btn-secondary ml-2">Finalize</button>
-                    </td>              
+                       {c}         
                 </tr>
             )
         })
@@ -134,6 +171,13 @@ class AdminDashboard extends Component {
                 </Modal>
 
                 <Modal className="w-75" open={this.state.openSponsor} onClose={this.onCloseSponsorModal} focusTrapped>
+                <div className="w-25" >
+                <h4 className="text-info">View Organizations:</h4><hr></hr>
+                     {b}
+                </div>
+                </Modal>
+
+                <Modal className="w-75" open={this.state.openHack} onClose={this.onCloseHackModal} focusTrapped>
                 <div className="w-25" >
                 <h4 className="text-info">View Organizations:</h4><hr></hr>
                      {b}
