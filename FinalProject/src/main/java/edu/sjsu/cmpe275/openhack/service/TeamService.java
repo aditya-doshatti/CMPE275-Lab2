@@ -37,5 +37,9 @@ public class TeamService {
 	public void deleteTeamById(Long Id) {
 		teamRepository.delete(Id);
 	}
+	
+	public void updateTeam(Team t) {
+		teamRepository.save(t);
+	}
 
 }

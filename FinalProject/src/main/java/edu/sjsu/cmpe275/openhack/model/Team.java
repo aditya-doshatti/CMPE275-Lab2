@@ -37,6 +37,10 @@ public class Team {
 	@JsonIgnoreProperties(value= {"judgesHackathons", "ownsTeams"})
 	private User owner;
 	
+	private String submissionLink;
+	
+	private float score;
+	
 	private int paidCount = 0;
 	
 	/**
@@ -77,6 +81,10 @@ public class Team {
 		this.name = obj.name;
 		this.users = obj.users;
 		this.hackathon = obj.hackathon;
+		this.owner = obj.owner;
+		this.paidCount = obj.paidCount;
+		this.score = obj.score;
+		this.submissionLink = obj.submissionLink;
 	}
 	
 	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
@@ -84,11 +92,11 @@ public class Team {
 		joinColumns={@JoinColumn(name="TEAM_ID", referencedColumnName="TEAM_ID")},
 		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
-			"judgesHackathons", "teams", "hibernateLazyInitializer", "handler"})
+			"judgesHackathons", "teams", "hibernateLazyInitializer", "handler","ownsTeams","participantTeam"})
 	private Set<User> users;
 
 	@ManyToOne
-	@JsonIgnoreProperties(value = {"teams"})
+	@JsonIgnoreProperties(value = {"teams","judges","sponsors"})
 	private Hackathon hackathon;
 	
 	public Set<User> getUsers() {
@@ -134,6 +142,21 @@ public class Team {
 	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
 	}
-	
 
+	public String getSubmissionLink() {
+		return submissionLink;
+	}
+
+	public void setSubmissionLink(String submissionLink) {
+		this.submissionLink = submissionLink;
+	}
+
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
+	}
+	
 }
