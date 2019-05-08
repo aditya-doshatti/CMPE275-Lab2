@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import UserNavbar from './UserNavbar';
 import {Redirect} from 'react-router';
-
+import { frontend, url } from '../config/config';
 import "../css/card.css"
 
 class Hackathon extends Component {

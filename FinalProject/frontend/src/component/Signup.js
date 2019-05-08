@@ -4,6 +4,7 @@ import {NavLink} from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbas';
 import swal from 'sweetalert';
+import { frontend, url } from '../config/config';
 
 const config = {
     apiKey: "AIzaSyB3Zwh6ZNXExXKzsnQWmCcw9C8em0Sq0A4",
@@ -16,7 +17,7 @@ const config = {
   };
 
 const fire=firebase.initializeApp(config);
-const url="http://localhost:8080"
+
 
 
 class Signup extends Component {

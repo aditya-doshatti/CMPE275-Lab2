@@ -5,11 +5,10 @@ import { Link } from 'react-router-dom'
 import Autosuggest from 'react-autosuggest';
 import UserNavbar from './UserNavbar';
 import {Redirect} from 'react-router';
+import { frontend, url } from '../config/config';
 var swal = require('sweetalert')
 
 
-
-const url="http://localhost:8080"
 class Profile extends Component {
     constructor(props) {
         super(props);

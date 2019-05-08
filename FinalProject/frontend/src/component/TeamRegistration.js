@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../css/teamRegistration.css'
 import UserNavbar from './UserNavbar';
 import {Redirect} from 'react-router';
+import { frontend, url } from '../config/config';
 
 class TeamRegistration extends Component {
     constructor(props) {

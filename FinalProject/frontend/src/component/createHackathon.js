@@ -3,9 +3,9 @@ import axios from 'axios';
 import "../css/createHackathon.css"
 import AdminNavbar from './AdminNavbar';
 import swal from 'sweetalert';
+import { frontend, url } from '../config/config';
 import {Redirect} from 'react-router';
 
-const url="http://localhost:8080"
 class CreateHackathon extends Component {
     constructor(props) {
         super(props);

@@ -3,9 +3,9 @@ import firebase from 'firebase';
 import {NavLink} from 'react-router-dom';
 import Navbar from './Navbas';
 import axios from 'axios';
+import { frontend, url } from '../config/config';
 var swal = require('sweetalert')
 // import fire from '../config/fire'
-const url="http://localhost:8078"
 
 class Login extends Component {
     constructor(props) {

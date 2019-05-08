@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 import UserNavbar from './UserNavbar';
+import { frontend, url } from '../config/config';
 import {Redirect} from 'react-router';
-
-const url="http://localhost:8080"
 
 class ApproveRequests extends Component {
     constructor(props) {

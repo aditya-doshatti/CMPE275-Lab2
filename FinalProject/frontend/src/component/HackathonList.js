@@ -5,10 +5,9 @@ import Modal from 'react-responsive-modal'
 import axios from 'axios';
 import "../css/hackathonTeam.css";
 import {Redirect} from 'react-router';
+import { frontend, url } from '../config/config';
 
 var swal = require('sweetalert')
-
-const url="http://localhost:8080"
 
 class HackathonList extends Component {
     constructor(props) {
