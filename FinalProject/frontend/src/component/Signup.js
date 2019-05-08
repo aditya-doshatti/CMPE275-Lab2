@@ -4,20 +4,18 @@ import {NavLink} from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbas';
 import swal from 'sweetalert';
-import { frontend, url } from '../config/config';
 
 const config = {
-    apiKey: "AIzaSyB3Zwh6ZNXExXKzsnQWmCcw9C8em0Sq0A4",
-    authDomain: "cmpe275-922ad.firebaseapp.com",
-    databaseURL: "https://cmpe275-922ad.firebaseio.com",
-    projectId: "cmpe275-922ad",
-    storageBucket: "cmpe275-922ad.appspot.com",
-    messagingSenderId: "681106181388",
-    appId: "1:681106181388:web:3f1e42b24333fe8a"
+    apiKey: "AIzaSyCi3JYLWPtBMR6kxxRF-D8MisQVqEVu1DY",
+    authDomain: "zhang-a2fe9.firebaseapp.com",
+    databaseURL: "https://zhang-a2fe9.firebaseio.com",
+    projectId: "zhang-a2fe9",
+    storageBucket: "zhang-a2fe9.appspot.com",
+    messagingSenderId: "122985196639"
   };
 
 const fire=firebase.initializeApp(config);
-
+const url="http://localhost:8078"
 
 
 class Signup extends Component {
@@ -140,22 +138,48 @@ class Signup extends Component {
                <h1 class="title pt-2">Sign up for Hackathon</h1>
                 Already have an account?<strong><NavLink to="/login"> Log in!</NavLink></strong>
                <form onSubmit={this.submitEvent}>
-                <div>
-                <input type="text" name="name" id="name" class="panel-input mt-2 w-50" placeholder="Full Name" onChange={this.setField} required/>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">   
+                    <input type="text" name="name" id="name" class="panel-input mt-2" placeholder="Full Name" onChange={this.setField} required/>                          
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
                 </div>
 
-                <div>
-                <input type="text" name="screenName" id="screenName" class="panel-input mt-3 w-50" onChange={this.setScreenName} placeholder="Screen Name" required/>
-                <h6 className="text-danger">{this.state.error_message}</h6>
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">                  
+                    <input type="text" name="screenName" id="screenName" class="panel-input mt-3" onChange={this.setScreenName} placeholder="Screen Name" required/>
+                <h6 className="text-danger">{this.state.error_message}</h6>      
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
                 </div>
 
-                <div>
-                <input type="email" name="email" id="email" class="panel-input mt-3 w-50" onChange={this.setField} placeholder="Email address" required/>
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">     
+                    <input type="email" name="email" id="email" class="panel-input mt-3" onChange={this.setField} placeholder="Email address" required/>                   
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
                 </div>
-               
-                <div>
-               <input type="password" name="password" id="password" class="panel-input mt-3 w-50" onChange={this.setField}    placeholder="Password" required/>
-                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">   
+                    <input type="password" name="password" id="password" class="panel-input mt-3" onChange={this.setField}    placeholder="Password" required/>                     
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
+                </div>               
+
 
                   {/* <div>
                <input type="text" name="portraitUrl" id="portraitUrl" class="panel-input mt-3 w-50" onChange={this.setField}    placeholder="Portrait URL"/>

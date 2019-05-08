@@ -138,6 +138,7 @@ class Profile extends Component {
                     portraitUrl:response.data.portraitUrl
                 })
                 console.log(response.data);
+                swal("Profile updated","Updated","success")
         });
     }
 
@@ -297,7 +298,7 @@ class Profile extends Component {
 
                         <div className="mt-4 mr-5"  >
                          <span className="text-info font-weight-bold">Business Title:</span>
-                            <input type="text" className="btn-lg ml-5 col-lg-7 pull-right" onChange={this.handleEvent} placeholder={this.state.business_title} name="business_title" defaultValue={this.state.business_title} id="business_title"  />
+                            <input type="text" className="btn-lg ml-5 col-lg-7 pull-right" onChange={this.handleEvent} placeholder={this.state.businessTitle} name="business_title" defaultValue={this.state.businessTitle} id="business_title"  />
                         </div><br></br>
 
                         <div className="mt-4 mr-5"  >

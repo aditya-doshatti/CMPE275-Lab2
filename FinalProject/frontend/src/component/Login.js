@@ -4,6 +4,7 @@ import {NavLink} from 'react-router-dom';
 import Navbar from './Navbas';
 import axios from 'axios';
 import { frontend, url } from '../config/config';
+// import "../css/login.css"
 var swal = require('sweetalert')
 // import fire from '../config/fire'
 
@@ -71,22 +72,36 @@ class Login extends Component {
     render() { 
         return ( 
           <div>
-            <Navbar />
-            <div className="text-center pull-center mt-5">
+              <Navbar />
+            <div className="text-center pull-center mt-5 ">
               <form onSubmit={this.submitEvent}>
-               <h1 class="title pt-2">Login to Hackathon</h1>
-                    Need an account?<strong><NavLink to="/signup"> Sign Up!</NavLink></strong>
-              
-                <div >
-                
-                <input type="email" name="email" id="email" class="panel-input mt-3 w-25 text-center" onChange={this.setField} placeholder="Email address" required />
+              <h1 class="title pt-2">Login to Hackathon</h1>
+                Need an account?<strong><NavLink to="/signup"> Sign Up!</NavLink></strong>
+                <br></br>          
+                <br></br>          
+
+                <div class="form-group row">
+                  <div class="col-sm-4">
+                  </div>
+                  <div class="col-sm-4">
+                    <input type="email" name="email" id="email" class="form-control text-center mt-3" onChange={this.setField} placeholder=" Email address" required />                
+                  </div>
+                  <div class="col-sm-4">
+                  </div>
                 </div>
-               
-                <div>
-               <input type="password" name="password" id="password" class="panel-input text-center mt-3 w-25 float-center" onChange={this.setField}   placeholder="Password" required />
-                </div> 
+
+                <div class="form-group row">
+                  <div class="col-sm-4">
+                  </div>
+                  <div class="col-sm-4">
+                    <input type="password" name="password" id="password" class="form-control text-center mt-3" onChange={this.setField}   placeholder="Password" required />
+                  </div>
+                  <div class="col-sm-4">
+                  </div>
+                </div>         
+ 
                 <button class="btn btn-submit text-white btn-large mt-4 custom" onSubmit={this.submitEvent}><strong>Login</strong></button> 
-                </form>
+              </form>
             </div>
            </div>
          );

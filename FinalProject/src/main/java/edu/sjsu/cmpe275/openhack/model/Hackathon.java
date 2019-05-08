@@ -279,7 +279,7 @@ public class Hackathon {
 	 * @param maxTeamSize
 	 */
 	public Hackathon(String name, String desc, Date startDate, Date endDate, Double regFees, int minTeamSize,
-			int maxTeamSize, Double discount, Long adminId) {
+			int maxTeamSize, Double discount, Long adminId, Boolean isOpen) {
 		super();
 		this.name = name;
 		this.description = desc;
@@ -290,6 +290,7 @@ public class Hackathon {
 		this.maxTeamSize = maxTeamSize;
 		this.discount = discount;
 		this.adminId = adminId;
+		this.isOpen=isOpen;
 	}
 	
 	public Hackathon(Hackathon obj) {
