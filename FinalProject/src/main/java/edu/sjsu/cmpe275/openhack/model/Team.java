@@ -31,7 +31,11 @@ public class Team {
 	private Long teamId;
 	
 	@Column(nullable=false, unique=true)
-	String name;
+	private String name;
+	
+	@ManyToOne
+	@JsonIgnoreProperties(value= {"judgesHackathons", "ownsTeams"})
+	private User owner;
 	
 	public Team() { }
 	

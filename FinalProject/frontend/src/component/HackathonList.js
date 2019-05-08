@@ -19,7 +19,9 @@ class HackathonList extends Component {
             error_message:"",
             openCreate:false,
             currentHackathonId:0,
-            allUsers:[]
+            allUsers:[],
+            owner:{id:0, name:""},
+            lenMatch:false
          }
     }
 
@@ -35,14 +37,26 @@ class HackathonList extends Component {
                 allUsers:response.data
             })
         });
+        const email=JSON.parse(localStorage.getItem('user'));
+        axios.get(url+`/user/profile/${email}`)
+        .then((response) => {
+                this.setState({
+                    owner:{id:response.data.id,
+                        name:response.data.name}
+                })
+                console.log(response.data);
+        });
 
     }
 
-    handleJoin = (id) => {
+    handleJoin = (index) => {
         //e.preventDefault();
         this.setState({ 
             openCreate: true,
-            currentHackathonId: id
+            currentHackathonId: this.state.hackathonlist[index].id,
+            currentHackathonMinTeamSize: this.state.hackathonlist[index].minTeamSize,
+            currentHackathonMaxTeamSize: this.state.hackathonlist[index].maxTeamSize
+
         });
     }
 
@@ -59,23 +73,28 @@ class HackathonList extends Component {
       };
     
     handleShareholderNameChange = idx => evt => {
-    const newShareholders = this.state.users.map((users, sidx) => {
-        if (idx !== sidx) return users;
-        return { ...users, id: evt.target.value };
+        //console.log("in change button",this.state.users.length)
+        const newShareholders = this.state.users.map((users, sidx) => {
+            if (idx !== sidx) return users;
+            return { ...users, id: evt.target.value };
     });
 
-    this.setState({ users: newShareholders });
+    this.setState({ 
+        users: newShareholders,
+        lenMatch : this.state.users.length >= this.state.currentHackathonMinTeamSize && this.state.users.length <= this.state.currentHackathonMaxTeamSize
+
+    });
     };
 
     handleSubmit = evt => {
-        evt.preventDefault()
-        const { name, users } = this.state;
+        const { name, users, owner } = this.state;
         console.log(users)
-        alert(`Incorporated: ${name} with ${users.length} shareholders`);
+        //alert(`Incorporated: ${name} with ${users.length} shareholders`);
         const teamData=({
             name: name,
             users,
-            hackathon: {id:this.state.currentHackathonId}
+            hackathon: {id:this.state.currentHackathonId},
+            owner
         })
         axios.post(url+'/team', teamData)
         .then((response)=>{
@@ -84,14 +103,18 @@ class HackathonList extends Component {
     };
 
     handleAddShareholder = () => {
+        //console.log("in Add button",this.state.users.length)
         this.setState({
             users: this.state.users.concat([{ id: "" }])
+
         });
     };
 
     handleRemoveShareholder = idx => () => {
+        //console.log("in Close button",this.state.users.length)
         this.setState({
-            users: this.state.users.filter((s, sidx) => idx !== sidx)
+            users: this.state.users.filter((s, sidx) => idx !== sidx),
+            lenMatch : this.state.users.length-1 >= this.state.currentHackathonMinTeamSize && this.state.users.length-1 <= this.state.currentHackathonMaxTeamSize
         });
     };
 
@@ -101,16 +124,17 @@ class HackathonList extends Component {
         if(this.state.hackathonlist!=null) {
         items = this.state.hackathonlist.map((item, key) => <div className="row text-center mt-4 ml-5">
             <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-            <button onClick={()=>this.handleJoin(item.id)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+            <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
         </div>
         );}
 
         var userList
         if(this.state.users!=null){
             userList=this.state.allUsers.map((u) => {
-                return(
-                    <option value={u.id}>{u.name} : ({u.email})</option>
-                )
+                if(u.role == 'hacker' && u.id != this.state.owner.id)
+                    return(
+                        <option value={u.id}>{u.name} : ({u.email})</option>
+                    )
             });}
         return ( <div> 
                     <div className="container-fluid">
@@ -121,11 +145,16 @@ class HackathonList extends Component {
                     <Modal open={this.state.openCreate} onClose={this.onCloseCreateModal} focusTrapped>
                     <form onSubmit={this.handleSubmit}>
                     <input
+                    required={true}
                     type="text"
                     placeholder="Team name, e.g. Magic Everywhere LLC"
                     value={this.state.name}
                     onChange={this.handleNameChange}
                     />
+                    <div>
+                        <h3>Team Owner</h3>
+                        {this.state.owner.name}
+                    </div>
 
                     <h4>Team Members</h4>
 
@@ -146,7 +175,7 @@ class HackathonList extends Component {
                         onClick={this.handleRemoveShareholder(idx)}
                         className="small"
                         >
-                        -
+                        X
                         </button>
                     </div>
                     ))}
@@ -155,9 +184,10 @@ class HackathonList extends Component {
                     onClick={this.handleAddShareholder}
                     className="small"
                     >
-                    Add Shareholder
+                    Add Teammember
                     </button>
-                    <button>Incorporate</button>
+                    {/* disabled={this.state.currentHackathonMinTeamSize <= this.state.users.length <= this.state.currentHackathonMaxTeamSize } */}
+                    <button disabled={!this.state.lenMatch}>Create</button>
                 </form>
                         </Modal>
                     </div>

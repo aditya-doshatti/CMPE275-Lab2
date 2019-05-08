@@ -65,7 +65,11 @@ public class User {
 	@ManyToMany(mappedBy = "judges")
 	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
-	private Set<Hackathon> judgesHackathons = new HashSet<Hackathon>();
+	private Set<Hackathon> judgesHackathons;
+	
+	@ManyToMany(mappedBy = "owner")
+	@JsonIgnoreProperties(value = {"owner"})
+	private Set<Team> ownsTeams;
 	
 	
 	@ManyToMany(mappedBy = "users")

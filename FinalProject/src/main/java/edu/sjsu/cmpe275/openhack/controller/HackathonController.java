@@ -103,16 +103,7 @@ public class HackathonController {
 		hackathonService.addHackathon(h);
 		orgService.addOrganization(org);		
 	}
-	
-	// Add a team [teamId] to hackathon [hackId]
-//	@RequestMapping(method=RequestMethod.PUT, value="/hackathon/{teamId}/join/{hackId}",  produces = { "application/json", "application/xml" })
-//	public void joinHackathon(@PathVariable Long teamId, @PathVariable Long hackId) {
-//		Team t = teamService.getTeamById(teamId);
-//		Hackathon h = hackathonService.getHackathonById(hackId);
-//		HackathonTeamAssoc obj = new HackathonTeamAssoc(h, t, "http://link1", 0.0);
-//		hackTeamAssocService.addHackathonTeamAssoc(obj);
-//	}
-	
+
 	// Fetch hackathon details by ID [hackId]
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathon/{hackId}", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Hackathon> getTeams(@PathVariable Long hackId) {
