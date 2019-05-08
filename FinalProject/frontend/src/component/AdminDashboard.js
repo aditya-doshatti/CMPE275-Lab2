@@ -3,11 +3,11 @@ import axios from 'axios';
 import Modal from 'react-responsive-modal'
 import AdminNavbar from './AdminNavbar';
 import {NavLink} from 'react-router-dom';
+import { frontend, url } from '../config/config';
 import {Redirect} from 'react-router';
 
 import "../css/hackathonTable.css"
 
-const url="http://localhost:8080"
 
 
 class AdminDashboard extends Component {

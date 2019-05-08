@@ -4,8 +4,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import UserNavbar from './UserNavbar';
 import {Redirect} from 'react-router';
-
-const url="http://localhost:8080"
+import { frontend, url } from '../config/config';
 
 class HackerDashboard extends Component {
     constructor(props) {

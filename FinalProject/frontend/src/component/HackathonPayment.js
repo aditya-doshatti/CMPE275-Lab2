@@ -3,10 +3,10 @@ import axios from 'axios';
 import '../css/hackathonPayment.css'
 import UserNavbar from './UserNavbar';
 import {Redirect} from 'react-router';
-
+import { frontend, url } from '../config/config';
 var swal = require('sweetalert')
 
-const url="http://localhost:8080"
+
 
 class HackathonPayment extends Component {
     constructor(props) {

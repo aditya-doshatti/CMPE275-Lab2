@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import { frontend, url } from '../config/config';
 
 class UserNavbar extends Component {
     constructor(props) {
