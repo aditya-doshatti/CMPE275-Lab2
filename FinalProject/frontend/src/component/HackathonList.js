@@ -99,7 +99,9 @@ class HackathonList extends Component {
         axios.post(url+'/team', teamData)
         .then((response)=>{
             console.log(response.data)
+            this.props.history.push('/payment')
         })
+
     };
 
     handleAddShareholder = () => {

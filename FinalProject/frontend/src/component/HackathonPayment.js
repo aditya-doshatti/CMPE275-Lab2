@@ -1,11 +1,40 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import '../css/hackathonPayment.css'
+
+var swal = require('sweetalert')
+
+const url="http://localhost:8080"
 
 class HackathonPayment extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = { 
+            userId:''
+         }
     }
+
+    componentWillMount(){
+        console.log("localStorage",localStorage.getItem('user'))
+        const email=JSON.parse(localStorage.getItem('user'));
+        axios.get(url+`/user/profile/${email}`)
+        .then((response) => {
+                this.setState({
+                    userId:response.data.id
+                })
+                console.log(response.data);
+        });
+    }
+
+    markPaymentDone = e => {
+        axios.post(url+`/user/${this.state.userId}/pay`)
+        .then((response)=>{
+            console.log(response.data)
+            this.props.history.push('/payment')
+        });
+        swal("Payment Done","Make your teammates pay","success")
+    }
+
     render() { 
         return ( 
         <div>
@@ -41,7 +70,7 @@ class HackathonPayment extends Component {
                                 
                             <br></br>
                             <hr></hr>     
-                            <button type="button" class="btn btn-dark">Make Payment</button>
+                            <button type="button" onClick={this.markPaymentDone} class="btn btn-dark">Make Payment</button>
                         </div>
                     </div>
                 </div>
