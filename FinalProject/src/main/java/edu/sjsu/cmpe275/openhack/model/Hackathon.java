@@ -87,7 +87,7 @@ public class Hackathon {
 	}
 
 	// Many to many relationship 'Hackathon-Judges' between "Hackathon" and "User"
-	@ManyToMany(/*cascade={CascadeType.ALL},*/ fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_judge",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
@@ -97,7 +97,7 @@ public class Hackathon {
 	private Set<User> judges;
 	
 	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
-	@ManyToMany(/*cascade={CascadeType.ALL},*/ fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_sponsor",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="ORGANIZATION_ID", referencedColumnName="ORGANIZATION_ID")})
@@ -105,16 +105,8 @@ public class Hackathon {
 			"hackathons", "hibernateLazyInitializer", "handler"})
 	private Set<Organization> sponsors;
 	
-	// Hackathon-Teams mapping
-//	@OneToMany(mappedBy = "hackathon")
-//	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
-//	private Set<HackathonTeamAssoc> teams = new HashSet<HackathonTeamAssoc>();
-	
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
 	private Set<Team> teams;
-	@OneToMany(mappedBy = "hackathon")
-	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
-	private Set<HackathonTeamAssoc> teams; // = new HashSet<HackathonTeamAssoc>();
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
@@ -323,20 +315,5 @@ public class Hackathon {
 	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
-
-//	/**
-//	 * @return the teams
-//	 */
-//	public Set<HackathonTeamAssoc> getTeams() {
-//		return teams;
-//	}
-//
-//	/**
-//	 * @param teams the teams to set
-//	 */
-//	public void setTeams(Set<HackathonTeamAssoc> teams) {
-//		this.teams = teams;
-//	}
-	
 	
 }

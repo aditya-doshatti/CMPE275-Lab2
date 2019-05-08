@@ -54,28 +54,8 @@ public class Team {
 	private Set<User> users;
 
 	@ManyToOne
+	@JsonIgnoreProperties(value = {"teams"})
 	private Hackathon hackathon;
-	
-//	@OneToMany(mappedBy = "team")
-//	@JsonIgnore
-//	private Set<TeamUserAssoc> users = new HashSet<TeamUserAssoc>();
-//	
-//	@OneToMany(mappedBy = "teamObj")
-//	@JsonIgnore
-//	private Set<HackathonTeamAssoc> hackathons = new HashSet<HackathonTeamAssoc>();
-//	/**
-//	 * @return the users
-//	 */
-//	public Set<TeamUserAssoc> getUsers() {
-//		return users;
-//	}
-//
-//	/**
-//	 * @param users the users to set
-//	 */
-//	public void setUsers(Set<TeamUserAssoc> users) {
-//		this.users = users;
-//	}
 	
 	public Set<User> getUsers() {
 		return users;
@@ -91,31 +71,21 @@ public class Team {
 	public String getName() {
 		return name;
 	}
-	public Set<HackathonTeamAssoc> getHackathons() {
-		return hackathons;
-	}
-
+	
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 
-//	/**
-//	 * @return the hackathons
-//	 */
-//	public Set<HackathonTeamAssoc> getHackathons() {
-//		return hackathons;
-//	}
-//
-//	/**
-//	 * @param hackathons the hackathons to set
-//	 */
-//	public void setHackathons(Set<HackathonTeamAssoc> hackathons) {
-//		this.hackathons = hackathons;
-//	}
+	public Hackathon getHackathon() {
+		return hackathon;
+	}
+
+	public void setHackathon(Hackathon hackathon) {
+		this.hackathon = hackathon;
+	}
 
 	/**
 	 * @return the teamId

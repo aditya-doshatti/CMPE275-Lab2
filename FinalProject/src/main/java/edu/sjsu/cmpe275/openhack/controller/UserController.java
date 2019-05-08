@@ -19,7 +19,6 @@ import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
-import edu.sjsu.cmpe275.openhack.service.TeamUserAssocService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
 
 @RestController
@@ -29,8 +28,8 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@Autowired
-	TeamUserAssocService teamUserAssocService;
+//	@Autowired
+//	TeamUserAssocService teamUserAssocService;
 	
 	@Autowired
 	HackathonService hackathonService;
@@ -133,10 +132,10 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value = "/user/{userId}/teams", produces = { "application/json", "application/xml" })
-	public List<Team> getTeamsOfAUser(@PathVariable Long userId) {
-		return teamUserAssocService.getTeamsOfUser(userId);
-	}
+//	@RequestMapping(method=RequestMethod.GET,value = "/user/{userId}/teams", produces = { "application/json", "application/xml" })
+//	public List<Team> getTeamsOfAUser(@PathVariable Long userId) {
+//		return teamUserAssocService.getTeamsOfUser(userId);
+//	}
 	
 	// Return all hackathons created by given admin [userId]
 	@RequestMapping(method=RequestMethod.GET, value = "/user/{userId}/hackathons", produces = { "application/json", "application/xml" })

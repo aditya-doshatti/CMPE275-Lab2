@@ -65,14 +65,11 @@ public class User {
 	@ManyToMany(mappedBy = "judges")
 	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
-
 	private Set<Hackathon> judgesHackathons = new HashSet<Hackathon>();
+	
+	
 	@ManyToMany(mappedBy = "users")
 	private Set<Team> participantTeam;
-
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties(value = {"team", "user", "hibernateLazyInitializer", "handler"})
-	private Set<TeamUserAssoc> teams = new HashSet<TeamUserAssoc>();
 	
 	@Column(name="isOwner",nullable = true)
 	private boolean isOwner=false;
@@ -81,22 +78,6 @@ public class User {
 	@JoinColumn(name = "ORGANIZATION_ID")
 	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
 	private Organization organization;
-	
-	
-
-	/**
-	 * @return the teams
-	 */
-	public Set<TeamUserAssoc> getTeams() {
-		return teams;
-	}
-
-	/**
-	 * @param teams the teams to set
-	 */
-	public void setTeams(Set<TeamUserAssoc> teams) {
-		this.teams = teams;
-	}
 
 	/**
 	 * @return the judgesHackathons

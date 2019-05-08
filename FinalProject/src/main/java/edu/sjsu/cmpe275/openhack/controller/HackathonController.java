@@ -11,12 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
-import edu.sjsu.cmpe275.openhack.model.HackathonTeamAssoc;
 import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
-import edu.sjsu.cmpe275.openhack.service.HackathonTeamAssocService;
 import edu.sjsu.cmpe275.openhack.service.OrganizationService;
 import edu.sjsu.cmpe275.openhack.service.TeamService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
@@ -42,8 +40,8 @@ public class HackathonController {
 	@Autowired
 	TeamService teamService;
 	
-	@Autowired
-	HackathonTeamAssocService hackTeamAssocService;
+//	@Autowired
+//	HackathonTeamAssocService hackTeamAssocService;
 	
 	// Get ALL hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathons", produces = { "application/json", "application/xml" })
@@ -107,13 +105,13 @@ public class HackathonController {
 	}
 	
 	// Add a team [teamId] to hackathon [hackId]
-	@RequestMapping(method=RequestMethod.PUT, value="/hackathon/{teamId}/join/{hackId}",  produces = { "application/json", "application/xml" })
-	public void joinHackathon(@PathVariable Long teamId, @PathVariable Long hackId) {
-		Team t = teamService.getTeamById(teamId);
-		Hackathon h = hackathonService.getHackathonById(hackId);
-		HackathonTeamAssoc obj = new HackathonTeamAssoc(h, t, "http://link1", 0.0);
-		hackTeamAssocService.addHackathonTeamAssoc(obj);
-	}
+//	@RequestMapping(method=RequestMethod.PUT, value="/hackathon/{teamId}/join/{hackId}",  produces = { "application/json", "application/xml" })
+//	public void joinHackathon(@PathVariable Long teamId, @PathVariable Long hackId) {
+//		Team t = teamService.getTeamById(teamId);
+//		Hackathon h = hackathonService.getHackathonById(hackId);
+//		HackathonTeamAssoc obj = new HackathonTeamAssoc(h, t, "http://link1", 0.0);
+//		hackTeamAssocService.addHackathonTeamAssoc(obj);
+//	}
 	
 	// Fetch hackathon details by ID [hackId]
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathon/{hackId}", produces = { "application/json", "application/xml" })
