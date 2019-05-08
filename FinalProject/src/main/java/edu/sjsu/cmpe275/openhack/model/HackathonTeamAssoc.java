@@ -24,7 +24,7 @@ public class HackathonTeamAssoc {
 	
 	String submissionLink;
 	
-	String grade;
+	Double grade;
 	
 	public HackathonTeamAssoc() { }
 	
@@ -35,7 +35,7 @@ public class HackathonTeamAssoc {
 	 * @param submissionLink
 	 * @param grade
 	 */
-	public HackathonTeamAssoc(Hackathon hackathon, Team team, String submissionLink, String grade) {
+	public HackathonTeamAssoc(Hackathon hackathon, Team team, String submissionLink, Double grade) {
 		this.id = new HackathonTeamID(hackathon.getId(), team.getTeamId());
 		this.hackathon = hackathon;
 		this.teamObj = team;
@@ -103,14 +103,14 @@ public class HackathonTeamAssoc {
 	/**
 	 * @return the grade
 	 */
-	public String getGrade() {
+	public Double getGrade() {
 		return grade;
 	}
 
 	/**
 	 * @param grade the grade to set
 	 */
-	public void setGrade(String grade) {
+	public void setGrade(Double grade) {
 		this.grade = grade;
 	}
 }

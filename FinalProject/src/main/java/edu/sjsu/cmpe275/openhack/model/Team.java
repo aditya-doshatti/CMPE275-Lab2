@@ -91,6 +91,9 @@ public class Team {
 	public String getName() {
 		return name;
 	}
+	public Set<HackathonTeamAssoc> getHackathons() {
+		return hackathons;
+	}
 
 	/**
 	 * @param name the name to set

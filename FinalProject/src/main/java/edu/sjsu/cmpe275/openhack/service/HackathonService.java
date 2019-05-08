@@ -55,9 +55,18 @@ public class HackathonService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Hackathon> getAllFutureOngoingHAckathons() {
+	public List<Hackathon> getAllFutureOngoingHackathons() {
 		Query query = entityManager.createQuery("from Hackathon where curdate() between startDate AND endDate OR curdate()<=startDate");
 	    return  (List<Hackathon>) query.getResultList();
+	}
+	
+	public List<Hackathon> getHackathonByAdminId(Long userId) throws Exception {
+		List<Hackathon> results = new ArrayList<Hackathon>();
+		for(Hackathon h: getAllHackathons()) {
+			if(h.getAdminId() == userId)
+				results.add(h);
+		}
+		return results;
 	}
 }
 

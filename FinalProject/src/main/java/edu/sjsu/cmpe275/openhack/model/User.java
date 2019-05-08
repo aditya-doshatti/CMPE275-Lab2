@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe275.openhack.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,13 +58,15 @@ public class User {
 	@Column(name="role")
 //	@org.hibernate.annotations.ColumnDefault("hacker")
 	private String role;
+	
+	private boolean paid = false;
 
 	// List of all hackathons judged by this user
 	@ManyToMany(mappedBy = "judges")
 	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
-	private List<Hackathon> judgesHackathons = new ArrayList<Hackathon>();
-	
+
+	private Set<Hackathon> judgesHackathons = new HashSet<Hackathon>();
 	@ManyToMany(mappedBy = "users")
 	private Set<Team> participantTeam;
 
@@ -101,14 +101,14 @@ public class User {
 	/**
 	 * @return the judgesHackathons
 	 */
-	public List<Hackathon> getJudgesHackathons() {
+	public Set<Hackathon> getJudgesHackathons() {
 		return judgesHackathons;
 	}
 
 	/**
 	 * @param judgesHackathons the judgesHackathons to set
 	 */
-	public void setJudgesHackathons(List<Hackathon> judgesHackathons) {
+	public void setJudgesHackathons(Set<Hackathon> judgesHackathons) {
 		this.judgesHackathons = judgesHackathons;
 	}
 	
@@ -131,6 +131,8 @@ public class User {
 		this.businessTitle=user.businessTitle;
 		this.portraitUrl=user.portraitUrl;
 		this.address=user.address;
+		this.paid = user.paid;
+		this.role = user.role;
 	}
 
 	public Long getId() {
@@ -236,6 +238,20 @@ public class User {
 
 	public void setOwner(boolean isOwner) {
 		this.isOwner = isOwner;
+	}
+
+	/**
+	 * @return the paid
+	 */
+	public boolean isPaid() {
+		return paid;
+	}
+
+	/**
+	 * @param paid the paid to set
+	 */
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 	
 }

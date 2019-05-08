@@ -51,7 +51,7 @@ public class Hackathon {
 	private Double regFees;
 	
 	@Column(nullable=false)
-	private boolean isOpen;
+	private boolean isOpen = false;
 
 	@Column(nullable=false)
 	private int minTeamSize;
@@ -87,21 +87,23 @@ public class Hackathon {
 	}
 
 	// Many to many relationship 'Hackathon-Judges' between "Hackathon" and "User"
-	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(/*cascade={CascadeType.ALL},*/ fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_judge",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
-			"judgesHackathons", "organization", "teams", "hibernateLazyInitializer", "handler"})
-	private Set<User> judges = new HashSet<User>();
+			"judgesHackathons", "organization", "teams", "isVerified", "role",
+			"hibernateLazyInitializer", "handler"})
+	private Set<User> judges;
 	
 	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
-	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(/*cascade={CascadeType.ALL},*/ fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_sponsor",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="ORGANIZATION_ID", referencedColumnName="ORGANIZATION_ID")})
-	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
-	private Set<Organization> sponsors = new HashSet<Organization>();
+	@JsonIgnoreProperties(value = {"owner", "pendingApprovals", "description", "orgUsers", "address", 
+			"hackathons", "hibernateLazyInitializer", "handler"})
+	private Set<Organization> sponsors;
 	
 	// Hackathon-Teams mapping
 //	@OneToMany(mappedBy = "hackathon")
@@ -110,6 +112,9 @@ public class Hackathon {
 	
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
 	private Set<Team> teams;
+	@OneToMany(mappedBy = "hackathon")
+	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
+	private Set<HackathonTeamAssoc> teams; // = new HashSet<HackathonTeamAssoc>();
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
@@ -281,7 +286,7 @@ public class Hackathon {
 	 * @param maxTeamSize
 	 */
 	public Hackathon(String name, String desc, Date startDate, Date endDate, Double regFees, int minTeamSize,
-			int maxTeamSize, Double discount) {
+			int maxTeamSize, Double discount, Long adminId) {
 		super();
 		this.name = name;
 		this.description = desc;
@@ -291,6 +296,7 @@ public class Hackathon {
 		this.minTeamSize = minTeamSize;
 		this.maxTeamSize = maxTeamSize;
 		this.discount = discount;
+		this.adminId = adminId;
 	}
 	
 	public Hackathon(Hackathon obj) {
@@ -300,11 +306,14 @@ public class Hackathon {
 		this.startDate = obj.startDate;
 		this.endDate = obj.endDate;
 		this.regFees = obj.regFees;
-		this.isOpen=true;
 		this.minTeamSize = obj.minTeamSize;
 		this.maxTeamSize = obj.maxTeamSize;
 		this.discount = obj.discount;
 		this.adminId = obj.adminId;
+		this.isOpen = obj.isOpen;
+		this.judges = obj.judges;
+		this.sponsors = obj.sponsors;
+		this.teams = obj.teams;
 	}
 
 	public Set<Team> getTeams() {
