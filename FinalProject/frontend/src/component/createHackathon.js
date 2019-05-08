@@ -25,6 +25,8 @@ class CreateHackathon extends Component {
             org_name:[],
             user:[],
             userID:[],
+            judges:[],
+            sponsers:[],
             user_name:[]
          }
          this.setField=this.setField.bind(this);
@@ -76,6 +78,7 @@ class CreateHackathon extends Component {
     setSponser(e){
         console.log("value",e.target.value)
         console.log("name",e.target.name)
+        var sponsers = this.state.sponsers.concat([{"id":e.target.value}]);
         var joined = this.state.orgID.concat(e.target.value);
         var joined_name = this.state.org_name.concat(e.target.id);
 
@@ -93,11 +96,18 @@ class CreateHackathon extends Component {
                 uniqueTag_name.push(img)
             }
         });
+
+        this.setState({
+            orgID:uniqueTags,
+            sponsers:sponsers
+        })
     }
         
         setJudge(e){
             console.log("value",e.target.value)
             console.log("name",e.target.name)
+            var judges = this.state.judges.concat([{"id":e.target.value}]);
+            console.log("tetst",judges)
             var joined = this.state.userID.concat(e.target.value);
             var joined_name = this.state.org_name.concat(e.target.id);
     
@@ -120,38 +130,34 @@ class CreateHackathon extends Component {
         console.log(joined)
         this.setState({
             userID:uniqueTags,
-            user_name:uniqueTag_name
+            user_name:uniqueTag_name,
+            judges:judges
         })
       
     }
 
     submitForm(e){
         e.preventDefault();
-
         const id=this.state.id
 
         const data=({
-            "name": this.state.inputHackathonName,
-            "description": this.state.inputDescription,
-            "startDate": this.state.inputStartTime,
-            "endDate": this.state.inputendTime,
-            "regFees": this.state.inputfee,
-            "isOpen":true,
-            "minTeamSize":this.state.inputMaxSize,
-            "maxTeamSize": this.state.inputMinSize,
-            "discount":this.state.inputSponsorDiscount
+            name: this.state.inputHackathonName,
+            description: this.state.inputDescription,
+            startDate: this.state.inputStartTime,
+            endDate: this.state.inputendTime,
+            regFees: this.state.inputfee,
+            isOpen:true,
+            minTeamSize:this.state.inputMaxSize,
+            maxTeamSize: this.state.inputMinSize,
+            discount:this.state.inputSponsorDiscount,
+            sponsers:this.state.sponsers,
+            judges: this.state.judges,
+            adminId:this.state.adminId
         })
         
         axios.post(url+'/hackathon',data)
         .then((response) => {
-                // this.setState({
-                //     name:response.data.name,
-                //     aboutMe:response.data.aboutMe,
-                //     address:response.data.address,
-                //     businessTitle:response.data.businessTitle,
-                //     portraitUrl:response.data.portraitUrl
-                // })
-                console.log(response);
+                console.log(response.data);
         });
     }
 
@@ -240,7 +246,7 @@ class CreateHackathon extends Component {
                     </div>
                     <div class="form-group col-md-8">
                     <select id="inputSponsor" name="inputSponsor" className="w-50 btn-md"  onChange={this.setJudge}>
-                    <option default>--default--</option>
+                    {/* <option default>--default--</option> */}
                        {userList}
                     </select>
                     <h6 className="ml-4 mr-2 text-primary">{this.state.userID}</h6>
