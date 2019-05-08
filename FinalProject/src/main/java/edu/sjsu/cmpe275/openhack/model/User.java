@@ -67,7 +67,7 @@ public class User {
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
 	private Set<Hackathon> judgesHackathons;
 	
-	@ManyToMany(mappedBy = "owner")
+	@OneToMany(mappedBy = "owner")
 	@JsonIgnoreProperties(value = {"owner"})
 	private Set<Team> ownsTeams;
 	
