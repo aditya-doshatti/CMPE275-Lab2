@@ -40,28 +40,27 @@ class Hackathon extends Component {
         });
         await axios.get(url+`/hackathon/${this.state.hackId}`)
         .then((response) =>{
-            console.log("here inside axios",response.data)
             this.setState({
                 hackathon: response.data,
             })
-        }
-        );
-        this.state.userTeams.map((team,key) => {
-            if (team!=null) {
-                if (team.hackathon.id === this.state.hackId) {
-                    this.setState({
-                        currentTeamId:team.teamId,
-                    })
+            this.state.userTeams.map((team,key) => {
+                if (team!=null) {
+                    if (team.hackathon.id === this.state.hackId) {
+                        this.setState({
+                            currentTeamId:team.teamId,
+                        })
+                    }
                 }
-            }
-        })
-        axios.get(url+`/team/${this.state.currentTeamId}`)
-        .then((response) =>{
-            console.log("here inside axios",response.data)
-            this.setState({
-                currUsers: response.data.users,
-                submissionLink:response.data.submissionLink
             })
+            axios.get(url+`/team/${this.state.currentTeamId}`)
+            .then((response) =>{
+                console.log("here inside axios",response.data)
+                this.setState({
+                    currUsers: response.data.users,
+                    submissionLink:response.data.submissionLink
+                })
+            }
+            );
         }
         );
         console.log(this.state)
