@@ -66,6 +66,9 @@ public class User {
 	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
 	private List<Hackathon> judgesHackathons = new ArrayList<Hackathon>();
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<Team> participantTeam;
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties(value = {"team", "user", "hibernateLazyInitializer", "handler"})
@@ -78,6 +81,8 @@ public class User {
 	@JoinColumn(name = "ORGANIZATION_ID")
 	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
 	private Organization organization;
+	
+	
 
 	/**
 	 * @return the teams

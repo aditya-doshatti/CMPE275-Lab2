@@ -104,9 +104,12 @@ public class Hackathon {
 	private Set<Organization> sponsors = new HashSet<Organization>();
 	
 	// Hackathon-Teams mapping
-	@OneToMany(mappedBy = "hackathon")
-	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
-	private Set<HackathonTeamAssoc> teams = new HashSet<HackathonTeamAssoc>();
+//	@OneToMany(mappedBy = "hackathon")
+//	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
+//	private Set<HackathonTeamAssoc> teams = new HashSet<HackathonTeamAssoc>();
+	
+	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
+	private Set<Team> teams;
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
@@ -304,17 +307,27 @@ public class Hackathon {
 		this.adminId = obj.adminId;
 	}
 
-	/**
-	 * @return the teams
-	 */
-	public Set<HackathonTeamAssoc> getTeams() {
+	public Set<Team> getTeams() {
 		return teams;
 	}
 
-	/**
-	 * @param teams the teams to set
-	 */
-	public void setTeams(Set<HackathonTeamAssoc> teams) {
+	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
+
+//	/**
+//	 * @return the teams
+//	 */
+//	public Set<HackathonTeamAssoc> getTeams() {
+//		return teams;
+//	}
+//
+//	/**
+//	 * @param teams the teams to set
+//	 */
+//	public void setTeams(Set<HackathonTeamAssoc> teams) {
+//		this.teams = teams;
+//	}
+	
+	
 }
