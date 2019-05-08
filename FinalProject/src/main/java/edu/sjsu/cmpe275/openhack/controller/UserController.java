@@ -157,7 +157,7 @@ public class UserController {
 	}
 	
 	// Set payment DONE for given user
-	@RequestMapping(method=RequestMethod.GET, value = "/user/{userId}/pay", produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.PUT, value = "/user/{userId}/pay", produces = { "application/json", "application/xml" })
 	public ResponseEntity<HttpStatus> setPaymentDone(@PathVariable Long userId) {
 		User u = userService.getUser(userId);
 		if(u == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

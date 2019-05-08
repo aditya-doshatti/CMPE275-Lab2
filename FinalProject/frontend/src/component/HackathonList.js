@@ -87,6 +87,7 @@ class HackathonList extends Component {
     };
 
     handleSubmit = evt => {
+        evt.preventDefault()
         const { name, users, owner } = this.state;
         console.log(users)
         //alert(`Incorporated: ${name} with ${users.length} shareholders`);
@@ -99,7 +100,10 @@ class HackathonList extends Component {
         axios.post(url+'/team', teamData)
         .then((response)=>{
             console.log(response.data)
-            this.props.history.push('/payment')
+            this.props.history.push({
+                pathname:'/payment',
+                state: { hackId: this.state.currentHackathonId }
+            })
         })
 
     };

@@ -10,10 +10,12 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.stereotype.Service;
+
 @Service
 public class MailService {
 	
-	public static void sendMail(String toEmail, String subject, String msg) {
+	public void sendMail(String toEmail, String subject, String msg) {
 		final String username = "devtoolmailer@gmail.com";
         final String password = "cmpe275project";
 
