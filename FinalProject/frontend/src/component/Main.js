@@ -17,6 +17,7 @@ import AdminMainDashboard from './AdminMainDashboard';
 import ApproveRequests from './ApproveRequests';
 import AdminNavbar from './AdminNavbar';
 import UserNavbar from './UserNavbar';
+import AdminProfile from './AdminProfile';
 
 
 
@@ -44,6 +45,7 @@ class Main extends Component {
                 <Route path="/approveRequests" component={ApproveRequests}/>
                 <Route path="/anavbar" component={AdminNavbar}/>
                 <Route path="/unavbar" component={UserNavbar}/>
+                <Route path="/admin/profile" component={AdminProfile}/>
 
             </div>
         )

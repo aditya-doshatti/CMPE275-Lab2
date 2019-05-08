@@ -29,7 +29,7 @@ class AdminMainDashboard extends Component {
                  </ul>
 
                  <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">
-                  <Link to="/profile" className="text-white"> <h3> Profile </h3></Link>
+                  <Link to="/admin/profile" className="text-white"> <h3> Profile </h3></Link>
                  </ul>
             
                   </div>
