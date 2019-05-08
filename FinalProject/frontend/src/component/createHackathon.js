@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import "../css/createHackathon.css"
 import Navbar from './Navbas';
+import swal from 'sweetalert';
 
 const url="http://localhost:8080"
 class CreateHackathon extends Component {
@@ -26,7 +27,7 @@ class CreateHackathon extends Component {
             user:[],
             userID:[],
             judges:[],
-            sponsers:[],
+            sponsors:[],
             user_name:[]
          }
          this.setField=this.setField.bind(this);
@@ -78,7 +79,7 @@ class CreateHackathon extends Component {
     setSponser(e){
         console.log("value",e.target.value)
         console.log("name",e.target.name)
-        var sponsers = this.state.sponsers.concat([{"id":e.target.value}]);
+        var sponsors = this.state.sponsors.concat([{id:e.target.value}]);
         var joined = this.state.orgID.concat(e.target.value);
         var joined_name = this.state.org_name.concat(e.target.id);
 
@@ -99,14 +100,14 @@ class CreateHackathon extends Component {
 
         this.setState({
             orgID:uniqueTags,
-            sponsers:sponsers
+            sponsors:sponsors
         })
     }
         
         setJudge(e){
             console.log("value",e.target.value)
             console.log("name",e.target.name)
-            var judges = this.state.judges.concat([{"id":e.target.value}]);
+            var judges = this.state.judges.concat([{id:e.target.value}]);
             console.log("tetst",judges)
             var joined = this.state.userID.concat(e.target.value);
             var joined_name = this.state.org_name.concat(e.target.id);
@@ -139,7 +140,13 @@ class CreateHackathon extends Component {
     submitForm(e){
         e.preventDefault();
         const id=this.state.id
-
+        if(this.state.name==""||this.state.description==""||this.state.startDate==""||this.state.endDate==""||this.state.regFees==""||this.state.minTeamSize==""||this.state.maxTeamSize==""||this.state.judges==""){
+            swal("Fill all the required fields","Fill again","error")
+        }else if(this.state.startDate>this.state.endDate){
+            swal("Start Date can't be later than end date","Input again","error")
+        }else if(this.state.minTeamSize==0||this.state.maxTeamSize==0){
+            swal("Team Size must be atleast 1","Input again","error")
+        }else{
         const data=({
             name: this.state.inputHackathonName,
             description: this.state.inputDescription,
@@ -150,7 +157,7 @@ class CreateHackathon extends Component {
             minTeamSize:this.state.inputMaxSize,
             maxTeamSize: this.state.inputMinSize,
             discount:this.state.inputSponsorDiscount,
-            sponsers:this.state.sponsers,
+            sponsors:this.state.sponsors,
             judges: this.state.judges,
             adminId:this.state.adminId
         })
@@ -158,7 +165,9 @@ class CreateHackathon extends Component {
         axios.post(url+'/hackathon',data)
         .then((response) => {
                 console.log(response.data);
+                swal("Hackathon created!","View ","success")
         });
+        }
     }
 
     render() { 

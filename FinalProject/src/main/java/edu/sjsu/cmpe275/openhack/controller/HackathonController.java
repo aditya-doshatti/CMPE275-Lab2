@@ -118,8 +118,8 @@ public class HackathonController {
 	public ResponseEntity<Hackathon> getTeams(@PathVariable Long hackId) {
 		try {
 			Hackathon obj = hackathonService.getHackathonById(hackId);
-			if(obj == null) 
-				return ResponseEntity.notFound().build();
+//			if(obj == null) 
+//				return ResponseEntity.notFound().build();
 			return ResponseEntity.ok(obj);
 		}
 		catch(Exception e) {
@@ -131,6 +131,18 @@ public class HackathonController {
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
+	
+	//get hackathon by adminId
+	@RequestMapping(method=RequestMethod.GET, value = "/hackathons/{adminId}", produces = { "application/json", "application/xml" })
+	public List<Hackathon> getHackathon(@PathVariable Long adminId) {
+			try {
+				return hackathonService.getHackathonByAdminId(adminId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
 	}
 	
 	// Open/close a hackathon

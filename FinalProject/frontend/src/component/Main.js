@@ -12,7 +12,8 @@ import Organization from './Organization';
 import HackathonList from './HackathonList';
 import AdminMainDashboard from './AdminMainDashboard';
 import ApproveRequests from './ApproveRequests';
-
+import AdminNavbar from './AdminNavbar';
+import UserNavbar from './UserNavbar';
 
 
 
@@ -35,6 +36,8 @@ class Main extends Component {
                 <Route path="/view/hackathon" component={HackathonList}/>
                 <Route path="/admin/maindashboard" component={AdminMainDashboard}/>
                 <Route path="/approveRequests" component={ApproveRequests}/>
+                <Route path="/anavbar" component={AdminNavbar}/>
+                <Route path="/unavbar" component={UserNavbar}/>
 
             </div>
         )

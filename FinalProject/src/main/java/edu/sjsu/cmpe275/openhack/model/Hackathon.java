@@ -51,7 +51,7 @@ public class Hackathon {
 	private Double regFees;
 	
 	@Column(nullable=false)
-	private boolean isOpen = false;
+	private boolean isOpen;
 
 	@Column(nullable=false)
 	private int minTeamSize;
@@ -302,7 +302,7 @@ public class Hackathon {
 		this.maxTeamSize = obj.maxTeamSize;
 		this.discount = obj.discount;
 		this.adminId = obj.adminId;
-		this.isOpen = obj.isOpen;
+		this.isOpen = true;
 		this.judges = obj.judges;
 		this.sponsors = obj.sponsors;
 		this.teams = obj.teams;

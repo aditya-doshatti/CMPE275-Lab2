@@ -19,7 +19,7 @@ class AdminMainDashboard extends Component {
                  </ul>
 
                  <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">
-                       <Link to="/view/hackathon" className="text-white text-center"><h3> View Hackathons </h3></Link>
+                       <Link to="/admin/maindashboard" className="text-white text-center"><h3> View Hackathons </h3></Link>
                  </ul>
 
                  <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">

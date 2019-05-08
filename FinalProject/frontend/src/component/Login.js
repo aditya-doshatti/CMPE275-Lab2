@@ -5,7 +5,7 @@ import Navbar from './Navbas';
 import axios from 'axios';
 var swal = require('sweetalert')
 // import fire from '../config/fire'
-const url="http://localhost:8080"
+const url="http://localhost:8078"
 
 class Login extends Component {
     constructor(props) {
@@ -72,7 +72,7 @@ class Login extends Component {
         return ( 
           <div>
             <Navbar />
-            <div className="text-center mt-5">
+            <div className="text-center  pull-center mt-5">
               <form onSubmit={this.submitEvent}>
                <h1 class="title pt-2">Login to Hackathon</h1>
                     Need an account?<strong><NavLink to="/signup"> Sign Up!</NavLink></strong>
