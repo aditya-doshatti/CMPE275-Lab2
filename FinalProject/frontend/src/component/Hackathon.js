@@ -7,7 +7,9 @@ import "../css/card.css"
 class Hackathon extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = { 
+            hackId:this.props.location.state.hackId
+         }
     }
     onUploadClick(e) {
         let files = e.target.files;

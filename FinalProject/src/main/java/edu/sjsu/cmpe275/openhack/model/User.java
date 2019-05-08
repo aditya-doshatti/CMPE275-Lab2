@@ -63,7 +63,7 @@ public class User {
 
 	// List of all hackathons judged by this user
 	@ManyToMany(mappedBy = "judges")
-	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
+	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", "teams",
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
 	private Set<Hackathon> judgesHackathons;
 	
@@ -73,6 +73,7 @@ public class User {
 	
 	
 	@ManyToMany(mappedBy = "users")
+	@JsonIgnoreProperties(value = {"users", "owner","hackathon"})
 	private Set<Team> participantTeam;
 	
 	@Column(name="isOwner",nullable = true)
@@ -118,6 +119,11 @@ public class User {
 		this.address=user.address;
 		this.paid = user.paid;
 		this.role = user.role;
+		this.isOwner = user.isOwner;
+		this.judgesHackathons = user.judgesHackathons;
+		this.organization = user.organization;
+		this.ownsTeams = user.ownsTeams;
+		this.participantTeam = user.participantTeam;
 	}
 
 	public Long getId() {
@@ -237,6 +243,22 @@ public class User {
 	 */
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+
+	public Set<Team> getOwnsTeams() {
+		return ownsTeams;
+	}
+
+	public void setOwnsTeams(Set<Team> ownsTeams) {
+		this.ownsTeams = ownsTeams;
+	}
+
+	public Set<Team> getParticipantTeam() {
+		return participantTeam;
+	}
+
+	public void setParticipantTeam(Set<Team> participantTeam) {
+		this.participantTeam = participantTeam;
 	}
 	
 }

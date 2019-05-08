@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,9 @@ public class TeamController {
 		for(User u:temp.getUsers()) {
 			User tempUser = userService.getUser(u.getId());
 			try {
+				Set<Team> currTeams = tempUser.getParticipantTeam();
+				currTeams.add(temp);
+				userService.updateProfile(tempUser);
 				mailService.sendMail(tempUser.getEmail(),"Payment Due for Openhack", "Go ahead and make payment on http://localhost:8080/payment");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -59,21 +63,23 @@ public class TeamController {
 		return ResponseEntity.ok(temp);
 	}
 	
-//	@RequestMapping(method=RequestMethod.PUT, value="/team/{userId}/join/{teamId}",  produces = { "application/json", "application/xml" })
-//	public void joinTeam(@PathVariable Long userId, @PathVariable Long teamId) {
-//		Team t = teamService.getTeamById(teamId);
-//		User u = userService.getUser(userId);
-//		TeamUserAssoc obj = new TeamUserAssoc(t, u, "Other");
-//		teamUserAssocService.addTeamUserAssoc(obj);	
-//	}
-	
 	@RequestMapping(method=RequestMethod.GET,value = "/team/{teamId}", produces = { "application/json", "application/xml" })
 	public Team getTeamByTeamId(@PathVariable Long teamId) {
 		return teamService.getTeamById(teamId);
 	}
 	
-//	@RequestMapping(method=RequestMethod.GET,value = "/team/{teamId}/users", produces = { "application/json", "application/xml" })
-//	public List<User> getUsersInATeam(@PathVariable Long teamId) {
-//		return teamUserAssocService.getUsersInTeam(teamId);
-//	}
+	@RequestMapping(method=RequestMethod.POST,value = "/team/{teamId}/submit", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Team> submitLink(@RequestBody Team t, @PathVariable Long teamId) {
+		Team temp = new Team(t);
+		try {
+			teamService.updateTeam(temp);
+			return ResponseEntity.ok(temp);
+		}
+		catch(Exception e) {
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}		
+	}
 }

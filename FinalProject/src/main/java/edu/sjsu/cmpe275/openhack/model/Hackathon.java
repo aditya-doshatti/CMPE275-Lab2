@@ -62,7 +62,7 @@ public class Hackathon {
 	@Column(nullable=true)
 	private Double discount;
 	
-	Long adminId;
+	private Long adminId;
 	
 	/**
 	 * @return the discount
@@ -93,7 +93,7 @@ public class Hackathon {
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "teams", "isVerified", "role",
-			"hibernateLazyInitializer", "handler"})
+			"hibernateLazyInitializer", "handler","ownsTeams"})
 	private Set<User> judges;
 	
 	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
@@ -106,6 +106,7 @@ public class Hackathon {
 	private Set<Organization> sponsors;
 	
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
+	@JsonIgnoreProperties(value = {"hackathon", "owner","users"})
 	private Set<Team> teams;
 
 	public Set<Organization> getSponsors() {
