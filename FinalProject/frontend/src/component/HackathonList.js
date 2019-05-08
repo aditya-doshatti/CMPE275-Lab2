@@ -141,15 +141,27 @@ class HackathonList extends Component {
         })
     }
 
+    handlePay = key => {
+        this.props.history.push({
+                pathname:'/payment',
+                state: { 
+                    hackId: this.state.hackathonlist[key].id
+                }
+        })
+    }
+
     isTeamInHack = val => {
         return this.state.teams.some(item => val.teamId === item.teamId);
     }
 
     shouldJoin = (teams, key) => {
-        var retVal = <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join Kartot</button>
-        teams.map((team, key) => {
+        var retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+        teams.map((team, key12) => {
             if (this.isTeamInHack(team)) {
-                retVal = <button onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                retVal = <div>
+                    <button onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                    <button onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                    </div>
                 return retVal
             }
         })

@@ -28,6 +28,7 @@ class Main extends Component {
                 {/*Render Different Component based on Route*/}
 
                 {/* <Route exact path="/" component={Home} /> */}
+                <Route exact path="/" component={Login}/>
                 <Route exact path="/login" component={Login}/>
                 <Route path="/signup" component={Signup}/>
                 <Route path="/profile" component={Profile}/>
