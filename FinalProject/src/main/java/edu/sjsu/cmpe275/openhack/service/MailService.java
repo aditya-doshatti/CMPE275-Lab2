@@ -10,6 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+@Service
 public class MailService {
 	
 	public static void sendMail(String toEmail, String subject, String msg) {
