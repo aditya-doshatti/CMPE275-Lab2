@@ -9,6 +9,9 @@ import CreateHackathon from './createHackathon';
 import AdminDashboard from './AdminDashboard';
 import HackerDashboard from './HackerDashboard';
 import Organization from './Organization';
+import HackathonPayment from './HackathonPayment'; 
+import TeamRegistration from './TeamRegistration';
+
 
 
 
@@ -29,6 +32,9 @@ class Main extends Component {
                 <Route path="/admin/dashboard" component={AdminDashboard} />
                 <Route path="/dashboard" component={HackerDashboard} />
                 <Route path="/organization" component={Organization}/>
+                <Route path="/payment" component={HackathonPayment}/>
+                <Route path="/registration" component={TeamRegistration}/>
+                
 
             </div>
         )

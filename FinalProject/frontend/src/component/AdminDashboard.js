@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {NavLink} from 'react-router-dom';
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import "../css/hackathonTable.css"
 
 const url="http://localhost:8080"
 
@@ -50,7 +43,21 @@ class AdminDashboard extends Component {
 
     }
 
-    render() {         
+    render() {   
+        
+        let listdetails = this.state.listed.map((row) => {
+            return(                
+                
+                <tr>
+                    <td className="text-primary">{row.id}</td>                     
+                    <td className="text-primary">{row.name}</td>
+                    <td className="text-primary">{row.startDate}</td>
+                    <td className="text-primary">{row.endDate}</td>
+                    <td className="text-primary">{row.regFees}</td>           
+                   
+                </tr>
+            )
+        })
 
         return ( 
         <div>
@@ -85,30 +92,21 @@ class AdminDashboard extends Component {
                 </div>
                 </nav>
                 <div class="card">
-                <Table id="hackathonTable">
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell align="right">Hackathon Name</TableCell>
-                        <TableCell align="right">Start Date</TableCell>
-                        <TableCell align="right">End Date</TableCell>
-                        <TableCell align="right">Fees</TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {this.state.listed.map((row) => (
-                        <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">
-                            {row.id}
-                        </TableCell>
-                        <TableCell align="right">{row.name}</TableCell>
-                        <TableCell align="right">{row.startDate}</TableCell>
-                        <TableCell align="right">{row.endDate}</TableCell>
-                        <TableCell align="right">{row.regFees}</TableCell>
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
+                
+                    <table class="table mt-4 bg w-100 text-center border rounded shadow-lg">
+                        <thead>
+                            <tr>
+                                <th><em>Id</em></th>
+                                <th><em>Hackathon Name</em></th>
+                                <th><em>Start Date</em></th>
+                                <th><em>End Date</em></th>
+                                <th><em>Registration Fees</em></th>
+                            </tr>  
+                        </thead>
+                        <tbody>
+                            {listdetails}                        
+                        </tbody>
+                    </table>
                 </div>               
             </div>            
         </div> 
