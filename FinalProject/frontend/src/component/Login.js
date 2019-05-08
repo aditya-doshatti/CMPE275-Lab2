@@ -72,7 +72,7 @@ class Login extends Component {
     render() { 
         return ( 
           <div>
-            
+              <Navbar />
             <div className="text-center pull-center mt-5 ">
               <form onSubmit={this.submitEvent}>
               <h1 class="title pt-2">Login to Hackathon</h1>
