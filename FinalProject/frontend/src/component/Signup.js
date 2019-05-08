@@ -140,22 +140,48 @@ class Signup extends Component {
                <h1 class="title pt-2">Sign up for Hackathon</h1>
                 Already have an account?<strong><NavLink to="/login"> Log in!</NavLink></strong>
                <form onSubmit={this.submitEvent}>
-                <div>
-                <input type="text" name="name" id="name" class="panel-input mt-2 w-50" placeholder="Full Name" onChange={this.setField} required/>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">   
+                    <input type="text" name="name" id="name" class="panel-input mt-2" placeholder="Full Name" onChange={this.setField} required/>                          
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
                 </div>
 
-                <div>
-                <input type="text" name="screenName" id="screenName" class="panel-input mt-3 w-50" onChange={this.setScreenName} placeholder="Screen Name" required/>
-                <h6 className="text-danger">{this.state.error_message}</h6>
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">                  
+                    <input type="text" name="screenName" id="screenName" class="panel-input mt-3" onChange={this.setScreenName} placeholder="Screen Name" required/>
+                <h6 className="text-danger">{this.state.error_message}</h6>      
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
                 </div>
 
-                <div>
-                <input type="email" name="email" id="email" class="panel-input mt-3 w-50" onChange={this.setField} placeholder="Email address" required/>
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">     
+                    <input type="email" name="email" id="email" class="panel-input mt-3" onChange={this.setField} placeholder="Email address" required/>                   
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
                 </div>
-               
-                <div>
-               <input type="password" name="password" id="password" class="panel-input mt-3 w-50" onChange={this.setField}    placeholder="Password" required/>
-                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">                                            
+                    </div>    
+                    <div class="col-sm-6">   
+                    <input type="password" name="password" id="password" class="panel-input mt-3" onChange={this.setField}    placeholder="Password" required/>                     
+                    </div>
+                    <div class="col-sm-3">                        
+                    </div>             
+                </div>               
+
 
                   {/* <div>
                <input type="text" name="portraitUrl" id="portraitUrl" class="panel-input mt-3 w-50" onChange={this.setField}    placeholder="Portrait URL"/>
