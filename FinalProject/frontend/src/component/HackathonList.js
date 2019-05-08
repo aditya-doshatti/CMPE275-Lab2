@@ -136,7 +136,7 @@ class HackathonList extends Component {
         this.props.history.push({
                 pathname:'/hackathon',
                 state: { 
-                    hackId: this.state.currentHackathonId
+                    hackId: this.state.hackathonlist[key].id
                 }
         })
     }

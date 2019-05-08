@@ -73,7 +73,7 @@ public class User {
 	
 	
 	@ManyToMany(mappedBy = "users")
-	@JsonIgnoreProperties(value = {"users", "owner","hackathon"})
+	@JsonIgnoreProperties(value = {"users", "owner"})
 	private Set<Team> participantTeam;
 	
 	@Column(name="isOwner",nullable = true)

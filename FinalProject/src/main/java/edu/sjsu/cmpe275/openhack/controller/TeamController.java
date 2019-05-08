@@ -70,8 +70,9 @@ public class TeamController {
 	
 	@RequestMapping(method=RequestMethod.POST,value = "/team/{teamId}/submit", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Team> submitLink(@RequestBody Team t, @PathVariable Long teamId) {
-		Team temp = new Team(t);
+		Team temp = teamService.getTeamById(teamId);
 		try {
+			temp.setSubmissionLink(t.getSubmissionLink());
 			teamService.updateTeam(temp);
 			return ResponseEntity.ok(temp);
 		}
