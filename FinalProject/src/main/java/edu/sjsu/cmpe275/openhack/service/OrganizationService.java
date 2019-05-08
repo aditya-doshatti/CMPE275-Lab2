@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.openhack.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class OrganizationService {
 		organizationRepository.save(org);
 	}
 	
-	public List<User> getPendingUsers(Long id) {
+	public Set<User> getPendingUsers(Long id) {
 		Organization org = organizationRepository.findOne(id);
 		return org.getPendingApprovals();
 	}

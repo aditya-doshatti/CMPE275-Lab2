@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
-import edu.sjsu.cmpe275.openhack.model.HackathonTeamAssoc;
 import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.User;
-import edu.sjsu.cmpe275.openhack.repository.HackathonTeamAssocRepository;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
 import edu.sjsu.cmpe275.openhack.service.OrganizationService;
 import edu.sjsu.cmpe275.openhack.service.TeamService;
@@ -41,8 +40,8 @@ public class HackathonController {
 	@Autowired
 	TeamService teamService;
 	
-	@Autowired
-	HackathonTeamAssocRepository hackTeamAssocRepo;
+//	@Autowired
+//	HackathonTeamAssocService hackTeamAssocService;
 	
 	// Get ALL hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathons", produces = { "application/json", "application/xml" })
@@ -50,17 +49,30 @@ public class HackathonController {
 		return hackathonService.getAllHackathons();
 	}
 	
-	// Get ALL future and ongoing hackathons
+	// Get ALL ongoing hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathonsByDate", produces = { "application/json", "application/xml" })
 	public List<Hackathon> getAllOpenHackathons() {
-		return hackathonService.getAllFutureOngoingHAckathons();
+		return hackathonService.getAllFutureOngoingHackathons();
 	}
 	
 	// Create a new hackathon
 	@RequestMapping(method=RequestMethod.POST, value = "/hackathon", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Hackathon> createHackathon(@RequestBody Hackathon h) {
 		Hackathon temp = new Hackathon(h);
-		hackathonService.addHackathon(temp);
+		try {
+			if(userService.getUser(temp.getAdminId()) == null) {
+				return ResponseEntity.notFound().build();
+			}
+			hackathonService.addHackathon(temp);
+		} catch(Exception e) {
+			if(e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 		return ResponseEntity.ok(temp);
 	}
 	
@@ -91,21 +103,12 @@ public class HackathonController {
 		hackathonService.addHackathon(h);
 		orgService.addOrganization(org);		
 	}
-	
-	// Add a team [teamId] to hackathon [hackId]
-	@RequestMapping(method=RequestMethod.PUT, value="/hackathon/{teamId}/join/{hackId}",  produces = { "application/json", "application/xml" })
-	public void joinHackathon(@PathVariable Long teamId, @PathVariable Long hackId) {
-		Team t = teamService.getTeamById(teamId);
-		Hackathon h = hackathonService.getHackathonById(hackId);
-		HackathonTeamAssoc obj = new HackathonTeamAssoc(h, t, "http://link1", "grade1");
-		hackTeamAssocRepo.save(obj);
-	}
-	
+
 	// Fetch hackathon details by ID [hackId]
-	@RequestMapping(method=RequestMethod.GET, value = "/hackathon/{teamId}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<Hackathon> getTeams(@PathVariable Long teamId) {
+	@RequestMapping(method=RequestMethod.GET, value = "/hackathon/{hackId}", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Hackathon> getTeams(@PathVariable Long hackId) {
 		try {
-			Hackathon obj = hackathonService.getHackathonById(teamId);
+			Hackathon obj = hackathonService.getHackathonById(hackId);
 			if(obj == null) 
 				return ResponseEntity.notFound().build();
 			return ResponseEntity.ok(obj);
@@ -121,5 +124,24 @@ public class HackathonController {
 		}
 	}
 	
-	
+	// Open/close a hackathon
+	@RequestMapping(method=RequestMethod.PUT, value = "/hackathon/{hackId}/open", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Hackathon> openHackathon(@PathVariable Long hackId,
+			@RequestParam(required=true) boolean status) {
+		try {
+			Hackathon h = hackathonService.getHackathonById(hackId);
+			h.setOpen(status);
+			hackathonService.addHackathon(h);
+		}
+		catch (Exception e) {
+			if(e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+		}
+		return ResponseEntity.noContent().build();
+	}
 }
+

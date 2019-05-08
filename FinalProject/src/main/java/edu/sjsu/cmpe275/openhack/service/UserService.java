@@ -3,7 +3,9 @@ package edu.sjsu.cmpe275.openhack.service;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -11,7 +13,7 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.sjsu.cmpe275.openhack.model.Organization;
+import edu.sjsu.cmpe275.openhack.model.Hackathon;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.repository.UserRepository;
 
@@ -21,7 +23,6 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -69,29 +70,26 @@ public class UserService {
 	 return user;
 	}
 
+	public User updateProfile(User user) {
 
+		System.out.println("Inside update profile service");
+		System.out.println(user);
+		userRepository.save(user);
+		return user;
+	}
 
-public User updateProfile(User user) {
-
-	System.out.println("Inside update profile service");
-	System.out.println(user);
-    userRepository.save(user);
-    return user;
-}
-
-
-public User getProfileVerify(String id) {
-	User user = null;
-	 Query query = entityManager.createQuery("from User as u WHERE u.email=:email");
-	    query.setParameter("email",id);
-	    System.out.println(query.getParameterValue("email"));
-	    try {
-	    	user =  (User) query.getSingleResult();
-	    	user.setIsVerified("true");
-	    	userRepository.save(user);
-	    } catch (Exception e) {
-	        System.out.println("Here! Inside changing status of profile verification status");
-	    }
-	 return user;
-}
+	public User getProfileVerify(String id) {
+		User user = null;
+		Query query = entityManager.createQuery("from User as u WHERE u.email=:email");
+		query.setParameter("email",id);
+		System.out.println(query.getParameterValue("email"));
+		try {
+			user =  (User) query.getSingleResult();
+			user.setIsVerified("true");
+			userRepository.save(user);
+		} catch (Exception e) {
+			System.out.println("Here! Inside changing status of profile verification status");
+		}
+		return user;
+	}
 }

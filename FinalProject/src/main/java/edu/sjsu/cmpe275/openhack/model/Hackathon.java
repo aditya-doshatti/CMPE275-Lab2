@@ -51,21 +51,7 @@ public class Hackathon {
 	private Double regFees;
 	
 	@Column(nullable=false)
-	private boolean isOpen;
-	
-	/**
-	 * @return the admin
-	 */
-	public User getAdmin() {
-		return admin;
-	}
-
-	/**
-	 * @param admin the admin to set
-	 */
-	public void setAdmin(User admin) {
-		this.admin = admin;
-	}
+	private boolean isOpen = false;
 
 	@Column(nullable=false)
 	private int minTeamSize;
@@ -76,15 +62,21 @@ public class Hackathon {
 	@Column(nullable=true)
 	private Double discount;
 	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="USER_ID")
-	User admin;
+	Long adminId;
 	
 	/**
 	 * @return the discount
 	 */
 	public Double getDiscount() {
 		return discount;
+	}
+
+	public Long getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(Long adminId) {
+		this.adminId = adminId;
 	}
 
 	/**
@@ -95,26 +87,26 @@ public class Hackathon {
 	}
 
 	// Many to many relationship 'Hackathon-Judges' between "Hackathon" and "User"
-	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_judge",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
-			"judgesHackathons", "organization", "teams", "hibernateLazyInitializer", "handler"})
-	private Set<User> judges = new HashSet<User>();
+			"judgesHackathons", "organization", "teams", "isVerified", "role",
+			"hibernateLazyInitializer", "handler"})
+	private Set<User> judges;
 	
 	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
-	@ManyToMany(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(name="hackathon_sponsor",
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="ORGANIZATION_ID", referencedColumnName="ORGANIZATION_ID")})
-	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
-	private Set<Organization> sponsors = new HashSet<Organization>();
+	@JsonIgnoreProperties(value = {"owner", "pendingApprovals", "description", "orgUsers", "address", 
+			"hackathons", "hibernateLazyInitializer", "handler"})
+	private Set<Organization> sponsors;
 	
-	// Hackathon-Teams mapping
-	@OneToMany(mappedBy = "hackathon")
-	@JsonIgnoreProperties(value = {"id", "hackathon", "submissionLink", "grade", "hibernateLazyInitializer", "handler"})
-	private Set<HackathonTeamAssoc> teams = new HashSet<HackathonTeamAssoc>();
+	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
+	private Set<Team> teams;
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
@@ -286,7 +278,7 @@ public class Hackathon {
 	 * @param maxTeamSize
 	 */
 	public Hackathon(String name, String desc, Date startDate, Date endDate, Double regFees, int minTeamSize,
-			int maxTeamSize, Double discount) {
+			int maxTeamSize, Double discount, Long adminId) {
 		super();
 		this.name = name;
 		this.description = desc;
@@ -296,6 +288,7 @@ public class Hackathon {
 		this.minTeamSize = minTeamSize;
 		this.maxTeamSize = maxTeamSize;
 		this.discount = discount;
+		this.adminId = adminId;
 	}
 	
 	public Hackathon(Hackathon obj) {
@@ -308,19 +301,19 @@ public class Hackathon {
 		this.minTeamSize = obj.minTeamSize;
 		this.maxTeamSize = obj.maxTeamSize;
 		this.discount = obj.discount;
+		this.adminId = obj.adminId;
+		this.isOpen = obj.isOpen;
+		this.judges = obj.judges;
+		this.sponsors = obj.sponsors;
+		this.teams = obj.teams;
 	}
 
-	/**
-	 * @return the teams
-	 */
-	public Set<HackathonTeamAssoc> getTeams() {
+	public Set<Team> getTeams() {
 		return teams;
 	}
 
-	/**
-	 * @param teams the teams to set
-	 */
-	public void setTeams(Set<HackathonTeamAssoc> teams) {
+	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
+	
 }

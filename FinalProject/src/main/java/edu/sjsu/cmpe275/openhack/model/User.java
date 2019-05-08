@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe275.openhack.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,16 +58,25 @@ public class User {
 	@Column(name="role")
 //	@org.hibernate.annotations.ColumnDefault("hacker")
 	private String role;
+	
+	private boolean paid = false;
 
 	// List of all hackathons judged by this user
 	@ManyToMany(mappedBy = "judges")
 	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", 
 			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
-	private List<Hackathon> judgesHackathons = new ArrayList<Hackathon>();
-
-	@OneToMany(mappedBy = "user")
-	@JsonIgnoreProperties(value = {"team", "user", "hibernateLazyInitializer", "handler"})
-	private Set<TeamUserAssoc> teams = new HashSet<TeamUserAssoc>();
+	private Set<Hackathon> judgesHackathons;
+	
+	@ManyToMany(mappedBy = "owner")
+	@JsonIgnoreProperties(value = {"owner"})
+	private Set<Team> ownsTeams;
+	
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<Team> participantTeam;
+	
+	@Column(name="isOwner",nullable = true)
+	private boolean isOwner=false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORGANIZATION_ID")
@@ -77,30 +84,16 @@ public class User {
 	private Organization organization;
 
 	/**
-	 * @return the teams
-	 */
-	public Set<TeamUserAssoc> getTeams() {
-		return teams;
-	}
-
-	/**
-	 * @param teams the teams to set
-	 */
-	public void setTeams(Set<TeamUserAssoc> teams) {
-		this.teams = teams;
-	}
-
-	/**
 	 * @return the judgesHackathons
 	 */
-	public List<Hackathon> getJudgesHackathons() {
+	public Set<Hackathon> getJudgesHackathons() {
 		return judgesHackathons;
 	}
 
 	/**
 	 * @param judgesHackathons the judgesHackathons to set
 	 */
-	public void setJudgesHackathons(List<Hackathon> judgesHackathons) {
+	public void setJudgesHackathons(Set<Hackathon> judgesHackathons) {
 		this.judgesHackathons = judgesHackathons;
 	}
 	
@@ -123,6 +116,8 @@ public class User {
 		this.businessTitle=user.businessTitle;
 		this.portraitUrl=user.portraitUrl;
 		this.address=user.address;
+		this.paid = user.paid;
+		this.role = user.role;
 	}
 
 	public Long getId() {
@@ -221,4 +216,27 @@ public class User {
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
+
+	public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean isOwner) {
+		this.isOwner = isOwner;
+	}
+
+	/**
+	 * @return the paid
+	 */
+	public boolean isPaid() {
+		return paid;
+	}
+
+	/**
+	 * @param paid the paid to set
+	 */
+	public void setPaid(boolean paid) {
+		this.paid = paid;
+	}
+	
 }

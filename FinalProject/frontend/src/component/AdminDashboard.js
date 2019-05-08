@@ -6,16 +6,6 @@ import "../css/hackathonTable.css"
 
 const url="http://localhost:8080"
 
-const styles = theme => ({
-    root: {
-      width: '100%',
-      marginTop: theme.spacing.unit * 3,
-      overflowX: 'auto',
-    },
-    table: {
-      minWidth: 700,
-    },
-});
 
 class AdminDashboard extends Component {
     constructor(props) {
