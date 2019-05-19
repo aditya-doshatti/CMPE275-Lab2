@@ -16,7 +16,7 @@ const config = {
   };
 
 const fire=firebase.initializeApp(config);
-const url="http://localhost:8078"
+const url="http://localhost:8080"
 
 
 class Signup extends Component {
