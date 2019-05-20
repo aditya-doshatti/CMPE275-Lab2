@@ -143,6 +143,15 @@ class HackathonList extends Component {
         })
     }
 
+    handleJudge = key => {
+        this.props.history.push({
+                pathname:'/judge/hackathon',
+                state: { 
+                    hackId: this.state.hackathonlist[key].id
+                }
+        })
+    }
+
     isTeamInHack = val => {
         return this.state.teams.some(item => val.teamId === item.teamId);
     }
@@ -154,7 +163,7 @@ class HackathonList extends Component {
     shouldJoin = (teams, key) => {
         var retVal
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
-            retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
             return retVal
         }
         else {

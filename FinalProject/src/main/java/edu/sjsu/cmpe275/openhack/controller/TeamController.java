@@ -72,7 +72,10 @@ public class TeamController {
 	public ResponseEntity<Team> submitLink(@RequestBody Team t, @PathVariable Long teamId) {
 		Team temp = teamService.getTeamById(teamId);
 		try {
-			temp.setSubmissionLink(t.getSubmissionLink());
+			if(t.getSubmissionLink() != null)
+				temp.setSubmissionLink(t.getSubmissionLink());
+			if(t.getScore() != 0)
+				temp.setScore(t.getScore());
 			teamService.updateTeam(temp);
 			return ResponseEntity.ok(temp);
 		}
