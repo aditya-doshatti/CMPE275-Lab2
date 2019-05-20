@@ -33,9 +33,6 @@ public class TeamController {
 	@Autowired
 	MailService mailService;
 	
-	@Autowired
-//	TeamUserAssocService teamUserAssocService;
-	
 	@RequestMapping(method=RequestMethod.GET,value = "/teams", produces = { "application/json", "application/xml" })
 	public List<Team> getAllTeams() {
 		return teamService.getAllTeams();

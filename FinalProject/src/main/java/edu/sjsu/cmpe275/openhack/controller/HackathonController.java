@@ -37,9 +37,7 @@ public class HackathonController {
 	
 	@Autowired
 	TeamService teamService;
-	
-//	@Autowired
-//	HackathonTeamAssocService hackTeamAssocService;
+
 	
 	// Get ALL hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathons", produces = { "application/json", "application/xml" })

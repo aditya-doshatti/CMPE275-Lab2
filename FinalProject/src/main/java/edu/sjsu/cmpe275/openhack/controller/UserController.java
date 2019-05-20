@@ -11,12 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
-import edu.sjsu.cmpe275.openhack.model.Team;
-import edu.sjsu.cmpe275.openhack.model.Organization;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
@@ -27,9 +23,6 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
-//	@Autowired
-//	TeamUserAssocService teamUserAssocService;
 	
 	@Autowired
 	HackathonService hackathonService;
@@ -139,11 +132,6 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
-	
-//	@RequestMapping(method=RequestMethod.GET,value = "/user/{userId}/teams", produces = { "application/json", "application/xml" })
-//	public List<Team> getTeamsOfAUser(@PathVariable Long userId) {
-//		return teamUserAssocService.getTeamsOfUser(userId);
-//	}
 	
 	// Return all hackathons created by given admin [userId]
 	@RequestMapping(method=RequestMethod.GET, value = "/user/{userId}/hackathons", produces = { "application/json", "application/xml" })
