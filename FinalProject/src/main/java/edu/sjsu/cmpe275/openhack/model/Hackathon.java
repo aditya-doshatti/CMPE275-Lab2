@@ -105,7 +105,7 @@ public class Hackathon {
 	private Set<Organization> sponsors;
 	
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
-	@JsonIgnoreProperties(value = {"hackathon", "owner","users"})
+	@JsonIgnoreProperties(value = {"hackathon", "owner"})
 	private Set<Team> teams;
 
 	public Set<Organization> getSponsors() {

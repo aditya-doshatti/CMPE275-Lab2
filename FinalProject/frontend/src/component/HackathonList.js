@@ -160,6 +160,14 @@ class HackathonList extends Component {
         return this.state.judgesHacks.some(item => val.id === item.id)
     }
 
+    isPaymentDone = val => {
+        return val.paidUsers.some(item => this.state.owner.id === item.id)
+    }
+
+    isAllPaymentDone = val => {
+        return val.paidUsers.length === val.users.length
+    }
+
     shouldJoin = (teams, key) => {
         var retVal
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
@@ -171,8 +179,8 @@ class HackathonList extends Component {
             teams.map((team, key12) => {
                 if (this.isTeamInHack(team)) {
                     retVal = <div>
-                        <button onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
-                        <button onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                        <button disabled={!this.isAllPaymentDone(team)} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
                         </div>
                     return retVal
                 }
