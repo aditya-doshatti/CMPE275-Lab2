@@ -106,6 +106,7 @@ public class TeamController {
 			
 			// Add user to the team
 			team.addPaidUsers(userService.getUser(userId));
+			teamService.updateTeam(team);
 		}
 		catch (Exception e) {
 		}

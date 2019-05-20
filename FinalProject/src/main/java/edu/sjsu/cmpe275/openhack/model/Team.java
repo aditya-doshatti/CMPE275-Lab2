@@ -49,7 +49,7 @@ public class Team {
 		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "teams", "isVerified", "role",
-			"hibernateLazyInitializer", "handler","ownsTeams"})
+			"hibernateLazyInitializer", "handler","ownsTeams", "participantTeam"})
 	private Set<User> paidUsers;
 	
 	/**

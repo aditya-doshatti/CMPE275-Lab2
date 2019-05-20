@@ -16,45 +16,52 @@ class HackathonPayment extends Component {
             userOrg:'',
             hackId:this.props.location.state.hackId,
             hackathon:" ",
-            sponsorList:[]
+            sponsorList:[],
+            userTeams:[],
+            currentTeamId:''
          }
     }
 
     async componentWillMount(){
         console.log("localStorage",localStorage.getItem('user'))
         const email=JSON.parse(localStorage.getItem('user'));
-        axios.get(url+`/user/profile/${email}`)
+        await axios.get(url+`/user/profile/${email}`)
         .then((response) => {
-                this.setState({
-                    userId:response.data.id,
-                })
-                if (response.data.organization!=null) {
-                    this.setState({
-                        userOrg:response.data.organization.name
-                    })
-                }
-                console.log(response.data);
-        });
-        await axios.get(url+`/hackathon/${this.state.hackId}`)
-        .then((response) =>{
-            console.log("here inside axios",response.data)
+            var lists = response.data.ownsTeams.concat(response.data.participantTeam)
             this.setState({
-                hackathon: response.data,
-                sponsorList: response.data.sponsors
+                userId:response.data.id,
+                userTeams:lists
             })
-            console.log("aaa",response.data.sponsors);
-        }
-        );
+            if (response.data.organization!=null) {
+                this.setState({
+                    userOrg:response.data.organization.name
+                })
+            }
 
-        console.log("here inside",this.state.hackathon)
+            axios.get(url+`/hackathon/${this.state.hackId}`)
+            .then((response) =>{
+                this.setState({
+                    hackathon: response.data,
+                    sponsorList: response.data.sponsors
+                })
+                this.state.userTeams.map((team,key) => {
+                    if (team.hackathon.id === this.state.hackId) {
+                        this.setState({
+                            currentTeamId:team.teamId,
+                        })
+                    }
+                })
+            }
+            );
+        });
     }
 
     markPaymentDone = e => {
-        axios.put(url+`/user/${this.state.userId}/pay`)
+        axios.put(url+`/team/${this.state.currentTeamId}/addPaidUser/${this.state.userId}`)
         .then((response)=>{
             console.log(response.data)
+            swal("Payment Done","Make your teammates pay","success")
         });
-        swal("Payment Done","Make your teammates pay","success")
         this.props.history.push('/dashboard')
     }
 

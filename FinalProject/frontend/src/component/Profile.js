@@ -385,10 +385,6 @@ class Profile extends Component {
                     <button onClick={this.leaveOrganizationEvent} className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg "> Yes </button>
                     <button onClick={this.onCloseLeaveModal} className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg "> No </button>
                 </Modal>
-               
-                {/* <div className="col-lg-3 text-left mt-5 border-left" >
-                </div> */}
-
             </div>
         </div>
         </div> );
