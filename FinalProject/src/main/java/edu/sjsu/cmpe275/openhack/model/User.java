@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe275.openhack.model;
 
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -75,6 +74,10 @@ public class User {
 	@ManyToMany(mappedBy = "users")
 	@JsonIgnoreProperties(value = {"users", "owner"})
 	private Set<Team> participantTeam;
+	
+	@ManyToMany(mappedBy = "paidUsers")
+	@JsonIgnoreProperties(value = {"users", "owner"})
+	private Set<Team> paymentForTeam;
 	
 	@Column(name="isOwner",nullable = true)
 	private boolean isOwner=false;
@@ -259,6 +262,20 @@ public class User {
 
 	public void setParticipantTeam(Set<Team> participantTeam) {
 		this.participantTeam = participantTeam;
+	}
+
+	/**
+	 * @return the paymentForTeam
+	 */
+	public Set<Team> getPaymentForTeam() {
+		return paymentForTeam;
+	}
+
+	/**
+	 * @param paymentForTeam the paymentForTeam to set
+	 */
+	public void setPaymentForTeam(Set<Team> paymentForTeam) {
+		this.paymentForTeam = paymentForTeam;
 	}
 	
 }

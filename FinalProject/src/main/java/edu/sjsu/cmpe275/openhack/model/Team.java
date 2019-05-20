@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe275.openhack.model;
 
-import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -39,9 +36,21 @@ public class Team {
 	
 	private String submissionLink;
 	
-	private float score;
+	private double score;
 	
 	private int paidCount = 0;
+
+	/* 
+	 * List of users in this team who has made payments
+	 */
+	@ManyToMany(cascade={CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@JoinTable(name="paid_users",
+		joinColumns={@JoinColumn(name="TEAM_ID", referencedColumnName="TEAM_ID")},
+		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
+	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+			"judgesHackathons", "organization", "teams", "isVerified", "role",
+			"hibernateLazyInitializer", "handler","ownsTeams"})
+	private Set<User> paidUsers;
 	
 	/**
 	 * @return the owner
@@ -151,12 +160,29 @@ public class Team {
 		this.submissionLink = submissionLink;
 	}
 
-	public float getScore() {
+	public double getScore() {
 		return score;
 	}
 
-	public void setScore(float score) {
+	public void setScore(double score) {
 		this.score = score;
 	}
+
+	/**
+	 * @return the paidUsers
+	 */
+	public Set<User> getPaidUsers() {
+		return paidUsers;
+	}
+
+	/**
+	 * @param paidUsers the paidUsers to set
+	 */
+	public void setPaidUsers(Set<User> paidUsers) {
+		this.paidUsers = paidUsers;
+	}
 	
+	public void addPaidUsers(User paidUser) {
+		this.paidUsers.add(paidUser);
+	}
 }

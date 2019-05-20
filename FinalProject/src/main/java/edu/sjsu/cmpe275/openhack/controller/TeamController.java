@@ -2,7 +2,6 @@ package edu.sjsu.cmpe275.openhack.controller;
 
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.MailService;
@@ -54,7 +52,6 @@ public class TeamController {
 				userService.updateProfile(tempUser);
 				mailService.sendMail(tempUser.getEmail(),"Payment Due for Openhack", "Go ahead and make payment on http://localhost:8080/payment");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			}
@@ -82,5 +79,36 @@ public class TeamController {
 			}
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}		
+	}
+	
+	@RequestMapping(method=RequestMethod.POST,value = "/team/{teamId}/paidUsers", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Set<User>> getPaidUsers(@PathVariable("teamId") Long id) {
+		try {
+			Team team = teamService.getTeamById(id);
+			if(team != null) {
+				Set<User> paidUsers = team.getPaidUsers();
+				return ResponseEntity.ok(paidUsers);
+			}
+		}
+		catch(Exception e) { }
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value = "/team/{teamId}/addPaidUser/{userId}", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Team> addPaidUser(@PathVariable Long teamId, @PathVariable Long userId) {
+		try {
+			Team team = teamService.getTeamById(teamId);
+			if(team == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			User user = userService.getUser(userId);
+			if(user == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			
+			// Add user to the team
+			team.addPaidUsers(userService.getUser(userId));
+		}
+		catch (Exception e) {
+		}
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }
