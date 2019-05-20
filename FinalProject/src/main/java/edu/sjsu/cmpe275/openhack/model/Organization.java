@@ -1,9 +1,7 @@
 package edu.sjsu.cmpe275.openhack.model;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;

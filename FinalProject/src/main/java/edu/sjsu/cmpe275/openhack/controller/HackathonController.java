@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
 import edu.sjsu.cmpe275.openhack.model.Organization;
-import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
 import edu.sjsu.cmpe275.openhack.service.OrganizationService;
@@ -39,9 +37,7 @@ public class HackathonController {
 	
 	@Autowired
 	TeamService teamService;
-	
-//	@Autowired
-//	HackathonTeamAssocService hackTeamAssocService;
+
 	
 	// Get ALL hackathons
 	@RequestMapping(method=RequestMethod.GET, value = "/hackathons", produces = { "application/json", "application/xml" })
