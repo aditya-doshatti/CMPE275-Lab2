@@ -24,13 +24,13 @@ import edu.sjsu.cmpe275.openhack.service.UserService;
 @RestController
 public class TeamController {
 	
-	@Autowired
+	@Autowired(required=true)
 	TeamService teamService;
 	
-	@Autowired
+	@Autowired(required=true)
 	UserService userService;
 	
-	@Autowired
+	@Autowired(required=true)
 	MailService mailService;
 	
 	@RequestMapping(method=RequestMethod.GET,value = "/teams", produces = { "application/json", "application/xml" })
@@ -78,7 +78,7 @@ public class TeamController {
 		}		
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value = "/team/{teamId}/paidUsers", produces = { "application/json", "application/xml" })
+	@RequestMapping(method=RequestMethod.GET,value = "/team/{teamId}/paidUsers", produces = { "application/json", "application/xml" })
 	public ResponseEntity<Set<User>> getPaidUsers(@PathVariable("teamId") Long id) {
 		try {
 			Team team = teamService.getTeamById(id);
