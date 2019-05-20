@@ -22,7 +22,8 @@ class HackathonList extends Component {
             allUsers:[],
             owner:{id:0, name:""},
             lenMatch:false,
-            teams:[]
+            teams:[],
+            judgesHacks:[]
          }
     }
 
@@ -47,7 +48,8 @@ class HackathonList extends Component {
                         name:response.data.name,
                         teams:lists
                     },
-                    teams:lists
+                    teams:lists,
+                    judgesHacks:response.data.judgesHackathons
                 })
         });
 
@@ -145,18 +147,29 @@ class HackathonList extends Component {
         return this.state.teams.some(item => val.teamId === item.teamId);
     }
 
+    isJudgeThisHack = val => {
+        return this.state.judgesHacks.some(item => val.id === item.id)
+    }
+
     shouldJoin = (teams, key) => {
-        var retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
-        teams.map((team, key12) => {
-            if (this.isTeamInHack(team)) {
-                retVal = <div>
-                    <button onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
-                    <button onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
-                    </div>
-                return retVal
-            }
-        })
-        return retVal
+        var retVal
+        if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
+            retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            return retVal
+        }
+        else {
+            retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+            teams.map((team, key12) => {
+                if (this.isTeamInHack(team)) {
+                    retVal = <div>
+                        <button onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                        <button onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                        </div>
+                    return retVal
+                }
+            })
+            return retVal
+        }
     }
 
     render() { 
