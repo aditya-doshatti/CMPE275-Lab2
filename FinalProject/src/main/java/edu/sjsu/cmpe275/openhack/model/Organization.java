@@ -45,7 +45,7 @@ public class Organization {
 	
 	@OneToMany
 	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
-			"judgesHackathons", "organization", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+			"judgesHackathons", "organization","role", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private Set<User> pendingApprovals;
 
 	@Embedded

@@ -30,7 +30,6 @@ class HackathonList extends Component {
         axios.get(url+`/hackathonsByDate`)
         .then((response) => {
                this.setState({hackathonlist:response.data})
-                console.log(response.data);
         });
         axios.get(url+`/users`)
         .then((response) => {
@@ -41,27 +40,26 @@ class HackathonList extends Component {
         const email=JSON.parse(localStorage.getItem('user'));
         axios.get(url+`/user/profile/${email}`)
         .then((response) => {
+                var lists = response.data.ownsTeams.concat(response.data.participantTeam)
                 this.setState({
                     owner:{
                         id:response.data.id,
                         name:response.data.name,
-                        teams:response.data.participantTeam
+                        teams:lists
                     },
-                    teams:response.data.participantTeam
+                    teams:lists
                 })
-                console.log(response.data);
         });
 
     }
 
     handleJoin = (index) => {
-        //e.preventDefault();
         this.setState({ 
             openCreate: true,
             currentHackathonId: this.state.hackathonlist[index].id,
             currentHackathonMinTeamSize: this.state.hackathonlist[index].minTeamSize,
-            currentHackathonMaxTeamSize: this.state.hackathonlist[index].maxTeamSize
-
+            currentHackathonMaxTeamSize: this.state.hackathonlist[index].maxTeamSize,
+            lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
         });
     }
 
@@ -78,7 +76,6 @@ class HackathonList extends Component {
       };
     
     handleShareholderNameChange = idx => evt => {
-        //console.log("in change button",this.state.users.length, this.state.currentHackathonMaxTeamSize, this.state.currentHackathonMinTeamSize, this.state.lenMatch)
         const newShareholders = this.state.users.map((users, sidx) => {
             if (idx !== sidx) return users;
             return { ...users, id: evt.target.value };
@@ -86,17 +83,16 @@ class HackathonList extends Component {
 
     this.setState({ 
         users: newShareholders,
-        lenMatch : (this.state.users.length >= this.state.currentHackathonMinTeamSize) && (this.state.users.length <= this.state.currentHackathonMaxTeamSize)
+        lenMatch : (this.state.users.length +1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length +1 <= this.state.currentHackathonMaxTeamSize)
         });
-        //console.log("CHange check", this.state.users.length >= this.state.currentHackathonMinTeamSize, this.state.users.length <= this.state.currentHackathonMaxTeamSize)
     };
 
 
     handleSubmit = evt => {
         evt.preventDefault()
         const { name, users, owner } = this.state;
-        console.log(users)
-        //alert(`Incorporated: ${name} with ${users.length} shareholders`);
+        var ownerObj = {"id":this.state.owner.id}
+        users.push(ownerObj)
         const teamData=({
             name: name,
             users,
@@ -105,7 +101,6 @@ class HackathonList extends Component {
         })
         axios.post(url+'/team', teamData)
         .then((response)=>{
-            console.log(response.data)
             this.props.history.push({
                 pathname:'/payment',
                 state: { hackId: this.state.currentHackathonId }
@@ -115,21 +110,17 @@ class HackathonList extends Component {
     };
 
     handleAddShareholder = () => {
-        console.log("in Add button",this.state.users.length, this.state.currentHackathonMaxTeamSize, this.state.currentHackathonMinTeamSize, this.state.lenMatch)
         this.setState({
             users: this.state.users.concat([{ id: "" }]),
-            lenMatch : (this.state.users.length-1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length-1 <= this.state.currentHackathonMaxTeamSize)
+            lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
         });
-        console.log("Add check", this.state.users.length >= this.state.currentHackathonMinTeamSize, this.state.users.length <= this.state.currentHackathonMaxTeamSize)
     };
 
     handleRemoveShareholder = idx => () => {
-        console.log("in Close button",this.state.users.length, this.state.currentHackathonMaxTeamSize, this.state.currentHackathonMinTeamSize, this.state.lenMatch)
         this.setState({
             users: this.state.users.filter((s, sidx) => idx !== sidx),
-            lenMatch : (this.state.users.length-1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length-1 <= this.state.currentHackathonMaxTeamSize)
+            lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
         });
-        console.log("Close check", this.state.users.length >= this.state.currentHackathonMinTeamSize, this.state.users.length <= this.state.currentHackathonMaxTeamSize)
     };
 
     handleCode = key => {
@@ -179,7 +170,6 @@ class HackathonList extends Component {
         if(this.state.hackathonlist!=null) {
         items = this.state.hackathonlist.map((item, key) => <div className="row text-center mt-4 ml-5">
             <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-            {/* <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button> */}
             {this.shouldJoin(item.teams, key)}
         </div>
         );}
@@ -222,12 +212,6 @@ class HackathonList extends Component {
                         <option default>--default--</option>
                             {userList}
                         </select>
-                        {/* <input
-                        type="text"
-                        placeholder={`Teammember #${idx + 1} name`}
-                        value={shareholder.name}
-                        onChange={this.handleShareholderNameChange(idx)}
-                        /> */}
                         <button
                         type="button"
                         onClick={this.handleRemoveShareholder(idx)}
@@ -244,7 +228,6 @@ class HackathonList extends Component {
                     >
                     Add Teammember
                     </button>
-                    {/* disabled={this.state.currentHackathonMinTeamSize <= this.state.users.length <= this.state.currentHackathonMaxTeamSize } */}
                     <button disabled={!this.state.lenMatch}>Create</button>
                 </form>
                         </Modal>

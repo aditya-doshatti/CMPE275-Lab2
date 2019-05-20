@@ -24,62 +24,42 @@ class Hackathon extends Component {
     }
 
     async componentWillMount(){
-        console.log("localStorage",localStorage.getItem('user'))
         const email=JSON.parse(localStorage.getItem('user'));
-        axios.get(url+`/user/profile/${email}`)
+        await axios.get(url+`/user/profile/${email}`)
         .then((response) => {
+                var lists = response.data.ownsTeams.concat(response.data.participantTeam)
                 this.setState({
                     userId:response.data.id,
+                    userTeams:lists
                 })
-                if (response.data.participantTeam!=null) {
-                    this.setState({
-                        userTeams:response.data.participantTeam
-                    })
-                }
                 console.log(response.data);
-        });
-        await axios.get(url+`/hackathon/${this.state.hackId}`)
-        .then((response) =>{
-            this.setState({
-                hackathon: response.data,
-            })
-            this.state.userTeams.map((team,key) => {
-                if (team!=null) {
+            axios.get(url+`/hackathon/${this.state.hackId}`)
+            .then((response) =>{
+                this.setState({
+                    hackathon: response.data,
+                })
+                this.state.userTeams.map((team,key) => {
                     if (team.hackathon.id === this.state.hackId) {
                         this.setState({
                             currentTeamId:team.teamId,
                         })
                     }
-                }
-            })
-            axios.get(url+`/team/${this.state.currentTeamId}`)
-            .then((response) =>{
-                console.log("here inside axios",response.data)
-                this.setState({
-                    currUsers: response.data.users,
-                    submissionLink:response.data.submissionLink
                 })
+                axios.get(url+`/team/${this.state.currentTeamId}`)
+                .then((response) =>{
+                    this.setState({
+                        currUsers: response.data.users,
+                        submissionLink: response.data.submissionLink
+                    })
+                }
+                );
             }
             );
-        }
-        );
-        console.log(this.state)
+        });
     }
-
-    // currentTeamId = () => {
-    //     this.userTeams.map((team,key) => {
-    //         if (team.hackathon.id === this.state.hackId) {
-    //             this.setState({
-    //                 currentTeamId:team.teamId
-    //             })
-    //         }
-    //     })
-
-    // }
 
     onUploadClick(e) {
         let files = e.target.files;
-        console.log("Data files", files);
     }
 
     handleEvent(e){
@@ -88,7 +68,6 @@ class Hackathon extends Component {
         this.setState({
             [name]:target.value    
         });
-        console.log("handle Ecent for update profile")
     }
 
     onSubmit = (e) => {
@@ -98,7 +77,6 @@ class Hackathon extends Component {
         })
         axios.post(url+`/team/${this.state.currentTeamId}/submit`, teamData)
         .then((response)=>{
-            console.log(response.data)
             this.props.history.push({
                 pathname:'/dashboard'
             })
@@ -114,7 +92,6 @@ class Hackathon extends Component {
         var Authors = this.state.currUsers.map((item, key) => <div>
                 <td><span>{item.name}</span></td>
             </div>)
-        console.log("aditya daitya",this.state.submissionLink)
         return ( 
             <div>
                  {redirectVar}
@@ -137,16 +114,11 @@ class Hackathon extends Component {
                                     [0, 1]
 
                                 </samp>
-                                <hr></hr>
-                                {/* <a href="#" class="card-link">Upload Solution</a> */}
-                                {/* <input type="file" name="file"  onChange={(e)=>this.onUploadClick(e)}></input> */}
-                                
+                                <hr></hr>                                
                                     <div class="form-group row">
-                                    <input type="text" name="submissionLink" class="form-control col-md-8" id="githublinkinput" onChange={this.handleEvent} placeholder="github link for submission"></input>
-                                    <button onClick={this.onSubmit} class="btn btn-primary col-md-4"  id="submitbutton">Submit</button>
-                                    </div>
-                                        
-                               
+                                        <input type="text" name="submissionLink" class="form-control col-md-8" id="githublinkinput" onChange={this.handleEvent} placeholder="github link for submission" defaultValue={this.state.submissionLink}></input>
+                                        <button onClick={this.onSubmit} class="btn btn-primary col-md-4"  id="submitbutton">Submit</button>
+                                    </div>                               
                             </div>
                         </div>
                     </div>

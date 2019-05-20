@@ -68,7 +68,7 @@ public class User {
 	private Set<Hackathon> judgesHackathons;
 	
 	@OneToMany(mappedBy = "owner")
-	@JsonIgnoreProperties(value = {"owner"})
+	@JsonIgnoreProperties(value = {"owner", "users"})
 	private Set<Team> ownsTeams;
 	
 	

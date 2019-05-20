@@ -166,6 +166,9 @@ class CreateHackathon extends Component {
         axios.post(url+'/hackathon',data)
         .then((response) => {
                 console.log(response.data);
+                this.props.history.push({
+                    pathname:'/dashboard'
+                })
                 swal("Hackathon created!","View ","success")
         });
         // }
@@ -261,7 +264,7 @@ class CreateHackathon extends Component {
                     </div>
                     <div class="form-group col-md-8">
                     <select id="inputSponsor" name="inputSponsor" className="w-50 btn-md"  onChange={this.setJudge}>
-                    {/* <option default>--default--</option> */}
+                    <option default>--default--</option>
                        {userList}
                     </select>
                     <h6 className="ml-4 mr-2 text-primary">{this.state.userID}</h6>
