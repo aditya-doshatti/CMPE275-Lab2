@@ -63,6 +63,9 @@ public class Hackathon {
 	
 	private Long adminId;
 	
+	@Column(nullable=false)
+	private Boolean finalized;
+	
 	/**
 	 * @return the discount
 	 */
@@ -278,7 +281,7 @@ public class Hackathon {
 	 * @param maxTeamSize
 	 */
 	public Hackathon(String name, String desc, Date startDate, Date endDate, Double regFees, int minTeamSize,
-			int maxTeamSize, Double discount, Long adminId, Boolean isOpen) {
+			int maxTeamSize, Double discount, Long adminId, Boolean isOpen, Boolean finalized) {
 		super();
 		this.name = name;
 		this.description = desc;
@@ -290,6 +293,7 @@ public class Hackathon {
 		this.discount = discount;
 		this.adminId = adminId;
 		this.isOpen=isOpen;
+		this.finalized = finalized;
 	}
 	
 	public Hackathon(Hackathon obj) {
@@ -303,10 +307,11 @@ public class Hackathon {
 		this.maxTeamSize = obj.maxTeamSize;
 		this.discount = obj.discount;
 		this.adminId = obj.adminId;
-		this.isOpen = true;
+		this.isOpen = obj.isOpen;
 		this.judges = obj.judges;
 		this.sponsors = obj.sponsors;
 		this.teams = obj.teams;
+		this.finalized = obj.finalized;
 	}
 
 	public Set<Team> getTeams() {
@@ -315,6 +320,20 @@ public class Hackathon {
 
 	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
+	}
+
+	/**
+	 * @return the finalized
+	 */
+	public Boolean getFinalized() {
+		return finalized;
+	}
+
+	/**
+	 * @param finalized the finalized to set
+	 */
+	public void setFinalized(Boolean finalized) {
+		this.finalized = finalized;
 	}
 	
 }
