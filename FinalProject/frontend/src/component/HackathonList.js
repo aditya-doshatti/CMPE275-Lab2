@@ -184,9 +184,24 @@ class HackathonList extends Component {
     }
 
     shouldJoin = (teams, key) => {
-        var retVal
+        var retVal, judge
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
-            retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            if(this.state.hackathonlist[key].open){
+                retVal = <Popup
+                trigger={<button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} 
+                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>}
+                position="top center"
+                on="hover"
+                >
+                <div className="card">
+                    <span> Hackthon must be closed and not finalized to be able to judge. Contact Admin</span>
+                </div>
+                </Popup>
+            }
+            else {
+                retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} 
+                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            }            
             return retVal
         }
         else {
@@ -196,11 +211,46 @@ class HackathonList extends Component {
                 <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{this.state.hackathonlist[key].endDate}</span>
                 <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">${this.state.hackathonlist[key].regFees}</span>
             </div>
+            var join, pay
             teams.map((team, key12) => {
                 if (this.isTeamInHack(team)) {
+                    if(!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open){
+                        join = <Popup
+                        trigger={<button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} 
+                                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>}
+                        position="top center"
+                        on="hover"
+                        >
+                        <div className="card">
+                            <span> All users must have paid the registration fees and Hackathon must be open for submission</span>
+                        </div>
+                        </Popup>
+                    }
+                    else {
+                        join = <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} 
+                                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                    }
+                    if (this.isPaymentDone(team)) {
+                        pay = <Popup
+                        trigger={<button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} 
+                                    className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>}
+                        position="top center"
+                        on="hover"
+                        >
+                        <div className="card">
+                            <span> Payment already done for this hackathon</span>
+                        </div>
+                        </Popup>
+                    }
+                    else {
+                        pay = <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} 
+                        className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                    }
                     retVal = <div>
-                        <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
-                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                        {join}
+                        {pay}
+                        {/* <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button> */}
                         </div>
                     return retVal
                 }
