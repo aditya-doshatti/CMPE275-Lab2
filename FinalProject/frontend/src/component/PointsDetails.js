@@ -70,6 +70,19 @@ class PointsDetails extends Component {
         //console.log(this.state)
     }
 
+    getHackathonExpenses = (val) => {
+        var expenses=0
+        axios.get(url+`/expenses/${val}`)
+        .then((response, error) => {
+            response.data.map((values) =>{
+                expenses += values.amount
+            })
+            this.setState({
+                totalExpenses: expenses
+            })
+        })
+    }
+
     setChartData = () => {
         var totalAmountPaid = 0, totalAmountUnpaid = 0, totalSponsors = 0, totalExpenses = 0, totalProfit = 0
         this.state.currentTeamDetails.map((detail) => {
@@ -79,8 +92,8 @@ class PointsDetails extends Component {
             totalAmountUnpaid += ((team.users.length - team.paidUsers.length)*this.state.hackathon.regFees)
         })
         totalSponsors = this.state.hackathon.sponsors.length * 1000
-        totalExpenses = 100
-        totalProfit = totalAmountPaid + totalSponsors - totalExpenses
+        this.getHackathonExpenses(this.state.hackId)
+        totalProfit = (totalAmountPaid + totalSponsors) - totalExpenses
         this.setState({
             totalAmountPaid:totalAmountPaid,
             totalAmountUnpaid:totalAmountUnpaid,
@@ -107,7 +120,7 @@ class PointsDetails extends Component {
             { label: 'Total Amount Unpaid', y: this.state.totalAmountUnpaid, color: '#C13C37' },
             { label: 'Total Revenue from Sponsors', y: this.state.totalSponsors, color: '#6A2135' },
             { label: 'Total Expenses', y: this.state.totalExpenses, color: '#2A0135' },
-            { label: 'Total Profit', y: this.state.totalProfit, color: '#E38627' },
+            { label: 'Total Profit', y: (this.state.totalSponsors + tot)-this.state.totalExpenses, color: '#E38627' },
         ]
 
         const options = {
