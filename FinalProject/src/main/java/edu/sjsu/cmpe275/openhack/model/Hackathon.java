@@ -110,6 +110,10 @@ public class Hackathon {
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
 	@JsonIgnoreProperties(value = {"hackathon", "owner"}, allowSetters = true)
 	private Set<Team> teams;
+	
+	@OneToMany(cascade=CascadeType.MERGE, mappedBy="hackathonForExpenses")
+	@JsonIgnoreProperties(value = {"hackathon"}, allowSetters = true)
+	private Set<HackathonExpense> hackathonExpense;
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
@@ -312,6 +316,7 @@ public class Hackathon {
 		this.sponsors = obj.sponsors;
 		this.teams = obj.teams;
 		this.finalized = obj.finalized;
+		this.hackathonExpense = obj.hackathonExpense;
 	}
 
 	public Set<Team> getTeams() {
@@ -335,5 +340,24 @@ public class Hackathon {
 	public void setFinalized(Boolean finalized) {
 		this.finalized = finalized;
 	}
+
+	/**
+	 * @return the hackathonExpense
+	 */
+	public Set<HackathonExpense> getHackathonExpense() {
+		return hackathonExpense;
+	}
+
+	/**
+	 * @param hackathonExpense the hackathonExpense to set
+	 */
+	public void setHackathonExpense(Set<HackathonExpense> hackathonExpense) {
+		this.hackathonExpense = hackathonExpense;
+	}
 	
+	public void addHackathonForExpense(HackathonExpense hackathonExpense) {
+		if(this.hackathonExpense == null)
+			this.hackathonExpense = new HashSet<HackathonExpense>();
+		this.hackathonExpense.add(hackathonExpense);
+	}
 }
