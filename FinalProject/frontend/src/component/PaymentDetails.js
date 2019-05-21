@@ -18,7 +18,8 @@ class PaymentDetails extends Component {
             teams:[],
             hackathon:'',
             hackId:this.props.location.state.hackId,
-            error_status:" "
+            error_status:" ",
+            currentTeamDetails:[]
         }
     }
 
@@ -31,12 +32,24 @@ class PaymentDetails extends Component {
                     teams : response.data.teams,
                     error_status:" "
                 })
+                this.state.teams.map((row, key) => {
+                    this.getTeamPaymentDeatails(row.teamId)
+                })
                 }).catch((error) => {
                     console.log("Error",error)
                     console.log("Error response",error.response.data)
                     this.setState({error_status:error.response.data})
                 });
 
+    }
+    
+    getTeamPaymentDeatails = val =>{
+        axios.get(url+`/payments/${val}`)
+        .then((response, error) => {
+            this.setState({
+                currentTeamDetails: this.state.currentTeamDetails.concat(response.data)
+            })
+        })
     }
 
     render() {   
@@ -51,23 +64,17 @@ class PaymentDetails extends Component {
                     <td value={user.id} name={user.name}>{user.name}</td>
                 )
             })
-            var paidUsers = row.paidUsers.map((user) => {
-                if(user.organization != null) {
-                    if(this.state.hackathon.sponsors.some(item => user.organization.name === item.name)) {
-                        console.log("in here disc")
-                        feesPaid += this.state.hackathon.regFees-(this.state.hackathon.regFees*(this.state.hackathon.discount*0.01))
-                    }
-                } 
-                else 
-                    feesPaid += this.state.hackathon.regFees
+            var paidUsers = this.state.currentTeamDetails.map((detail) => {
+                feesPaid += detail.amount
                 return(<div>
                     <Popup
-                        trigger={<td value={user.id} name={user.name}>{user.name}</td>}
+                        trigger={<td value={detail.id} name={detail.user.name}>{detail.user.name}</td>}
                         position="top center"
                         on="hover"
                         >
                         <div className="card">
-                            {user.email}
+                            <span> Date: {detail.date} </span>
+                            <span> Amount:{detail.amount}</span>
                         </div>
                     </Popup>
                     </div>

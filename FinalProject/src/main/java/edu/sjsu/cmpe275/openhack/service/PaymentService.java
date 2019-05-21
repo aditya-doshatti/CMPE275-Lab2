@@ -24,7 +24,7 @@ public class PaymentService {
 	
 	@SuppressWarnings("unchecked")
 	public List<PaymentDetails> getPayments(Long teamId) {
-		Query query = entityManager.createQuery("from payment_details as p WHERE p.team_id=:t");
+		Query query = entityManager.createQuery("from PaymentDetails as p WHERE p.teamId=:t");
 		query.setParameter("t", teamId);
 		List<PaymentDetails> results = (List<PaymentDetails>) query.getResultList();
 		if(results == null) return null;

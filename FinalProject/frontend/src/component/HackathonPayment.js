@@ -18,7 +18,8 @@ class HackathonPayment extends Component {
             hackathon:" ",
             sponsorList:[],
             userTeams:[],
-            currentTeamId:''
+            currentTeamId:'',
+            currentAmount:''
          }
     }
 
@@ -51,13 +52,19 @@ class HackathonPayment extends Component {
                         })
                     }
                 })
+                this.setAmountVal()
             }
             );
         });
     }
 
     markPaymentDone = e => {
-        axios.put(url+`/team/${this.state.currentTeamId}/addPaidUser/${this.state.userId}`)
+        const data=({
+            teamId:this.state.currentTeamId,
+            userId:this.state.userId,
+            amount:this.state.currentAmount
+        })
+        axios.put(url+`/team/${this.state.currentTeamId}/addPaidUser/${this.state.userId}`, data)
         .then((response)=>{
             console.log(response.data)
             swal("Payment Done","Make your teammates pay","success")
@@ -67,6 +74,17 @@ class HackathonPayment extends Component {
 
     handleCheck = val => {
         return this.state.sponsorList.some(item => val === item.name);
+    }
+    
+    setAmountVal = () => {
+        var amount
+        if (!this.handleCheck(this.state.userOrg)) {
+            amount = this.state.hackathon.regFees
+            this.setState({currentAmount:amount})
+        } else {
+            amount = this.state.hackathon.regFees-(this.state.hackathon.regFees*(this.state.hackathon.discount*0.01))
+            this.setState({currentAmount:amount})
+        }
     }
 
     render() { 
@@ -80,16 +98,15 @@ class HackathonPayment extends Component {
         var sponsors = this.state.sponsorList.map((item, key) =>
         <span className="text-info font-weight-bold">{item.name}<br></br></span> 
         );
-        var payment
+        var payment, amount
         if (!this.handleCheck(this.state.userOrg)) {
             payment = <div>
-                        <h5><b>Your Total: </b><span class="right-aligned">${this.state.hackathon.regFees}</span></h5> 
+                        <h5><b>Your Total: </b><span class="right-aligned">${this.state.currentAmount}</span></h5> 
                     </div>
         }
         else {
-            var amount = this.state.hackathon.regFees-(this.state.hackathon.regFees*(this.state.hackathon.discount*0.01))
             payment = <div>
-                        <h5><b>Your Discounted Total: </b><span class="right-aligned">${amount}</span></h5>
+                        <h5><b>Your Discounted Total: </b><span class="right-aligned">${this.state.currentAmount}</span></h5>
                     </div>
         }
         return ( 

@@ -160,7 +160,8 @@ class CreateHackathon extends Component {
             discount:this.state.inputSponsorDiscount,
             sponsors:this.state.sponsors,
             judges: this.state.judges,
-            adminId:this.state.adminId
+            adminId:this.state.adminId,
+            finalized:false
         })
         
         axios.post(url+'/hackathon',data)
