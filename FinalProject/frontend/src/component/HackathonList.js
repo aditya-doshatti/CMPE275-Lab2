@@ -171,11 +171,11 @@ class HackathonList extends Component {
     shouldJoin = (teams, key) => {
         var retVal
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
-            retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            retVal = <button onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
             return retVal
         }
         else {
-            retVal = <button disabled={!this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+            retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
             teams.map((team, key12) => {
                 if (this.isTeamInHack(team)) {
                     retVal = <div>

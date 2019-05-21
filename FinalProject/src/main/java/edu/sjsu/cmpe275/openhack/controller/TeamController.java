@@ -107,6 +107,10 @@ public class TeamController {
 			// Add user to the team
 			team.addPaidUsers(userService.getUser(userId));
 			teamService.updateTeam(team);
+			if (team.getPaidUsers().size() == team.getUsers().size()) {
+				User tempUser = team.getOwner();
+				mailService.sendMail(tempUser.getEmail(),"Payment Done for Openhack", "All your team members have done the payment, You are all set to submit code");
+			}
 		}
 		catch (Exception e) {
 		}

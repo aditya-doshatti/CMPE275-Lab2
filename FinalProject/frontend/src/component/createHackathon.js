@@ -154,7 +154,7 @@ class CreateHackathon extends Component {
             startDate: this.state.inputStartTime,
             endDate: this.state.inputendTime,
             regFees: this.state.inputfee,
-            isOpen:true,
+            isOpen:false,
             minTeamSize:this.state.inputMinSize,
             maxTeamSize: this.state.inputMaxSize,
             discount:this.state.inputSponsorDiscount,
