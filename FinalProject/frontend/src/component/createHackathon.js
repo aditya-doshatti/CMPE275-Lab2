@@ -141,13 +141,15 @@ class CreateHackathon extends Component {
     submitForm(e){
         e.preventDefault();
         const id=this.state.id
-        // if(this.state.name==""||this.state.description==""||this.state.startDate==""||this.state.endDate==""||this.state.regFees==""||this.state.minTeamSize==""||this.state.maxTeamSize==""||this.state.judges==""){
-        //     swal("Fill all the required fields","Fill again","error")
-        // }else if(this.state.startDate>this.state.endDate){
-        //     swal("Start Date can't be later than end date","Input again","error")
-        // }else if(this.state.minTeamSize==0||this.state.maxTeamSize==0){
-        //     swal("Team Size must be atleast 1","Input again","error")
-        // }else{
+        console.log("dates",this.state.startDate,this.state.endDate)
+        
+        if(this.state.name==""||this.state.description==""||this.state.startDate==""||this.state.endDate==""||this.state.regFees==""||this.state.minTeamSize==""||this.state.maxTeamSize==""||this.state.judges==""){
+            swal("Fill all the required fields","Fill again","error")
+        }else if(this.state.startDate>this.state.endDate){
+            swal("Start Date can't be later than end date","Input again","error")
+        }else if(this.state.minTeamSize==0||this.state.maxTeamSize==0){
+            swal("Team Size must be atleast 1","Input again","error")
+        }else{
         const data=({
             name: this.state.inputHackathonName,
             description: this.state.inputDescription,
@@ -172,7 +174,7 @@ class CreateHackathon extends Component {
                 })
                 swal("Hackathon created!"," ","success")
         });
-        // }
+        }
     }
 
     render() { 

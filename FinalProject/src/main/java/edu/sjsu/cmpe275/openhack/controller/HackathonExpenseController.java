@@ -42,7 +42,6 @@ public class HackathonExpenseController {
 	public ResponseEntity<HackathonExpense> addExpense(@RequestBody HackathonExpense h) {
 		if(h == null)
 			return ResponseEntity.badRequest().build();
-		System.out.println("PRATIKB: " + h.getDecription());
 		HackathonExpense result = expService.addExpense(h);
 		if(result == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		return ResponseEntity.ok(result);

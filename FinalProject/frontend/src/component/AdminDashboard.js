@@ -22,8 +22,12 @@ class AdminDashboard extends Component {
             openJoin: false,
             openSponsor:false,
             openHack:true,
-            openTeams:false
+            openTeams:false,
+            finalizeHack:[],
+            status:"",
+            openCond:[]
         }
+        this.OpenTeamFunction=this.OpenTeamFunction.bind(this)
         this.setCloseFunction=this.setCloseFunction.bind(this)
     }
 
@@ -53,20 +57,84 @@ class AdminDashboard extends Component {
 
     }
 
-    setCloseFunction(id,stat){
+    OpenTeamFunction(hackId){
+        this.props.history.push({
+            pathname:'/scorelist',
+            state: { hackId: hackId }
+        })
+    }
+
+    async setCloseFunction(id,stat){
         console.log("inside close hackathoin",id,stat)
         var hackId=id
         var status=stat
+        var flag=false
+        if(status==true){
+            await axios.get(url+`/hackathon/${hackId}`)
+            .then((response, error) => {
+                console.log(response.data.teams)
+                console.log("sorting try",response.data.teams.sort())
+                this.setState({openCond:response.data.teams})
+                this.state.openCond.map((row) => {
+                    if(row.score>=0){
+                      flag=true  
+                    }
+                })
+            }).catch((error) => {
+                console.log("Error",error.code)
+            }); 
+           
+        }
+        if(flag==true)
+            swal("It cannot be opened now!","Grading of atleast one team done","error")
+        else{
         axios.put(url+`/hackathon/${hackId}/open/${status}`)
         .then((response, error) => {
-            if(stat==true)
+            if(stat==true){
                 swal("Hackathon has been opened successfully!","Status changed!","success")
-            else
+                // window.location.reload();
+            }
+            else{
                 swal("Hackathon has been closed successfully!","Status changed!","success")
+                // window.location.reload();
+            }
             console.log(response.data)
         }).catch((error) => {
             console.log("Error",error.code)
         }); 
+    }
+
+    }
+
+    async setFinalizeFunction(id){
+        console.log("inside finalize hackathoin",id)
+        var hackId=id
+        var err=false
+        await axios.get(url+`/hackathon/${hackId}`)
+        .then((response, error) => {
+            console.log(response.data.teams)
+            this.setState({finalizeHack:response.data.teams})
+            this.state.finalizeHack.map((row) => {
+                if(row.score==-1){
+                    err=true
+                }
+            })
+        }).catch((error) => {
+            console.log("Error",error.code)
+        }); 
+
+        if(err==true)
+           swal("Can't Finalize!Grades for all teams has not submitted","Grading required","Error")
+        else{
+            await axios.put(url+`/hackathon/${hackId}/finalize`)
+            .then((response, error) => {
+                console.log(response.data)
+                swal("Hackathon is being closed","Done!","Success")
+            }).catch((error) => {
+                console.log("Error",error.code)
+            }); 
+        }
+        
 
     }
 
@@ -131,7 +199,9 @@ class AdminDashboard extends Component {
 
 
     render() {   
+        console.log(this.state.status)
         let redirectVar = null;
+        var team_score=null;
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
         }
@@ -139,16 +209,36 @@ class AdminDashboard extends Component {
         let listdetails = this.state.listed.map((row) => {
            a=row.judges.map(detail=>{return(<h5 className="text-background">{detail.name} <span className="text-muted">  Screen Name:</span>{detail.screenName}</h5>)})
            b=row.sponsors.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
-           teams = row.teams.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
-            if(row.open===true){
+          
+           teams = row.teams.map(
+               detail=>{
+                   return(
+                    <tr>                    
+                    <td className="text-secondary"><h6>{detail.name}</h6></td>
+                    <td className="text-secondary"><h6>{detail.submissionLink}</h6></td> 
+                    <td className="text-secondary"><h6>{detail.score}</h6></td> 
+                    </tr>)}
+                 )
+                  
+
+
+
+
+
+
+            if(row.finalized===true){
+                c=<td><button className="btn btn-secondary ml-2 mt-2" disabled>Finalize</button>
+                <h6 className="text-secondary">Hackathon closed!</h6>
+            </td> 
+            }else if(row.finalized===false && row.open==true){
                 c=<td className="text-primary">
                 <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,false)} >Close</button>
-                <button className="btn btn-secondary ml-2">Finalize</button>
+                <button className="btn btn-secondary ml-2" onClick={()=>this.setFinalizeFunction(row.id)}>Finalize</button>
             </td> 
-            }else{
+            } else{
                c= <td className="text-primary">
                      <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,true)} >Open</button>
-                      <button className="btn btn-secondary ml-2">Finalize</button>
+                    <button className="btn btn-secondary ml-2" onClick={()=>this.setFinalizeFunction(row.id)}>Finalize</button>
                  </td> 
             }
 
@@ -163,10 +253,12 @@ class AdminDashboard extends Component {
                     <td className="text-primary">{row.minTeamSize}/{row.maxTeamSize}</td> 
                     <td>
                         <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
-                        <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button>
-                        {/* <button className="btn btn-info ml-2" onClick={this.onOpenTeamsModal}>Teams</button> */}
-                        <button className="btn btn-info ml-2" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
-                        <button className="btn btn-info ml-2" onClick={()=> this.openPointsStatus(row.id)}>Points Status</button>
+                        <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button> 
+                        <button className="btn btn-info ml-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams</button>
+                        <br></br> <br></br>
+                        <button className="btn btn-info mt-2" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
+                        <button className="btn btn-info ml-2 mt-2" onClick={()=> this.openPointsStatus(row.id)}>Points Status</button>
+                        
                     </td> 
                        {c}         
                 </tr>
@@ -211,10 +303,25 @@ class AdminDashboard extends Component {
                 </div>
                 </Modal>
 
-                <Modal className="w-75" open={this.state.openTeams} onClose={this.onCloseTeamsModal} focusTrapped>
-                <div className="w-25" >
+                <Modal className="modal-dialog mw-100 w-75" open={this.state.openTeams} onClose={this.onCloseTeamsModal} focusTrapped>
+                <div className="w-100" >
                 <h4 className="text-info">View teams:</h4><hr></hr>
-                     {teams}
+                <div className="w-100">
+                
+                    <table class="table mt-4 bg w-100 border rounded shadow-lg">
+                        <thead>
+                            <tr>
+                                <th><em>Team Name</em></th>
+                                <th><em>Submission Link </em></th>
+                                <th><em>Score</em></th>
+            
+                            </tr>  
+                        </thead>
+                        <tbody>
+                             {teams}                       
+                        </tbody>
+                    </table>
+                </div>
                 </div>
                 </Modal>
 

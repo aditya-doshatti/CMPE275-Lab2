@@ -58,9 +58,9 @@ class Signup extends Component {
         })
         console.log("screenname",this.state.screenName)
         if(e.target.value.includes(" ")){
-            this.setState({error_message:"Sceen Name can't contain space"})
+            this.setState({error_message:"Screen Name can't contain space"})
         }else if(e.target.value.length<3){
-            this.setState({error_message:"Sceen Name should be atleast 3 characters"})
+            this.setState({error_message:"Screen Name should be atleast 3 characters"})
         }else{
         this.setState({error_message:" "})
         axios.get(url+`/user/profile/sn/${e.target.value}`)
