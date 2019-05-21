@@ -169,5 +169,16 @@ public class HackathonController {
 		}
 		return ResponseEntity.noContent().build();
 	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/hackathon/name/{name}",  produces = { "application/json", "application/xml" })
+	public ResponseEntity<Hackathon> getProfileByScreenName(@PathVariable String name ) {
+		Hackathon hack = hackathonService.getHackByName(name);
+		if  (hack != null) {
+			return ResponseEntity.ok(hack);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.CREATED).body(null);
+		}
+	}
 }
 

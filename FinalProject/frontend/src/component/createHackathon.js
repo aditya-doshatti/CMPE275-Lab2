@@ -29,7 +29,9 @@ class CreateHackathon extends Component {
             userID:[],
             judges:[],
             sponsors:[],
-            user_name:[]
+            user_name:[],
+            hackNameUnique:false,
+            todaysDate: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]
          }
          this.setField=this.setField.bind(this);
          this.submitForm=this.submitForm.bind(this);
@@ -138,6 +140,37 @@ class CreateHackathon extends Component {
       
     }
 
+    setHackName = (e) => {
+
+        console.log("screenname",e.target.value)
+        var target=e.target;
+        var value=target.value;
+        var name=target.name;
+        this.setState({
+            [name]:value
+        })
+        console.log("screenname",this.state.screenName)
+        this.setState({error_message:" "})
+        axios.get(url+`/hackathon/name/${e.target.value}`)
+        .then((response) => {
+            if(response.status==201){
+              this.setState({
+                  error_message:" Hackathon Name is available",
+                  hackNameUnique:true
+                })
+            }
+            if(response.status==200){
+                this.setState({
+                    error_message:"Not available",
+                    hackNameUnique:false
+                })
+            }
+         }).catch(function(error) {
+            console.log("error occured",error)
+            // window.alert(error.code)
+        });       
+    }
+
     submitForm(e){
         e.preventDefault();
         const id=this.state.id
@@ -178,34 +211,31 @@ class CreateHackathon extends Component {
     }
 
     render() { 
-        let redirectVar = null;
-        if(!localStorage.getItem("user")){
-            redirectVar = <Redirect to= "/login"/>
-        }
-        var organizationList
-        console.log("here in render")
-        console.log(this.state.organization)
-        if(this.state.organization!=null){
-        organizationList=this.state.organization.map((org) => {
-            return(
-                <option value={org.id} name={org.name}>{org.name}</option>
-            )
-        })
-    }
+                let redirectVar = null;
+                if(!localStorage.getItem("user")){
+                    redirectVar = <Redirect to= "/login"/>
+                }
+                var organizationList
+                console.log("here in render")
+                console.log(this.state.organization)
+                if(this.state.organization!=null){
+                organizationList=this.state.organization.map((org) => {
+                    return(
+                        <option value={org.id} name={org.name}>{org.name}</option>
+                    )
+                })
+            }
 
-    var userList
-    console.log("here in render for user list")
-    console.log(this.state.user)
-    if(this.state.user!=null){
-    userList=this.state.user.map((u) => {
-        return(
-            <option value={u.id}>{u.name} : ({u.email})</option>
-        )
-    })
-}
-
-        
-
+            var userList
+            console.log("here in render for user list")
+            console.log(this.state.user)
+            if(this.state.user!=null){
+            userList=this.state.user.map((u) => {
+                return(
+                    <option value={u.id}>{u.name} : ({u.email})</option>
+                )
+            })
+            }
         return ( 
         <div>
              {redirectVar}
@@ -225,7 +255,8 @@ class CreateHackathon extends Component {
                     </div>
                     <div class="form-group col-md-8">
                     <input type="text" class="form-control hackInputs w-50" name="inputHackathonName" id="inputHackathonName" placeholder="Event Name"
-                    onChange={this.setField} ></input>
+                    onChange={this.setHackName} ></input>
+                    <h6 className="text-danger">{this.state.error_message}</h6>
                     </div>
                 </div>
                 <div class="form-row">
@@ -233,7 +264,7 @@ class CreateHackathon extends Component {
                     <label for="inputStartTime" className="font-weight-bold">Start Date:<span className="text-danger">*</span></label>                
                     </div>
                     <div class="form-group col-md-8">
-                    <input type="date" class="form-control hackInputs w-50" id="inputStartTime" name="inputStartTime" placeholder="Time" onChange={this.setField}></input>
+                    <input type="date" class="form-control hackInputs w-50" id="inputStartTime" name="inputStartTime" placeholder="Time" onChange={this.setField} min={this.state.todaysDate}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -241,7 +272,7 @@ class CreateHackathon extends Component {
                     <label for="inputendTime"className="font-weight-bold">End Date:<span className="text-danger">*</span></label>                
                     </div>
                     <div class="form-group col-md-8">
-                    <input type="date" class="form-control hackInputs w-50" id="inputendTime" name="inputendTime" placeholder="Time" onChange={this.setField}></input>
+                    <input type="date" class="form-control hackInputs w-50" id="inputendTime" name="inputendTime" placeholder="Time" onChange={this.setField} min={this.state.inputStartTime}></input>
                     </div>
                 </div>
                 <div class="form-row">
@@ -249,7 +280,7 @@ class CreateHackathon extends Component {
                     <label for="inputDescription" className="font-weight-bold">Description<span className="text-danger">*</span></label>                
                     </div>
                     <div class="form-group col-md-8">
-                    <textarea class="form-control" id="inputDescription" name="inputDescription" rows="3"  onChange={this.setField}></textarea>
+                    <textarea class="form-control" id="inputDescription" name="inputDescription" rows="3"  onChange={this.setField}  minlength="10"></textarea>
                     </div>
                 </div>
                 <div class="form-row">
@@ -307,11 +338,12 @@ class CreateHackathon extends Component {
                     <label for="inputSponsorDiscount" className="font-weight-bold">Sponsor Discount(In percent)</label>                
                     </div>
                     <div class="form-group col-md-8">
-                    <input type="text" class="form-control hack-inputs w-25" id="inputSponsorDiscount" name="inputSponsorDiscount" placeholder="Discount"  onChange={this.setField}></input>
+                    <input type="number" class="form-control hack-inputs w-25"  min="0" max="50" 
+                    id="inputSponsorDiscount" name="inputSponsorDiscount" placeholder="Discount"  onChange={this.setField}></input>
                     </div>
                 </div>
                 <div className="text-center">
-                 <button className="btn btn-primary btn-lg mt-3 mb-3">Create Hackathon</button>
+                 <button disabled={!this.state.hackNameUnique} className="btn btn-primary btn-lg mt-3 mb-3">Create Hackathon</button>
                 </div>
             </form>
 

@@ -30,7 +30,8 @@ class AdminDashboard extends Component {
             expenseDesc:'',
             expenseDate:'',
             exepenseAmount:0,
-            expenseHackId: ''
+            expenseHackId: '',
+            todaysDate:''
         }
         this.OpenTeamFunction=this.OpenTeamFunction.bind(this)
         this.setCloseFunction=this.setCloseFunction.bind(this)
@@ -188,7 +189,8 @@ class AdminDashboard extends Component {
         e.preventDefault();
         this.setState({ 
             openExpense: true,
-            expenseHackId: id
+            expenseHackId: id,
+            todaysDate: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]
          });
       };
 
@@ -211,7 +213,7 @@ class AdminDashboard extends Component {
             title: this.state.expenseTitle,
             decription: this.state.expenseDesc,
             time:this.state.expenseDate,
-            amount:this.state.exepenseAmount
+            amount:this.state.exepenseAmount,
         }
         axios.post(url+'/expenses', data)
         .then((response, error) => {
@@ -300,25 +302,27 @@ class AdminDashboard extends Component {
 
             expense = <div>
                 <form onSubmit={this.submitAddExpense}>
-                    <div className="mt-4 mr-5"   >
+                    <div className="mt-5 mr-5">
                     <span className="text-info font-weight-bold">Expense Title:</span>
-                        <input type="text" className=" ml-4 btn-lg col-lg-7 pull-right" name="expenseTitle" id="expenseTitle" onChange={this.handleEvent} placeholder={this.state.expenseTitle}/>
+                        <input type="text" className="ml-4 col-lg-7 btn-lg pull-right" name="expenseTitle" id="expenseTitle" onChange={this.handleEvent} placeholder={this.state.expenseTitle}/>
                     </div><br></br>
                         
                     <div className="mt-5 mr-5">
                         <span className="text-info font-weight-bold">Expense Description:</span>
-                        <textarea rows="6" cols="40" className="mt-4 ml-5 btn-lg pull-right" onChange={this.handleEvent} placeholder={this.state.expenseDesc} name="expenseDesc" id="expenseDesc"   max="500"/>
-                    </div><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-                    <div className="mt-4 mr-5">
+                        <textarea rows="2" cols="20" className="ml-4 col-lg-7 btn-lg pull-right" onChange={this.handleEvent} placeholder={this.state.expenseDesc} name="expenseDesc" id="expenseDesc"   max="500"/>
+                    </div><br></br><br></br>
+                    <div className="mt-5 mr-5">
                     <span className="text-info font-weight-bold">Expense Date:</span>
-                        <input type="date" class="form-control hackInputs w-50" id="expenseDate" name="expenseDate" placeholder="Time" onChange={this.handleEvent}></input>
+                        <input type="date" className=" ml-4 col-lg-7 pull-right" id="expenseDate" name="expenseDate" placeholder="Time" onChange={this.handleEvent} max={this.state.todaysDate}></input>
                     </div><br></br>
-                    <div className="mt-4 mr-5">
+                    <div className="mt-5 mr-5">
                     <span className="text-info font-weight-bold">Expense Amount: $</span>
                         <input type="text" className=" ml-4 btn-lg col-lg-7 pull-right" name="exepenseAmount" id="exepenseAmount" onChange={this.handleEvent} placeholder={this.state.exepenseAmount}/>
                     </div>
-                    <div className="row text-center mt-4 ml-5">
+                    <div className="mt-5 mr-5">
+                    <div className="row text-center mt-4">
                          <button type="submit" className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg ">Add Expense</button>
+                    </div>
                     </div>
                 </form>
                 </div>
@@ -404,8 +408,8 @@ class AdminDashboard extends Component {
                 </div>
                 </Modal>
 
-                <Modal  className="w-100" open={this.state.openExpense} onClose={this.onCloseAddExpense} focusTrapped>
-                <div className="w-100">
+                <Modal open={this.state.openExpense} onClose={this.onCloseAddExpense} focusTrapped>
+                <div>
                 <h4  className="text-info">Add Expense</h4><hr></hr>
                      {expense}
                 </div>
