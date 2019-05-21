@@ -9,7 +9,17 @@ import "../css/hackathonTable.css"
 import Popup from "reactjs-popup";
 import PieChart from 'react-minimal-pie-chart';
 import ReactSvgPieChart from "react-svg-piechart"
+import CanvasJSReact from '../assets/canvasjs.react';
 var swal = require('sweetalert')
+
+var ReactBsTable  = require('react-bootstrap-table');
+var BootstrapTable = ReactBsTable.BootstrapTable;
+var TableHeaderColumn = ReactBsTable.TableHeaderColumn;
+
+
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
 
 class PointsDetails extends Component {
     constructor(props) {
@@ -92,28 +102,51 @@ class PointsDetails extends Component {
         this.state.currentTeamDetails.map((detail) => {
             tot += detail.amount
         })
+        const data=[
+            { label: 'Total Amount Paid', y: tot, color: '#138620' },
+            { label: 'Total Amount Unpaid', y: this.state.totalAmountUnpaid, color: '#C13C37' },
+            { label: 'Total Revenue from Sponsors', y: this.state.totalSponsors, color: '#6A2135' },
+            { label: 'Total Expenses', y: this.state.totalExpenses, color: '#2A0135' },
+            { label: 'Total Profit', y: this.state.totalProfit, color: '#E38627' },
+        ]
+
+        const options = {
+			exportEnabled: true,
+			animationEnabled: true,
+			title: {
+				text: this.state.hackathon.name
+			},
+			data: [{
+				type: "pie",
+				startAngle: 180,
+				toolTipContent: "<b>{label}</b>: ${y}",
+				showInLegend: "true",
+				legendText: "{label}",
+				indexLabelFontSize: 16,
+				indexLabel: "{label} - ${y}",
+				dataPoints: data
+			}]
+		}
+
         return ( 
         <div>
             {redirectVar}
             <AdminNavbar />
             <div>               
                 <div class="card">
-                <h1 class="center"> Points details of Hackathon {this.state.hackathon.name}</h1>     
-                <div class="container" style={{height:300}}>
-                <ReactSvgPieChart
-                data={[
-                    { title: 'totalAmountPaid', value: tot, color: '#138620' },
-                    { title: 'totalAmountUnpaid', value: this.state.totalAmountUnpaid, color: '#C13C37' },
-                    { title: 'totalSponsors', value: this.state.totalSponsors, color: '#6A2135' },
-                    { title: 'totalExpenses', value: this.state.totalExpenses, color: '#2A0135' },
-                    { title: 'totalProfit', value: this.state.totalProfit, color: '#E38627' },
-                ]}
-                viewBoxSize={20}
-                strokeWidth={0}
-                expandSize={1}
-                // If you need expand on hover (or touch) effect
-                expandOnHover
-                /> </div>  
+                <h1 class="text-center"> Points details of Hackathon</h1>     
+                <div class="container">
+                <div>
+                <CanvasJSChart options = {options}
+                    /* onRef={ref => this.chart = ref} */
+                />
+                {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
+                </div>
+                <BootstrapTable data={data} hover>
+                    <TableHeaderColumn isKey dataField='label'>Point type</TableHeaderColumn>
+                    <TableHeaderColumn dataField='y' dataSort={ true }>Value</TableHeaderColumn>
+                </BootstrapTable>
+                </div>  
             </div> 
             </div>
         </div> 
