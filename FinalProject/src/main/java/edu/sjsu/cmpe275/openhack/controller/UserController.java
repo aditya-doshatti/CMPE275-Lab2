@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
 import edu.sjsu.cmpe275.openhack.model.User;
+import edu.sjsu.cmpe275.openhack.model.WinnerTeam;
 import edu.sjsu.cmpe275.openhack.service.HackathonService;
+import edu.sjsu.cmpe275.openhack.service.MailService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
 
 @RestController
@@ -26,6 +37,9 @@ public class UserController {
 	
 	@Autowired
 	HackathonService hackathonService;
+	
+	@Autowired
+	MailService mailService;
 	
 	@RequestMapping(method=RequestMethod.GET,value = "/user/ping")
 	public String pingHandler() {
@@ -161,5 +175,50 @@ public class UserController {
 		u.setPaid(true);
 		userService.addUser(u);
 		return ResponseEntity.status(HttpStatus.OK).build();		
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value = "/user/invite", produces = { "application/json", "application/xml" })
+	public ResponseEntity<HttpStatus> inviteUser(@RequestBody String emailID) throws JsonParseException, JsonMappingException, IOException {
+		ObjectNode object = new ObjectMapper().readValue(emailID, ObjectNode.class);
+		JsonNode node = object.get("emailID");
+		emailID = node.textValue();
+		if(userService.getProfile(emailID) != null) 
+			return ResponseEntity.ok().build();
+		String subject = "You are invited!";
+		String msg = "Hi there!\n\n"
+				+ "You have been invited to participate in the OpenHack - an online hackathon system "
+				+ "where you get to be a part of a number of hackathons and showcase your coding skills.\n\n"
+				+ "Click following link to go to the homepage, follow simple sign-up steps and start browsing"
+				+ "through a pool of future and ongoing hackathons. Go to the dashboard and join any hackathon you want."
+				+ "\n\nhttp://localhost:8080/hackathons"
+				+ "\n\nHappy Hacking!\n\nBest Regards,\nYour OpenHack Team";
+		mailService.sendMail(emailID, subject, msg);
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value = "/emailResults", produces = { "application/json", "application/xml" })
+	public ResponseEntity<HttpStatus> emailWinners(@RequestBody WinnerTeam team) throws JsonParseException, JsonMappingException, IOException {
+		String hackName = team.getHackName();
+		Boolean isWinner = team.getIsWinner();
+		List<String> emails = team.getEmails();
+
+		String subject="Results announced for Hackathon \"" + hackName + "\"!";
+		String msg="Hi there!\n\nResults for Hackathon " + hackName + " are now available online!\n\n" 
+					+ "Please login to http://localhost:8080/ to view results."
+					+ "\n\nBest Regards,\nTeam Openhack";
+		
+		if(isWinner) {
+			subject="Congratulations! You have won the Hackathon \"" + hackName + "\" !!!";
+			msg="Hi there!"
+					+ "\n\nCongratulations on winning the \"" + hackName + "\" hackathon!\n"
+					+ "\n\nThe hackathon results are now available online!\n\n" 
+					+ "Please login to http://localhost:8080/ to view results."
+					+ "\n\nBest Regards,\nTeam Openhack";
+		}
+		
+		for(String e: emails)
+			mailService.sendMail(e, subject, msg);
+		
+		return ResponseEntity.ok().build();
 	}
 }
