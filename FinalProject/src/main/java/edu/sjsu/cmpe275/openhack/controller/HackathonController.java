@@ -151,5 +151,23 @@ public class HackathonController {
 		}
 		return ResponseEntity.noContent().build();
 	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value = "/hackathon/{hackId}/finalize", produces = { "application/json", "application/xml" })
+	public ResponseEntity<Hackathon> finalizeHackathon(@PathVariable Long hackId) {
+		try {
+			Hackathon h = hackathonService.getHackathonById(hackId);
+			h.setFinalized(true);
+			hackathonService.addHackathon(h);
+		}
+		catch (Exception e) {
+			if(e.getClass().equals(new org.springframework.dao.EmptyResultDataAccessException(0).getClass())) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			}
+			if (e.getClass().equals(new org.springframework.dao.DataIntegrityViolationException(null).getClass())) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+		}
+		return ResponseEntity.noContent().build();
+	}
 }
 
