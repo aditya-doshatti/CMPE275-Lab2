@@ -133,4 +133,9 @@ public class TeamController {
 		}
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/team/hackathon/{hackId}", produces = { "application/json", "application/xml" })
+	public Team getTeamByHackathonId(@PathVariable Long hackId) {
+		return teamService.getTeamByHackathonId(hackId);
+	}
 }

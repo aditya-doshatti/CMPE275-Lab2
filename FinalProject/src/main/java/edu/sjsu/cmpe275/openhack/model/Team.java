@@ -36,7 +36,7 @@ public class Team {
 	
 	private String submissionLink;
 	
-	private double score;
+	private double score=-1;
 	
 	private int paidCount = 0;
 
