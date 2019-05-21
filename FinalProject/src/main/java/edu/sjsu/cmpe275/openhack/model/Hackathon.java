@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -110,6 +111,10 @@ public class Hackathon {
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
 	@JsonIgnoreProperties(value = {"hackathon", "owner"}, allowSetters = true)
 	private Set<Team> teams;
+	
+	@OneToOne(mappedBy="hackathon", cascade=CascadeType.MERGE, fetch=FetchType.LAZY)
+	@JsonIgnoreProperties(value = {"hackathon"}, allowSetters = true)
+	HackathonExpense hackathonExpense;
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
