@@ -5,6 +5,7 @@ import Modal from 'react-responsive-modal'
 import axios from 'axios';
 import "../css/hackathonTeam.css";
 import {Redirect} from 'react-router';
+import Popup from "reactjs-popup";
 import { frontend, url } from '../config/config';
 
 var swal = require('sweetalert')
@@ -23,7 +24,10 @@ class HackathonList extends Component {
             owner:{id:0, name:""},
             lenMatch:false,
             teams:[],
-            judgesHacks:[]
+            judgesHacks:[],
+            currentHackathonMinTeamSize:0,
+            currentHackathonMaxTeamSize:0,
+            checkValid:true
          }
     }
 
@@ -61,8 +65,10 @@ class HackathonList extends Component {
             currentHackathonId: this.state.hackathonlist[index].id,
             currentHackathonMinTeamSize: this.state.hackathonlist[index].minTeamSize,
             currentHackathonMaxTeamSize: this.state.hackathonlist[index].maxTeamSize,
-            lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
         });
+        this.setState({
+            lenMatch : (this.state.users.length+1 >= this.state.hackathonlist[index].minTeamSize) && (this.state.users.length+1 <= this.state.hackathonlist[index].maxTeamSize)
+        })
     }
 
     onCloseCreateModal = (e) => {
@@ -83,10 +89,15 @@ class HackathonList extends Component {
             return { ...users, id: evt.target.value };
     });
 
-    this.setState({ 
+        this.setState({ 
         users: newShareholders,
         lenMatch : (this.state.users.length +1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length +1 <= this.state.currentHackathonMaxTeamSize)
+        }, function () {
+            console.log(this.state.users)
+            this.checkValid(this.state.users);
+            console.log(this.state.checkValid)
         });
+        console.log(this.state.users, newShareholders)
     };
 
 
@@ -122,6 +133,10 @@ class HackathonList extends Component {
         this.setState({
             users: this.state.users.filter((s, sidx) => idx !== sidx),
             lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
+        }, function () {
+            console.log(this.state.users)
+            this.checkValid(this.state.users);
+            console.log(this.state.checkValid)
         });
     };
 
@@ -169,18 +184,73 @@ class HackathonList extends Component {
     }
 
     shouldJoin = (teams, key) => {
-        var retVal
+        var retVal, judge
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
-            retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            if(this.state.hackathonlist[key].open){
+                retVal = <Popup
+                trigger={<button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} 
+                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>}
+                position="top center"
+                on="hover"
+                >
+                <div className="card">
+                    <span> Hackthon must be closed and not finalized to be able to judge. Contact Admin</span>
+                </div>
+                </Popup>
+            }
+            else {
+                retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} 
+                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            }            
             return retVal
         }
         else {
-            retVal = <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+            retVal = <div>
+                <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
+                <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{this.state.hackathonlist[key].startDate}</span>
+                <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{this.state.hackathonlist[key].endDate}</span>
+                <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">${this.state.hackathonlist[key].regFees}</span>
+            </div>
+            var join, pay
             teams.map((team, key12) => {
                 if (this.isTeamInHack(team)) {
+                    if(!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open){
+                        join = <Popup
+                        trigger={<button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} 
+                                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>}
+                        position="top center"
+                        on="hover"
+                        >
+                        <div className="card">
+                            <span> All users must have paid the registration fees and Hackathon must be open for submission</span>
+                        </div>
+                        </Popup>
+                    }
+                    else {
+                        join = <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} 
+                                className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                    }
+                    if (this.isPaymentDone(team)) {
+                        pay = <Popup
+                        trigger={<button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} 
+                                    className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>}
+                        position="top center"
+                        on="hover"
+                        >
+                        <div className="card">
+                            <span> Payment already done for this hackathon</span>
+                        </div>
+                        </Popup>
+                    }
+                    else {
+                        pay = <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} 
+                        className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                    }
                     retVal = <div>
-                        <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
-                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
+                        {join}
+                        {pay}
+                        {/* <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button> */}
                         </div>
                     return retVal
                 }
@@ -189,7 +259,34 @@ class HackathonList extends Component {
         }
     }
 
-    render() { 
+    checkValid = (users) => {
+        const uniqueTags = []
+        var retVal = false
+        if(users != null) {
+            users.map((user) => {
+                if (!uniqueTags.some(item => parseInt(user.id) === parseInt(item.id))) {
+                    uniqueTags.push(user)
+                }
+            })
+            if(users.length === uniqueTags.length && this.state.lenMatch)
+                retVal = true
+            else
+                retVal = false
+        }
+        else {
+            retVal = this.state.lenMatch
+        }
+        this.setState({
+            checkValid : retVal
+        }, function () {
+            this.setState({
+                checkValid : this.state.checkValid
+            })
+        })
+        return retVal
+    }
+
+    render() {
         let redirectVar = null;
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
@@ -207,7 +304,8 @@ class HackathonList extends Component {
         var userList
         if(this.state.users!=null){
             userList=this.state.allUsers.map((u) => {
-                if(u.role == 'hacker' && u.id != this.state.owner.id)
+                if(u.role == 'hacker' && u.id != this.state.owner.id && !u.judgesHackathons.some(item => this.state.currentHackathonId === item.id) 
+                    && !u.participantTeam.some(item => this.state.currentHackathonId === item.hackathon.id))
                     return(
                         <option value={u.id}>{u.name} : ({u.email})</option>
                     )
@@ -258,7 +356,15 @@ class HackathonList extends Component {
                     >
                     Add Teammember
                     </button>
-                    <button disabled={!this.state.lenMatch}>Create</button>
+                    <Popup
+                        trigger={<button disabled={!this.state.checkValid}>Create</button>}
+                        position="top center"
+                        on="hover"
+                        >
+                        <div className="card">
+                            <span> All users must be unique and must match team size requirements</span>
+                        </div>
+                    </Popup>
                 </form>
                         </Modal>
                     </div>

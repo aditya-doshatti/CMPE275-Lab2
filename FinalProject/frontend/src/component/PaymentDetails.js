@@ -57,18 +57,20 @@ class PaymentDetails extends Component {
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
         }
+        console.log("Aditya,",this.state)
         let team = this.state.teams.map((row, key) => {
             var feesPaid = 0
             var users = row.users.map((user) => {
-                return(
+                return( <div>
                     <td value={user.id} name={user.name}>{user.name}</td>
+                    </div>
                 )
             })
             var paidUsers = this.state.currentTeamDetails.map((detail) => {
                 feesPaid += detail.amount
                 return(<div>
                     <Popup
-                        trigger={<td value={detail.id} name={detail.user.name}>{detail.user.name}</td>}
+                        trigger={<td value={detail.user.name} name={detail.user.name}>{detail.user.name}</td>}
                         position="top center"
                         on="hover"
                         >

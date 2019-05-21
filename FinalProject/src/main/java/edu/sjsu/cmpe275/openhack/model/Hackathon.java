@@ -1,7 +1,9 @@
 package edu.sjsu.cmpe275.openhack.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -110,6 +112,10 @@ public class Hackathon {
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
 	@JsonIgnoreProperties(value = {"hackathon", "owner"}, allowSetters = true)
 	private Set<Team> teams;
+	
+	@OneToMany(cascade={CascadeType.MERGE}/*, mappedBy="hackathonForExpense"*/)
+	@JsonIgnoreProperties(value = {"hackathonForExpenses"}, allowSetters = true)
+	private List<HackathonExpense> hackathonExpense;
 
 	public Set<Organization> getSponsors() {
 		return sponsors;
@@ -312,6 +318,7 @@ public class Hackathon {
 		this.sponsors = obj.sponsors;
 		this.teams = obj.teams;
 		this.finalized = obj.finalized;
+		this.hackathonExpense = obj.hackathonExpense;
 	}
 
 	public Set<Team> getTeams() {
@@ -335,5 +342,25 @@ public class Hackathon {
 	public void setFinalized(Boolean finalized) {
 		this.finalized = finalized;
 	}
+
+	/**
+	 * @return the hackathonExpense
+	 */
+	public List<HackathonExpense> getHackathonExpense() {
+		return hackathonExpense;
+	}
+
+	/**
+	 * @param hackathonExpense the hackathonExpense to set
+	 */
+	public void setHackathonExpense(List<HackathonExpense> hackathonExpense) {
+		this.hackathonExpense = hackathonExpense;
+	}
 	
+	public void addHackathonForExpense(HackathonExpense hackathonExpense) {
+		if(this.hackathonExpense == null)
+			this.hackathonExpense = new ArrayList<HackathonExpense>();
+		hackathonExpense.setHackathonForExpense(this);
+		this.hackathonExpense.add(hackathonExpense);
+	}
 }
