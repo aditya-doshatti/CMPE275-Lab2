@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe275.openhack.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,8 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -24,11 +21,24 @@ public class HackathonExpense {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.LAZY)
-	@JsonIgnoreProperties(value = {"teams","judges","sponsors"})
-	@JoinColumn(name="HACK_ID")
-	private Hackathon hackathonForExpenses;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="HACK_ID", referencedColumnName="HACKATHON_ID")
+	private Hackathon hackathonForExpense;
 	
+	/**
+	 * @return the hackathonForExpense
+	 */
+	public Hackathon getHackathonForExpense() {
+		return hackathonForExpense;
+	}
+
+	/**
+	 * @param hackathonForExpense the hackathonForExpense to set
+	 */
+	public void setHackathonForExpense(Hackathon hackathonForExpense) {
+		this.hackathonForExpense = hackathonForExpense;
+	}
+
 	@Column(name="TITLE", nullable=false)
 	private String title;
 	
@@ -44,7 +54,7 @@ public class HackathonExpense {
 	public HackathonExpense() { }
 	
 	public HackathonExpense(HackathonExpense obj) {
-		this.hackathonForExpenses = obj.hackathonForExpenses;
+		this.hackathonForExpense = obj.hackathonForExpense;
 		this.decription = obj.decription;
 		this.time = obj.time;
 		this.amount = obj.amount;
@@ -120,18 +130,4 @@ public class HackathonExpense {
 		this.title = title;
 	}
 
-	/**
-	 * @return the hackathonForExpenses
-	 */
-	@JsonIgnoreProperties(value = {"teams","judges","sponsors", "hibernateLazyInitializer", "handler"}, allowSetters=true)
-	public Hackathon getHackathonForExpenses() {
-		return hackathonForExpenses;
-	}
-
-	/**
-	 * @param hackathonForExpenses the hackathonForExpenses to set
-	 */
-	public void setHackathonForExpenses(Hackathon hackathonForExpenses) {
-		this.hackathonForExpenses = hackathonForExpenses;
-	}
 }

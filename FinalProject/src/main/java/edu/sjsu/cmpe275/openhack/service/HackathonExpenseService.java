@@ -25,7 +25,7 @@ public class HackathonExpenseService {
 	public List<HackathonExpense> findExpenseByHackathonId(Long hackId) {
 		Hackathon h = hackRepo.findOne(hackId);
 		if(h != null)
-			return hackExpRepo.findByHackathonForExpenses(h);
+			return hackExpRepo.findByHackathonForExpense(h);
 		return null;
 	}
 	
@@ -35,6 +35,7 @@ public class HackathonExpenseService {
 
 	public HackathonExpense addExpense(HackathonExpense h) {
 		if(h == null) return null;
+		System.out.println("PRATIKB " + h.getHackathonForExpense().getId());
 		Date date = Calendar.getInstance().getTime();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 		String strDate = dateFormat.format(date);

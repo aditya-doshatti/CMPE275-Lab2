@@ -14,6 +14,6 @@ import edu.sjsu.cmpe275.openhack.model.HackathonExpense;
  */
 public interface HackathonExpenseRepository extends JpaRepository<HackathonExpense, Long>{
 	
-	public List<HackathonExpense> findByHackathonForExpenses(Hackathon h);
+	public List<HackathonExpense> findByHackathonForExpense(Hackathon h);
 	
 }
