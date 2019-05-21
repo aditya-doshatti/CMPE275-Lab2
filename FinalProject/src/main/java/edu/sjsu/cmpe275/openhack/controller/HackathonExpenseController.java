@@ -31,8 +31,8 @@ public class HackathonExpenseController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/expenses/{hackId}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<HackathonExpense> getExpenseByHackathonId(@PathVariable Long hackId) {
-		HackathonExpense h = expService.findExpenseByHackathonId(hackId);
+	public ResponseEntity<List<HackathonExpense>> getExpenseByHackathonId(@PathVariable Long hackId) {
+		List<HackathonExpense> h = expService.findExpenseByHackathonId(hackId);
 		if(h == null)
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(h);
@@ -42,6 +42,7 @@ public class HackathonExpenseController {
 	public ResponseEntity<HackathonExpense> addExpense(@RequestBody HackathonExpense h) {
 		if(h == null)
 			return ResponseEntity.badRequest().build();
+		System.out.println("PRATIKB: " + h.getDecription());
 		HackathonExpense result = expService.addExpense(h);
 		if(result == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		return ResponseEntity.ok(result);

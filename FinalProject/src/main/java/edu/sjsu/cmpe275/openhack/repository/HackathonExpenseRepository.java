@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.openhack.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
@@ -12,6 +14,6 @@ import edu.sjsu.cmpe275.openhack.model.HackathonExpense;
  */
 public interface HackathonExpenseRepository extends JpaRepository<HackathonExpense, Long>{
 	
-	public HackathonExpense findByHackathon(Hackathon h);
+	public List<HackathonExpense> findByHackathonForExpenses(Hackathon h);
 	
 }

@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -24,12 +24,16 @@ public class HackathonExpense {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(cascade=CascadeType.MERGE, fetch=FetchType.LAZY)
-	@JoinColumn(referencedColumnName = "HACKATHON_ID")
-	private Hackathon hackathon;
+	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.LAZY)
+	@JsonIgnoreProperties(value = {"teams","judges","sponsors"})
+	@JoinColumn(name="HACK_ID")
+	private Hackathon hackathonForExpenses;
 	
-	@Column(name="DESCRIPTION", nullable=false)
-	private String description;
+	@Column(name="TITLE", nullable=false)
+	private String title;
+	
+	@Column(name="DECRIPTION", nullable=false)
+	private String decription;
 	
 	@Column(name="TIME", nullable=false)
 	private String time;
@@ -40,8 +44,8 @@ public class HackathonExpense {
 	public HackathonExpense() { }
 	
 	public HackathonExpense(HackathonExpense obj) {
-		this.hackathon = obj.hackathon;
-		this.description = obj.description;
+		this.hackathonForExpenses = obj.hackathonForExpenses;
+		this.decription = obj.decription;
 		this.time = obj.time;
 		this.amount = obj.amount;
 	}
@@ -61,32 +65,17 @@ public class HackathonExpense {
 	}
 
 	/**
-	 * @return the hackathon
-	 */
-	@JsonIgnoreProperties(value = {"teams","judges","sponsors", "hibernateLazyInitializer", "handler"}, allowSetters=true)
-	public Hackathon getHackathon() {
-		return hackathon;
-	}
-
-	/**
-	 * @param hackathon the hackathon to set
-	 */
-	public void setHackathon(Hackathon hackathon) {
-		this.hackathon = hackathon;
-	}
-
-	/**
 	 * @return the description
 	 */
-	public String getDescription() {
-		return description;
+	public String getDecription() {
+		return decription;
 	}
 
 	/**
 	 * @param description the description to set
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDecription(String description) {
+		this.decription = description;
 	}
 
 	/**
@@ -115,5 +104,34 @@ public class HackathonExpense {
 	 */
 	public void setAmount(Double amount) {
 		this.amount = amount;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @return the hackathonForExpenses
+	 */
+	@JsonIgnoreProperties(value = {"teams","judges","sponsors", "hibernateLazyInitializer", "handler"}, allowSetters=true)
+	public Hackathon getHackathonForExpenses() {
+		return hackathonForExpenses;
+	}
+
+	/**
+	 * @param hackathonForExpenses the hackathonForExpenses to set
+	 */
+	public void setHackathonForExpenses(Hackathon hackathonForExpenses) {
+		this.hackathonForExpenses = hackathonForExpenses;
 	}
 }

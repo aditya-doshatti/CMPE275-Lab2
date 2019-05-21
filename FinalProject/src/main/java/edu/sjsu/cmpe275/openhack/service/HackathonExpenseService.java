@@ -22,10 +22,10 @@ public class HackathonExpenseService {
 	@Autowired(required=true)
 	HackathonRepository hackRepo;
 	
-	public HackathonExpense findExpenseByHackathonId(Long hackId) {
+	public List<HackathonExpense> findExpenseByHackathonId(Long hackId) {
 		Hackathon h = hackRepo.findOne(hackId);
 		if(h != null)
-			return hackExpRepo.findByHackathon(h);
+			return hackExpRepo.findByHackathonForExpenses(h);
 		return null;
 	}
 	
@@ -35,10 +35,6 @@ public class HackathonExpenseService {
 
 	public HackathonExpense addExpense(HackathonExpense h) {
 		if(h == null) return null;
-		Hackathon obj = h.getHackathon();
-		if(hackRepo.findOne(obj.getId()) == null) return null;
-		HackathonExpense hObj = findExpenseByHackathonId(obj.getId());
-		if(hObj != null) return hObj; // Expense already exists
 		Date date = Calendar.getInstance().getTime();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 		String strDate = dateFormat.format(date);
