@@ -92,7 +92,7 @@ public class Hackathon {
 		inverseJoinColumns={@JoinColumn(name="JUDGE_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "teams", "isVerified", "role",
-			"hibernateLazyInitializer", "handler","ownsTeams"})
+			"hibernateLazyInitializer", "handler","ownsTeams"}, allowSetters = true)
 	private Set<User> judges;
 	
 	// Many-to-many relationship 'Hackathon-Sponsors' between "Hackathon" And "Organization"
@@ -101,11 +101,11 @@ public class Hackathon {
 		joinColumns={@JoinColumn(name="HACKATHON_ID", referencedColumnName="HACKATHON_ID")},
 		inverseJoinColumns={@JoinColumn(name="ORGANIZATION_ID", referencedColumnName="ORGANIZATION_ID")})
 	@JsonIgnoreProperties(value = {"owner", "pendingApprovals", "description", "orgUsers", "address", 
-			"hackathons", "hibernateLazyInitializer", "handler"})
+			"hackathons", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private Set<Organization> sponsors;
 	
 	@OneToMany(cascade={CascadeType.MERGE},mappedBy = "hackathon")
-	@JsonIgnoreProperties(value = {"hackathon", "owner"})
+	@JsonIgnoreProperties(value = {"hackathon", "owner"}, allowSetters = true)
 	private Set<Team> teams;
 
 	public Set<Organization> getSponsors() {

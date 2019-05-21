@@ -63,20 +63,20 @@ public class User {
 	// List of all hackathons judged by this user
 	@ManyToMany(mappedBy = "judges")
 	@JsonIgnoreProperties(value = {"description", "startDate", "endDate", "regFees", "isOpen", "teams",
-			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"})
+			"minTeamSize", "maxTeamSize", "judges", "sponsors", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private Set<Hackathon> judgesHackathons;
 	
 	@OneToMany(mappedBy = "owner")
-	@JsonIgnoreProperties(value = {"owner", "users"})
+	@JsonIgnoreProperties(value = {"owner", "users"}, allowSetters = true)
 	private Set<Team> ownsTeams;
 	
 	
 	@ManyToMany(mappedBy = "users")
-	@JsonIgnoreProperties(value = {"users", "owner", "paidUsers"})
+	@JsonIgnoreProperties(value = {"users", "owner", "paidUsers"}, allowSetters = true)
 	private Set<Team> participantTeam;
 	
 	@ManyToMany(mappedBy = "paidUsers")
-	@JsonIgnoreProperties(value = {"users", "owner", "paidUsers"})
+	@JsonIgnoreProperties(value = {"users", "owner", "paidUsers"}, allowSetters = true)
 	private Set<Team> paymentForTeam;
 	
 	@Column(name="isOwner",nullable = true)
@@ -84,7 +84,7 @@ public class User {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORGANIZATION_ID")
-	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"})
+	@JsonIgnoreProperties(value = {"owner", "description", "orgUsers", "address", "hackathons", "hibernateLazyInitializer", "handler"}, allowSetters = true)
 	private Organization organization;
 
 	/**

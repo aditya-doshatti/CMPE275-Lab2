@@ -31,7 +31,7 @@ public class Team {
 	private String name;
 	
 	@ManyToOne
-	@JsonIgnoreProperties(value= {"judgesHackathons", "ownsTeams"})
+	@JsonIgnoreProperties(value= {"judgesHackathons", "ownsTeams"}, allowSetters = true)
 	private User owner;
 	
 	private String submissionLink;
@@ -49,7 +49,7 @@ public class Team {
 		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
 			"judgesHackathons", "organization", "teams", "isVerified", "role",
-			"hibernateLazyInitializer", "handler","ownsTeams", "participantTeam"})
+			"hibernateLazyInitializer", "handler","ownsTeams", "participantTeam"}, allowSetters = true)
 	private Set<User> paidUsers;
 	
 	/**
@@ -101,7 +101,7 @@ public class Team {
 		joinColumns={@JoinColumn(name="TEAM_ID", referencedColumnName="TEAM_ID")},
 		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
 	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
-			"judgesHackathons", "teams", "hibernateLazyInitializer", "handler","ownsTeams","participantTeam"})
+			"judgesHackathons", "teams", "hibernateLazyInitializer", "handler","ownsTeams","participantTeam"}, allowSetters = true)
 	private Set<User> users;
 
 	@ManyToOne

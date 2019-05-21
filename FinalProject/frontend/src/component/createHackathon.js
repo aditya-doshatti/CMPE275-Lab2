@@ -167,9 +167,9 @@ class CreateHackathon extends Component {
         .then((response) => {
                 console.log(response.data);
                 this.props.history.push({
-                    pathname:'/dashboard'
+                    pathname:'/admin/dashboard'
                 })
-                swal("Hackathon created!","View ","success")
+                swal("Hackathon created!"," ","success")
         });
         // }
     }

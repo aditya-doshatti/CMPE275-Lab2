@@ -171,7 +171,7 @@ class HackathonList extends Component {
     shouldJoin = (teams, key) => {
         var retVal
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
-            retVal = <button onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
+            retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
             return retVal
         }
         else {
@@ -179,7 +179,7 @@ class HackathonList extends Component {
             teams.map((team, key12) => {
                 if (this.isTeamInHack(team)) {
                     retVal = <div>
-                        <button disabled={!this.isAllPaymentDone(team)} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
+                        <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
                         <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button>
                         </div>
                     return retVal
