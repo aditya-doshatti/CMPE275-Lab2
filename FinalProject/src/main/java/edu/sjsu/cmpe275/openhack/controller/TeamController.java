@@ -1,5 +1,9 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import edu.sjsu.cmpe275.openhack.model.PaymentDetails;
 import edu.sjsu.cmpe275.openhack.model.Team;
 import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.service.MailService;
+import edu.sjsu.cmpe275.openhack.service.PaymentService;
 import edu.sjsu.cmpe275.openhack.service.TeamService;
 import edu.sjsu.cmpe275.openhack.service.UserService;
 
@@ -32,6 +39,9 @@ public class TeamController {
 	
 	@Autowired(required=true)
 	MailService mailService;
+	
+	@Autowired
+	PaymentService paymentService;
 	
 	@RequestMapping(method=RequestMethod.GET,value = "/teams", produces = { "application/json", "application/xml" })
 	public List<Team> getAllTeams() {
@@ -95,7 +105,7 @@ public class TeamController {
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value = "/team/{teamId}/addPaidUser/{userId}", produces = { "application/json", "application/xml" })
-	public ResponseEntity<Team> addPaidUser(@PathVariable Long teamId, @PathVariable Long userId) {
+	public ResponseEntity<Team> addPaidUser(@PathVariable Long teamId, @PathVariable Long userId, @RequestBody PaymentDetails obj) {
 		try {
 			Team team = teamService.getTeamById(teamId);
 			if(team == null)
@@ -111,6 +121,13 @@ public class TeamController {
 				User tempUser = team.getOwner();
 				mailService.sendMail(tempUser.getEmail(),"Payment Done for Openhack", "All your team members have done the payment, You are all set to submit code");
 			}
+			
+			// Add payment details to DB
+			Date date = Calendar.getInstance().getTime();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+			String strDate = dateFormat.format(date);
+			obj.setDate(strDate);
+			paymentService.savePayment(obj);
 		}
 		catch (Exception e) {
 		}
