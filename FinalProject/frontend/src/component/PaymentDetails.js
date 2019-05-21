@@ -111,7 +111,7 @@ class PaymentDetails extends Component {
                                 <th><em>Team Name</em></th>
                                 <th><em>Paid Count </em></th>
                                 <th><em>Users</em></th>
-                                <th><em>Paid Users</em></th>
+                                <th><em>Paid Users (Hover to see details)</em></th>
                                 <th><em>Amount Collected</em></th>
                             </tr>  
                         </thead>
