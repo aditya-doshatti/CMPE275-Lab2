@@ -111,6 +111,24 @@ class AdminDashboard extends Component {
         this.setState({ openJoin: false });
     };
 
+    openPaymentStatus = key => {
+        this.props.history.push({
+                pathname:'/paymentDetails',
+                state: { 
+                    hackId: key
+                }
+        })
+    }
+
+    openPointsStatus = key => {
+        this.props.history.push({
+                pathname:'/pointsDetails',
+                state: { 
+                    hackId: key
+                }
+        })
+    }
+
 
     render() {   
         let redirectVar = null;
@@ -121,7 +139,7 @@ class AdminDashboard extends Component {
         let listdetails = this.state.listed.map((row) => {
            a=row.judges.map(detail=>{return(<h5 className="text-background">{detail.name} <span className="text-muted">  Screen Name:</span>{detail.screenName}</h5>)})
            b=row.sponsors.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
-           teams = row.teams.map(detail=>{return(<h5 className="text-background">{detail}</h5>)})
+           teams = row.teams.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
             if(row.open===true){
                 c=<td className="text-primary">
                 <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,false)} >Close</button>
@@ -146,7 +164,9 @@ class AdminDashboard extends Component {
                     <td>
                         <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
                         <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button>
-                        <button className="btn btn-info ml-2" onClick={this.onOpenTeamsModal}>Teams</button>
+                        {/* <button className="btn btn-info ml-2" onClick={this.onOpenTeamsModal}>Teams</button> */}
+                        <button className="btn btn-info ml-2" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
+                        <button className="btn btn-info ml-2" onClick={()=> this.openPointsStatus(row.id)}>Points Status</button>
                     </td> 
                        {c}         
                 </tr>

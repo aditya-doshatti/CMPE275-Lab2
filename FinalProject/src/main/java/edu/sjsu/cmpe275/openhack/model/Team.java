@@ -47,8 +47,8 @@ public class Team {
 	@JoinTable(name="paid_users",
 		joinColumns={@JoinColumn(name="TEAM_ID", referencedColumnName="TEAM_ID")},
 		inverseJoinColumns={@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")})
-	@JsonIgnoreProperties(value = {"email", "password", "portraitUrl", "businessTitle", "aboutMe", "address", 
-			"judgesHackathons", "organization", "teams", "isVerified", "role",
+	@JsonIgnoreProperties(value = {"password", "portraitUrl", "businessTitle", "aboutMe", "address", 
+			"judgesHackathons", "teams", "isVerified", "role",
 			"hibernateLazyInitializer", "handler","ownsTeams", "participantTeam"}, allowSetters = true)
 	private Set<User> paidUsers;
 	
