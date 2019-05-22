@@ -3,7 +3,7 @@ import axios from 'axios';
 import Modal from 'react-responsive-modal'
 import { Link } from 'react-router-dom'
 import Autosuggest from 'react-autosuggest';
-import UserNavbar from './UserNavbar';
+import AdminNavbar from './AdminNavbar';
 import {Redirect} from 'react-router';
 import { frontend, url } from '../config/config';
 var swal = require('sweetalert')
@@ -255,7 +255,7 @@ class Profile extends Component {
         }
         return ( <div>
              {redirectVar}
-            <UserNavbar />
+            <AdminNavbar />
                    <div className="container-fluid">
             <div className="row">
                 <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light" >

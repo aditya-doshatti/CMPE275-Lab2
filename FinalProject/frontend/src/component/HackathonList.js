@@ -369,6 +369,13 @@ class HackathonList extends Component {
                         <option default>--default--</option>
                             {userList}
                         </select>
+                        <select id="addTeamMemberRole" name="addTeamMemberRole" className="w-50 btn-md">
+                        <option value="ProductManger"> ProductManger </option>
+                        <option value="Engineer"> Engineer </option>
+                        <option value="FullStack"> FullStack </option>
+                        <option value="Designer"> Designer </option>
+                        <option value="Other"> Other </option>
+                        </select>
                         <button
                         type="button"
                         onClick={this.handleRemoveShareholder(idx)}

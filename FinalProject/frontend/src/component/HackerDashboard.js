@@ -4,13 +4,17 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import UserNavbar from './UserNavbar';
 import {Redirect} from 'react-router';
+import Modal from 'react-responsive-modal'
 import { frontend, url } from '../config/config';
+var swal = require('sweetalert')
 
 class HackerDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            isOwner:false
+            isOwner:false,
+            inviteModal: false,
+            userEmail:''
          }
     }
 
@@ -25,6 +29,49 @@ class HackerDashboard extends Component {
                 console.log(response.data);
         });
     }
+
+    handleEvent = (e) =>{
+        let target=e.target
+        let name=target.name;
+        this.setState({
+            [name]:target.value    
+        });
+    }
+
+    setOpenInviteModal = () => {
+        this.setState({
+            inviteModal:true
+        })
+    }
+    
+    onCloseInviteModal = () => {
+        this.setState({
+            inviteModal:false
+        })
+    }
+
+    submitAddExpense = (e) => {
+        e.preventDefault()
+        const data={
+            emailID:this.state.userEmail
+        }
+        axios.get(url+`/user/profile/${this.state.userEmail}`)
+        .then((response) => {
+        }).catch((error) => {
+            console.log("Iske andar Error",error.status)
+            axios.post(url+'/user/invite', data)
+                .then((response, error) => {
+                    this.setState({
+                        userEmail:''
+                    })
+                    swal("User Invited","Invitation Email sent!","success")
+                }).catch((error) => {
+                    console.log("Iske andar Error",error.code)
+                });
+        });;
+    }
+
+
     render() { 
         let redirectVar = null;
         if(!localStorage.getItem("user")){
@@ -52,9 +99,31 @@ class HackerDashboard extends Component {
                  </ul>
 
                  {isOwnerSection}
+
+                 <ul class="thumbnails bg-secondary m-5 p-5 col-sm-6 col-md-3">
+                       <Link to="#" className="text-white text-center" onClick={this.setOpenInviteModal}><h3> Invite a Friend </h3></Link>
+                 </ul>
             
                   </div>
                 </div>  
+                <div>
+                <Modal open={this.state.inviteModal} onClose={this.onCloseInviteModal} focusTrapped>
+                <div>
+                <h4  className="text-info">Invite Friend</h4><hr></hr>
+                <form onSubmit={this.submitAddExpense}>
+                    <div className="mt-5 mr-5">
+                    <span className="text-info font-weight-bold">User Email:</span>
+                        <input type="text" className="ml-4 col-lg-7 btn-lg pull-right" name="userEmail" id="userEmail" onChange={this.handleEvent} placeholder={this.state.userEmail}/>
+                    </div>
+                    <div className="mt-5 mr-5">
+                    <div className="row text-center mt-4">
+                         <button type="submit" className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg ">Send Invitation</button>
+                    </div>
+                    </div>
+                </form>
+                </div>
+                </Modal>
+                </div>
 
             </div> );
     }

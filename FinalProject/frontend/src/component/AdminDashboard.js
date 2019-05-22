@@ -25,7 +25,13 @@ class AdminDashboard extends Component {
             openTeams:false,
             finalizeHack:[],
             status:"",
-            openCond:[]
+            openCond:[],
+            expenseTitle:'',
+            expenseDesc:'',
+            expenseDate:'',
+            exepenseAmount:0,
+            expenseHackId: '',
+            todaysDate:''
         }
         this.OpenTeamFunction=this.OpenTeamFunction.bind(this)
         this.setCloseFunction=this.setCloseFunction.bind(this)
@@ -169,15 +175,61 @@ class AdminDashboard extends Component {
         this.setState({ openTeams: true });
       };
 
-      onCloseTeamsModal = (e) => {
+    onCloseTeamsModal = (e) => {
         e.preventDefault();
         this.setState({ openTeams: false });
     };
 
-      onCloseCreateModal = (e) => {
+    onCloseCreateModal = (e) => {
         e.preventDefault();
         this.setState({ openJoin: false });
     };
+
+    openAddExpense = (id, e) => {
+        e.preventDefault();
+        this.setState({ 
+            openExpense: true,
+            expenseHackId: id,
+            todaysDate: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]
+         });
+      };
+
+    onCloseAddExpense = (e) => {
+        e.preventDefault();
+        this.setState({ 
+            openExpense: false,
+            expenseHackId: '',
+            expenseTitle:'',
+            expenseDesc:'',
+            expenseDate:'',
+            exepenseAmount:0
+         });
+    };
+
+    submitAddExpense = (e) => {
+        e.preventDefault()
+        const data={
+            hackathonForExpense: {id:this.state.expenseHackId},
+            title: this.state.expenseTitle,
+            decription: this.state.expenseDesc,
+            time:this.state.expenseDate,
+            amount:this.state.exepenseAmount,
+        }
+        axios.post(url+'/expenses', data)
+        .then((response, error) => {
+            this.setState({
+                openExpense: false,
+                expenseHackId: '',
+                expenseTitle:'',
+                expenseDesc:'',
+                expenseDate:'',
+                exepenseAmount:0
+            })
+            swal("Hackathon Expense added Successfullu!","Revenue changed!","success")
+        }).catch((error) => {
+            console.log("Error",error.code)
+        });
+    }
 
     openPaymentStatus = key => {
         this.props.history.push({
@@ -197,6 +249,14 @@ class AdminDashboard extends Component {
         })
     }
 
+    handleEvent = (e) =>{
+        let target=e.target
+        let name=target.name;
+        this.setState({
+            [name]:target.value    
+        });
+    }
+
 
     render() {   
         console.log(this.state.status)
@@ -205,7 +265,7 @@ class AdminDashboard extends Component {
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
         }
-        var a,b,c,teams
+        var a,b,c,teams, expense
         let listdetails = this.state.listed.map((row) => {
            a=row.judges.map(detail=>{return(<h5 className="text-background">{detail.name} <span className="text-muted">  Screen Name:</span>{detail.screenName}</h5>)})
            b=row.sponsors.map(detail=>{return(<h5 className="text-background">{detail.name}</h5>)})
@@ -219,30 +279,53 @@ class AdminDashboard extends Component {
                     <td className="text-secondary"><h6>{detail.score}</h6></td> 
                     </tr>)}
                  )
-                  
-
-
-
-
-
 
             if(row.finalized===true){
-                c=<td><button className="btn btn-secondary ml-2 mt-2" disabled>Finalize</button>
-                <h6 className="text-secondary">Hackathon closed!</h6>
-            </td> 
+                c=<td>
+                    <button className="btn btn-secondary ml-2 mt-2" disabled>Finalize</button>
+                    <button className="btn btn-secondary ml-2" disabled>Add Expense</button>
+                    <h6 className="text-secondary">Hackathon closed!</h6>
+                </td> 
             }else if(row.finalized===false && row.open==true){
                 c=<td className="text-primary">
                 <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,false)} >Close</button>
                 <button className="btn btn-secondary ml-2" onClick={()=>this.setFinalizeFunction(row.id)}>Finalize</button>
+                <button className="btn btn-secondary ml-2" onClick={(e)=>this.openAddExpense(row.id, e)}>Add Expense</button>
             </td> 
             } else{
                c= <td className="text-primary">
-                     <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,true)} >Open</button>
+                    <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,true)} >Open</button>
                     <button className="btn btn-secondary ml-2" onClick={()=>this.setFinalizeFunction(row.id)}>Finalize</button>
+                    <button className="btn btn-secondary ml-2" onClick={(e)=>this.openAddExpense(row.id, e)}>Add Expense</button>
                  </td> 
             }
 
-
+            expense = <div>
+                <form onSubmit={this.submitAddExpense}>
+                    <div className="mt-5 mr-5">
+                    <span className="text-info font-weight-bold">Expense Title:</span>
+                        <input type="text" className="ml-4 col-lg-7 btn-lg pull-right" name="expenseTitle" id="expenseTitle" onChange={this.handleEvent} placeholder={this.state.expenseTitle}/>
+                    </div><br></br>
+                        
+                    <div className="mt-5 mr-5">
+                        <span className="text-info font-weight-bold">Expense Description:</span>
+                        <textarea rows="2" cols="20" className="ml-4 col-lg-7 btn-lg pull-right" onChange={this.handleEvent} placeholder={this.state.expenseDesc} name="expenseDesc" id="expenseDesc"   max="500"/>
+                    </div><br></br><br></br>
+                    <div className="mt-5 mr-5">
+                    <span className="text-info font-weight-bold">Expense Date:</span>
+                        <input type="date" className=" ml-4 col-lg-7 pull-right" id="expenseDate" name="expenseDate" placeholder="Time" onChange={this.handleEvent} max={this.state.todaysDate}></input>
+                    </div><br></br>
+                    <div className="mt-5 mr-5">
+                    <span className="text-info font-weight-bold">Expense Amount: $</span>
+                        <input type="text" className=" ml-4 btn-lg col-lg-7 pull-right" name="exepenseAmount" id="exepenseAmount" onChange={this.handleEvent} placeholder={this.state.exepenseAmount}/>
+                    </div>
+                    <div className="mt-5 mr-5">
+                    <div className="row text-center mt-4">
+                         <button type="submit" className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg ">Add Expense</button>
+                    </div>
+                    </div>
+                </form>
+                </div>
 
             return(                
                 
@@ -322,6 +405,13 @@ class AdminDashboard extends Component {
                         </tbody>
                     </table>
                 </div>
+                </div>
+                </Modal>
+
+                <Modal open={this.state.openExpense} onClose={this.onCloseAddExpense} focusTrapped>
+                <div>
+                <h4  className="text-info">Add Expense</h4><hr></hr>
+                     {expense}
                 </div>
                 </Modal>
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.sjsu.cmpe275.openhack.model.Hackathon;
+import edu.sjsu.cmpe275.openhack.model.User;
 import edu.sjsu.cmpe275.openhack.repository.HackathonRepository;
 
 /**
@@ -68,6 +69,20 @@ public class HackathonService {
 				results.add(h);
 		}
 		return results;
+	}
+	
+	public Hackathon getHackByName(String screenName) {
+
+		Hackathon hack = null;
+	    Query query = entityManager.createQuery("from Hackathon as u WHERE u.name=:name");
+	    query.setParameter("name",screenName);
+	    System.out.println(query.getParameterValue("name"));
+	    try {
+	    	hack =  (Hackathon) query.getSingleResult();
+	    } catch (Exception e) {
+	        System.out.println("Here! Inside get profile");
+	    }
+	 return hack;
 	}
 }
 
