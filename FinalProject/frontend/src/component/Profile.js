@@ -304,7 +304,7 @@ class Profile extends Component {
                         <div className="mt-4 mr-5"  >
                          <span className="text-info font-weight-bold">Portrait URL:</span>
                             <input type="text" className="btn-lg ml-4 col-lg-7 pull-right" onChange={this.handleEvent} placeholder={this.state.portraitUrl} name="portraitUrl" id="portraitUrl" defaultValue={this.state.portraitUrl}  />
-                            <button className="btn-link" onClick={()=> window.open(this.state.portraitUrl, "_blank")}><h6 className="ml-5 text-danger">  Click here to View:</h6></button>
+                            {/* <button className="btn-link" onClick={()=> window.open(this.state.portraitUrl, "_blank")}><h6 className="ml-5 text-danger">  Click here to View:</h6></button> */}
                         </div><br></br>
                         
                         <div className="mt-4 mr-5 mb-4"  >

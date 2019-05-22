@@ -24,10 +24,7 @@ class UserNavbar extends Component {
                 </button>
                 <div className="ml-5"></div>
                 <div className="ml-5"></div>
-                <div className="ml-5"></div>
-                <div className="ml-5"></div>
-                <div className="ml-5"></div>
-                <div className="ml-5"></div>
+              
 
                 <div class="collapse navbar-collapse float-right ml-5" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
@@ -40,7 +37,8 @@ class UserNavbar extends Component {
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard"><b>|  Dashboard</b></a>
                     </li>
-                    <li class="nav-item">
+                    <li className="ml-3 mt-1 nav-item"><h6 className="ml-5 text-secondary">Welcome</h6><h6 className="mt-2 text-black">{localStorage.getItem("user")}</h6></li> 
+                    <li class="nav-item ml-2">
                         <Link to="/login" class="btn ml-5 p-2 border text-dark" href="#" onClick = {this.handleLogout}><b>LogOut</b></Link>
                     </li>             
                     </ul>
