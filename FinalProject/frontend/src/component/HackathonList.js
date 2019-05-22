@@ -192,20 +192,21 @@ class HackathonList extends Component {
     shouldJoin = (teams, key) => {
         var retVal, judge
         if (this.isJudgeThisHack(this.state.hackathonlist[key])) {
-            if(this.state.hackathonlist[key].open){
+            if(this.state.hackathonlist[key].open || (new Date(this.state.hackathonlist[key].startDate) > new Date())){
                 retVal = <Popup
-                trigger={<button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} 
+                trigger={<button disabled={this.state.hackathonlist[key].open || (new Date(this.state.hackathonlist[key].startDate) > new Date())}
+                  onClick={()=>this.handleJudge(key)} 
                 className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>}
                 position="top center"
                 on="hover"
                 >
                 <div className="card">
-                    <span> Hackthon must be closed and not finalized to be able to judge. Contact Admin</span>
+                    <span> Hackthon must be started and then closed and not finalized to be able to judge. Contact Admin</span>
                 </div>
                 </Popup>
             }
             else {
-                retVal = <button disabled={this.state.hackathonlist[key].open} onClick={()=>this.handleJudge(key)} 
+                retVal = <button disabled={this.state.hackathonlist[key].open || (new Date(this.state.hackathonlist[key].startDate) > new Date())} onClick={()=>this.handleJudge(key)} 
                 className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Judge</button>
             }            
             return retVal
