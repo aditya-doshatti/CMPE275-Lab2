@@ -328,14 +328,14 @@ class AdminDashboard extends Component {
             if(row.finalized===true){
                 c=<td>
                     <button className="btn btn-secondary ml-2 mt-2" disabled>Finalize</button>
-                    <button className="btn btn-secondary ml-2" disabled>Add Expense</button>
+                    <button className="btn btn-secondary ml-2 mt-2" disabled>Add Expense</button>
                     <h6 className="text-secondary">Hackathon closed!</h6>
                 </td> 
             }else if(row.finalized===false && row.open==true){
                 c=<td className="text-primary">
                 <button className="btn btn-secondary" onClick={()=>this.setCloseFunction(row.id,false)} >Close</button>
                 <button className="btn btn-secondary ml-2" onClick={()=>this.setFinalizeFunction(row.id)}>Finalize</button>
-                <button className="btn btn-secondary ml-2" onClick={(e)=>this.openAddExpense(row.id, e)}>Add Expense</button>
+                <button className="btn btn-secondary ml-2 mt-2" onClick={(e)=>this.openAddExpense(row.id, e)}>Add Expense</button>
             </td> 
             } else{
                c= <td className="text-primary">
@@ -380,12 +380,12 @@ class AdminDashboard extends Component {
                     <td className="text-primary">{row.regFees}/{row.discount}</td>
                     <td className="text-primary">{row.minTeamSize}/{row.maxTeamSize}</td> 
                     <td>
-                        <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
-                        <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button> 
-                        <button className="btn btn-info ml-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams/Result Status</button>
+                        <button className="btn btn-info" onClick={this.onOpenJoinModal}>View Judges</button>
+                        <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>View Organizers</button> 
+                        <button className="btn btn-info ml-5 mt-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams/Result Status</button>
                         <br></br> <br></br>
-                        <button className="btn btn-info mt-2" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
-                        <button className="btn btn-info ml-2 mt-2" onClick={()=> this.openPointsStatus(row.id)}>Earning Report</button>
+                        <button className="btn btn-info" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
+                        <button className="btn btn-info ml-2" onClick={()=> this.openPointsStatus(row.id)}>Earning Report</button>
                         
                     </td> 
                        {c}         
