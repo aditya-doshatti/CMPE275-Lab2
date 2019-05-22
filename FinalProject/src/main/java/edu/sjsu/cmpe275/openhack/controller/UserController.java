@@ -188,9 +188,9 @@ public class UserController {
 		String msg = "Hi there!\n\n"
 				+ "You have been invited to participate in the OpenHack - an online hackathon system "
 				+ "where you get to be a part of a number of hackathons and showcase your coding skills.\n\n"
-				+ "Click following link to go to the homepage, follow simple sign-up steps and start browsing"
+				+ "Click following link to go to the signup page, follow simple sign-up steps and start browsing"
 				+ "through a pool of future and ongoing hackathons. Go to the dashboard and join any hackathon you want."
-				+ "\n\nhttp://localhost:8080/hackathons"
+				+ "\n\nhttp://54.69.212.178:3000/signup"
 				+ "\n\nHappy Hacking!\n\nBest Regards,\nYour OpenHack Team";
 		mailService.sendMail(emailID, subject, msg);
 		return ResponseEntity.ok().build();
@@ -204,7 +204,7 @@ public class UserController {
 
 		String subject="Results announced for Hackathon \"" + hackName + "\"!";
 		String msg="Hi there!\n\nResults for Hackathon " + hackName + " are now available online!\n\n" 
-					+ "Please login to http://localhost:8080/ to view results."
+					+ "Please login to http://54.69.212.178:3000/ to view results."
 					+ "\n\nBest Regards,\nTeam Openhack";
 		
 		if(isWinner) {
@@ -212,7 +212,7 @@ public class UserController {
 			msg="Hi there!"
 					+ "\n\nCongratulations on winning the \"" + hackName + "\" hackathon!\n"
 					+ "\n\nThe hackathon results are now available online!\n\n" 
-					+ "Please login to http://localhost:8080/ to view results."
+					+ "Please login to 	http://54.69.212.178:3000/ to view results."
 					+ "\n\nBest Regards,\nTeam Openhack";
 		}
 		
