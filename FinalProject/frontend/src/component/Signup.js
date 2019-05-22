@@ -4,7 +4,7 @@ import {NavLink} from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbas';
 import swal from 'sweetalert';
-
+import { frontend, url } from '../config/config';
 const config = {
     apiKey: "AIzaSyB3Zwh6ZNXExXKzsnQWmCcw9C8em0Sq0A4",
     authDomain: "cmpe275-922ad.firebaseapp.com",
@@ -16,7 +16,6 @@ const config = {
   };
 
 const fire=firebase.initializeApp(config);
-const url="http://localhost:8080"
 
 
 class Signup extends Component {
@@ -88,9 +87,6 @@ class Signup extends Component {
         var password=this.state.password
         console.log("submitin request",email,this.state.screenName)
 
-        if(this.state.error_message!=" ")
-            swal("Sreen Name requirements not followed","Try Again","error")
-        else{
         const data = {
             screenName:this.state.screenName,
             name:this.state.name,
@@ -132,7 +128,6 @@ class Signup extends Component {
             else
                 console.log(error.code)
         });
-    }
     }
 
     render() { 
