@@ -32,6 +32,7 @@ class AdminNavbar extends Component {
 
                 <div class="collapse navbar-collapse float-right ml-5" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
+                   
                     <li class="nav-item active">
                         <a class="nav-link" href="/admin/maindashboard"><b>Home</b> <span class="sr-only">(current)</span></a>
                     </li>
@@ -47,7 +48,7 @@ class AdminNavbar extends Component {
                     </ul>
                    
                 </div>
-             
+                  
                 </nav>
                 <hr></hr>
 

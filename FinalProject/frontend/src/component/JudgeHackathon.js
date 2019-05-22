@@ -67,12 +67,17 @@ class JudgeHackathon extends Component {
             if (item.teamId === key.teamId) {
                 data = item;
             }
-        })        
+        }) 
+        console.log("key",key.score)
+        if(key.score>10 || key.score<0) 
+            swal("Provide score within given limit","Score Again","error")  
+        else{ 
         axios.post(url+`/team/${key.teamId}/submit`,data)
         .then((response) => {
                 console.log(response.data);
                 swal("Score updated","Updated","success")
         });
+        }
     }
 
     render() {   
@@ -80,14 +85,29 @@ class JudgeHackathon extends Component {
         if(!localStorage.getItem("user")){
             redirectVar = <Redirect to= "/login"/>
         }
+        var c2
         let listdetails = this.state.listed.map((row, key) => {
+            if(row.submissionLink==null)
+            c2=  <td>
+                <button className=" btn btn-link"><h6 className="text-primary">{row.submissionLink==null?"No link submitted":row.submissionLink}</h6>
+                 </button>
+            
+            </td>
+            else
+            c2=  <td>
+            <button className=" btn btn-link" onClick={()=> window.open(row.submissionLink, "_blank")}><h6 className="text-primary">{row.submissionLink==null?"No link submitted":row.submissionLink}</h6>
+             </button>
+          </td>
+
             return(                
                 
                 <tr>                    
-                    <td className="text-primary">{row.name}</td>
-                    <td className="text-primary">{row.submissionLink}</td> 
+                    <td className="text-primary"><h6>{row.name}</h6></td>
+                   {c2}
+                    {/* <td className="text-primary">{row.submissionLink}</td>  */}
                     <td>
-                        <input type="text" className="btn-lg col-lg-7" name="teamScore" id="teamScore" onChange={(e) => this.handleEvent(e, key)} placeholder={row.score}/>
+                        
+                        <input type="number" min="0" max="10" step="1" className="btn-lg col-lg-7" name="teamScore" id="teamScore" onChange={(e) => this.handleEvent(e, key)} placeholder={row.score==-1?"No one has graded":row.score}/>
                     </td>
                     <td>
                         <button className="btn btn-info" onClick={(e)=>this.submitScore(row, e)}>Submit Score</button>
@@ -108,7 +128,7 @@ class JudgeHackathon extends Component {
                             <tr>
                                 <th><em>Team Name</em></th>
                                 <th><em>Submission Link </em></th>
-                                <th><em>Score</em></th>
+                                <th><em>Score</em><span className="text-danger"> (Between 0 to 10)</span></th>
                                 <th><em>Submit</em></th>
                             </tr>  
                         </thead>

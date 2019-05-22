@@ -88,6 +88,9 @@ class Signup extends Component {
         var password=this.state.password
         console.log("submitin request",email,this.state.screenName)
 
+        if(this.state.error_message!=" ")
+            swal("Sreen Name requirements not followed","Try Again","error")
+        else{
         const data = {
             screenName:this.state.screenName,
             name:this.state.name,
@@ -129,6 +132,7 @@ class Signup extends Component {
             else
                 console.log(error.code)
         });
+    }
     }
 
     render() { 

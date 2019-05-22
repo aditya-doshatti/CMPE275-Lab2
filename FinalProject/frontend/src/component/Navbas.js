@@ -12,6 +12,7 @@ class Navbar extends Component {
             <div className="h-25 w-25">
             <NavLink to="/" className="mb-0 py-0 img-thumbnail h-25 w-25" ><img src={require('../images/2.png')} /></NavLink>
             </div>
+           
             </nav>
         </div> );
     }
