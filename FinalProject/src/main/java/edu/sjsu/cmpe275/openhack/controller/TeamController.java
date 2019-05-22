@@ -116,6 +116,7 @@ public class TeamController {
 			
 			// Add user to the team
 			team.addPaidUsers(userService.getUser(userId));
+			team.setPaidCount(team.getPaidUsers().size());
 			teamService.updateTeam(team);
 			if (team.getPaidUsers().size() == team.getUsers().size()) {
 				User tempUser = team.getOwner();

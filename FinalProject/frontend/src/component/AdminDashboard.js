@@ -151,7 +151,7 @@ class AdminDashboard extends Component {
             await axios.put(url+`/hackathon/${hackId}/finalize`)
             .then((response, error) => {
                 console.log(response.data)
-                swal("Hackathon is being closed","Done!","success")
+                swal("Hackathon is Finalized hence being closed","Done!","success")
                 var teams=null,team_ungraded=null
                 var count=0, data
                 teams = this.state.teamsList.map(
