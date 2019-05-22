@@ -111,7 +111,7 @@ class Profile extends Component {
         this.setState({
             [name]:target.value    
         });
-        console.log("handle Ecent for update profile")
+        console.log("handle Event for update profile")
     }
 
     submitEvent(e){
@@ -290,6 +290,9 @@ class Profile extends Component {
                         <div className="mt-4 mr-5"  >
                          <span className="text-info font-weight-bold">Portrait URL:</span>
                             <input type="text" className="btn-lg ml-4 col-lg-7 pull-right" onChange={this.handleEvent} placeholder={this.state.portraitUrl} name="portraitUrl" id="portraitUrl" defaultValue={this.state.portraitUrl}  />
+                            <br></br><br></br>
+                            <br></br>
+                            <a  href={this.state.portraitUrl}  target="_blank" className="ml-5 pull-right"><h6 className="ml-5 text-danger">  Click here to View the Portrait:</h6></a>
                         </div><br></br>
                         
                         <div className="mt-4 mr-5 mb-4"  >
