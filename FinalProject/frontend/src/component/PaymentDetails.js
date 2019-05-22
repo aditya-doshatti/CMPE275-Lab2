@@ -66,21 +66,24 @@ class PaymentDetails extends Component {
                     </div>
                 )
             })
+            console.log("Apun",this.state.currentTeamDetails)
             var paidUsers = this.state.currentTeamDetails.map((detail) => {
-                feesPaid += detail.amount
-                return(<div>
-                    <Popup
-                        trigger={<td value={detail.user.name} name={detail.user.name}>{detail.user.name}</td>}
-                        position="top center"
-                        on="hover"
-                        >
-                        <div className="card">
-                            <span> Date: {detail.date} </span>
-                            <span> Amount:{detail.amount}</span>
+                if(detail.team.teamId === row.teamId) {
+                    feesPaid += detail.amount
+                    return(<div>
+                        <Popup
+                            trigger={<td value={detail.user.name} name={detail.user.name}>{detail.user.name}</td>}
+                            position="top center"
+                            on="hover"
+                            >
+                            <div className="card">
+                                <span> Date: {detail.date} </span>
+                                <span> Amount:{detail.amount}</span>
+                            </div>
+                        </Popup>
                         </div>
-                    </Popup>
-                    </div>
-                )
+                    )
+                }
             })
             return(    
                 

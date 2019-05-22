@@ -317,10 +317,10 @@ class Profile extends Component {
                             {orgaName}
                         </div><br></br>
                         <div className="row text-center mt-4 ml-5">
-                            <button disabled={this.state.isOwner}className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenCreateModal}>
+                            <button disabled={this.state.isOwner} className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenCreateModal}>
                                 Create organization
                             </button>
-                            <button className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenJoinModal}>
+                            <button disabled={this.state.isOwner} className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenJoinModal}>
                                 Join organization
                             </button>
                             <button className="mt-4 mb-4 ml-5 btn btn-submit bg-primary text-white btn-lg " onClick={this.onOpenLeaveModal}>

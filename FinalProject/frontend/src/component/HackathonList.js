@@ -6,6 +6,9 @@ import axios from 'axios';
 import "../css/hackathonTeam.css";
 import {Redirect} from 'react-router';
 import Popup from "reactjs-popup";
+
+import { Card, Button, CardHeader, CardFooter, CardBody,
+    CardTitle, CardText,  Row, Col } from 'reactstrap';
 import { frontend, url } from '../config/config';
 
 var swal = require('sweetalert')
@@ -94,11 +97,8 @@ class HackathonList extends Component {
         users: newShareholders,
         lenMatch : (this.state.users.length +1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length +1 <= this.state.currentHackathonMaxTeamSize)
         }, function () {
-            console.log(this.state.users)
             this.checkValid(this.state.users);
-            console.log(this.state.checkValid)
         });
-        console.log(this.state.users, newShareholders)
     };
 
 
@@ -135,9 +135,7 @@ class HackathonList extends Component {
             users: this.state.users.filter((s, sidx) => idx !== sidx),
             lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
         }, function () {
-            console.log(this.state.users)
             this.checkValid(this.state.users);
-            console.log(this.state.checkValid)
         });
     };
 
@@ -215,9 +213,6 @@ class HackathonList extends Component {
         else {
             retVal = <div>
                 <button onClick={()=>this.handleJoin(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Join</button>
-                <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{this.state.hackathonlist[key].startDate}</span>
-                <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{this.state.hackathonlist[key].endDate}</span>
-                <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">${this.state.hackathonlist[key].regFees}</span>
             </div>
             var join, pay
             teams.map((team, key12) => {
@@ -230,7 +225,7 @@ class HackathonList extends Component {
                         on="hover"
                         >
                         <div className="card">
-                            <span> All users must have paid the registration fees and Hackathon must be open for submission</span>
+                            <span> All users must pay the registration fees and Hackathon must be open for submission</span>
                         </div>
                         </Popup>
                     }
@@ -257,8 +252,6 @@ class HackathonList extends Component {
                     retVal = <div>
                         {join}
                         {pay}
-                        {/* <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
-                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button> */}
                         </div>
                     return retVal
                 }
@@ -308,33 +301,45 @@ class HackathonList extends Component {
               
             if(item.finalized==true)
                 return(
-                    <div className="row text-center mt-4 ml-5">
-                    <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-                    <button className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg" 
-                    onClick={()=> this.OpenTeamFunction(item.id)}>Results are here! View</button>
-                </div>)
+                    <Col sm="6">
+                    <Card>
+                        <CardHeader tag="h3">{item.name}</CardHeader>
+                        <CardBody>
+                        <CardTitle>${item.regFees}</CardTitle>
+                        <CardText>{item.startDate}</CardText>
+                        <CardText>{item.endDate}</CardText>
+                        <Button onClick={()=> this.OpenTeamFunction(item.id)}>Results are here! View</Button>
+                        </CardBody>
+                        <CardFooter className="text-muted">Let's Hack it</CardFooter>
+                    </Card>
+                    </Col>
+                    )
              else 
                 return(
-                    <div className="row text-center mt-4 ml-5">
-                    <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-                    {this.shouldJoin(item.teams, key)}
-                </div>)
+                    <Col sm="6">
+                    <Card>
+                        <CardHeader tag="h3">{item.name}</CardHeader>
+                        <CardBody>
+                        <CardTitle>Registration Fees: ${item.regFees}</CardTitle>
+                        <CardText>Start Date: {item.startDate} End Date: {item.endDate}</CardText>
+                        <CardText>Team Size: {item.minTeamSize}-{item.maxTeamSize}</CardText>
+                        {this.shouldJoin(item.teams, key)}
+                        </CardBody>
+                        <CardFooter className="text-muted">Let's Hack it</CardFooter>
+                    </Card>
+                    </Col>
+                )
                 
                 }
               )
             }
-        // if(this.state.hackathonlist!=null) {
-        // items = this.state.hackathonlist.map((item, key) => <div className="row text-center mt-4 ml-5">
-        //     <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-        //     {this.shouldJoin(item.teams, key)}
-        // </div>
-        // );}
 
         var userList
         if(this.state.users!=null){
             userList=this.state.allUsers.map((u) => {
                 if(u.role == 'hacker' && u.id != this.state.owner.id && !u.judgesHackathons.some(item => this.state.currentHackathonId === item.id) 
-                    && !u.participantTeam.some(item => this.state.currentHackathonId === item.hackathon.id))
+                    && !u.participantTeam.some(item => this.state.currentHackathonId === item.hackathon.id)
+                    && u.isVerified==="true")
                     return(
                         <option value={u.id}>{u.name} : ({u.email})</option>
                     )
@@ -343,9 +348,11 @@ class HackathonList extends Component {
                   {redirectVar}
                   <UserNavbar />
                     <div className="container-fluid">
-                    <div className=" col-lg-7 mb-5  mt-5 ml-5 bg-white border border-light">
-                    <h1 class="ml-9">Join Hackathon</h1>
+                    <div className="bg-white border border-light">
+                    <h1 class="ml-9 text-center">Join Hackathon</h1>
+                    <Row>
                             {items}
+                    </Row>
                     </div>
                     <Modal open={this.state.openCreate} onClose={this.onCloseCreateModal} focusTrapped>
                     <form onSubmit={this.handleSubmit}>

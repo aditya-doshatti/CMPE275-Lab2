@@ -31,7 +31,8 @@ class AdminDashboard extends Component {
             expenseDate:'',
             exepenseAmount:0,
             expenseHackId: '',
-            todaysDate:''
+            todaysDate:'',
+            hackathon:''
         }
         this.OpenTeamFunction=this.OpenTeamFunction.bind(this)
         this.setCloseFunction=this.setCloseFunction.bind(this)
@@ -119,6 +120,21 @@ class AdminDashboard extends Component {
         await axios.get(url+`/hackathon/${hackId}`)
         .then((response, error) => {
             console.log(response.data.teams)
+
+            function compare( a, b ) {
+                if ( a.score < b.score ){
+                  return 1;
+                }
+                if ( a.score > b.score ){
+                  return -1;
+                }
+                return 0;
+              }
+              
+            this.setState({
+                teamsList:response.data.teams.sort( compare ),
+                hackathon:response.data
+            })
             this.setState({finalizeHack:response.data.teams})
             this.state.finalizeHack.map((row) => {
                 if(row.score==-1){
@@ -130,14 +146,43 @@ class AdminDashboard extends Component {
         }); 
 
         if(err==true)
-           swal("Can't Finalize!Grades for all teams has not submitted","Grading required","Error")
+           swal("Can't Finalize!Grades for all teams has not submitted","Grading required","error")
         else{
             await axios.put(url+`/hackathon/${hackId}/finalize`)
             .then((response, error) => {
                 console.log(response.data)
-                swal("Hackathon is being closed","Done!","Success")
+                swal("Hackathon is Finalized hence being closed","Done!","success")
+                var teams=null,team_ungraded=null
+                var count=0, data
+                teams = this.state.teamsList.map(
+                    detail=>{
+                        console.log(count)
+                        var emails = detail.users.map((user) =>{
+                            return user.email
+                        })
+                        if(count<3) {
+                            console.log("inside <3", count)
+                            data={
+                                hackName:this.state.hackathon.name,
+                                isWinner:true,
+                                emails:emails
+                            }
+                        } 
+                        else {
+                            data={
+                                hackName:this.state.hackathon.name,
+                                isWinner:false,
+                                emails:emails
+                            }
+                        }
+                        count++
+                        axios.post(url+'/emailResults', data)
+                        .then((response) =>{
+                            console.log(response)
+                        })
+                    })
             }).catch((error) => {
-                console.log("Error",error.code)
+                console.log("Error",error)
             }); 
         }
         
@@ -337,10 +382,10 @@ class AdminDashboard extends Component {
                     <td>
                         <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
                         <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button> 
-                        <button className="btn btn-info ml-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams</button>
+                        <button className="btn btn-info ml-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams/Result Status</button>
                         <br></br> <br></br>
                         <button className="btn btn-info mt-2" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
-                        <button className="btn btn-info ml-2 mt-2" onClick={()=> this.openPointsStatus(row.id)}>Points Status</button>
+                        <button className="btn btn-info ml-2 mt-2" onClick={()=> this.openPointsStatus(row.id)}>Earning Report</button>
                         
                     </td> 
                        {c}         
