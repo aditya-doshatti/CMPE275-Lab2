@@ -157,6 +157,7 @@ public class HackathonController {
 		try {
 			Hackathon h = hackathonService.getHackathonById(hackId);
 			h.setFinalized(true);
+			h.setOpen(false);
 			hackathonService.addHackathon(h);
 		}
 		catch (Exception e) {

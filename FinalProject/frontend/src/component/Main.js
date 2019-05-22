@@ -21,6 +21,7 @@ import AdminNavbar from './AdminNavbar';
 import UserNavbar from './UserNavbar';
 import AdminProfile from './AdminProfile';
 import ScoreList from './ScoreList';
+import ScoreListJudge from './ScoreListJudge';
 
 
 
@@ -52,6 +53,7 @@ class Main extends Component {
                 <Route path="/anavbar" component={AdminNavbar}/>
                 <Route path="/unavbar" component={UserNavbar}/>
                 <Route path="/scorelist" component={ScoreList}/>
+                <Route path="/user/scorelist" component={ScoreListJudge}/>
                 <Route path="/admin/profile" component={AdminProfile}/>
 
             </div>

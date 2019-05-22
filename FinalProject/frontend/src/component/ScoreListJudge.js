@@ -6,10 +6,9 @@ import axios from 'axios';
 import "../css/hackathonTeam.css";
 import {Redirect} from 'react-router';
 import { frontend, url } from '../config/config';
-import AdminNavbar from './AdminNavbar';
 
 
-class ScoreList extends Component {
+class ScoreListJudge extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -100,7 +99,7 @@ class ScoreList extends Component {
 
         return (    <div>
             {/* {redirectVar} */}
-            <AdminNavbar />
+            <UserNavbar />
             <div>               
                 <div class="card">
                 
@@ -126,4 +125,4 @@ class ScoreList extends Component {
     }
 }
  
-export default ScoreList;
+export default ScoreListJudge;

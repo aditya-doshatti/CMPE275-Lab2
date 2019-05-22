@@ -29,6 +29,7 @@ class HackathonList extends Component {
             currentHackathonMaxTeamSize:0,
             checkValid:true
          }
+         this.OpenTeamFunction=this.OpenTeamFunction.bind(this)
     }
 
     componentDidMount(){
@@ -162,6 +163,13 @@ class HackathonList extends Component {
         })
     }
 
+    OpenTeamFunction(hackId){
+        this.props.history.push({
+            pathname:'/user/scorelist',
+            state: { hackId: hackId }
+        })
+    }
+
     isTeamInHack = val => {
         return this.state.teams.some(item => val.teamId === item.teamId);
     }
@@ -288,11 +296,32 @@ class HackathonList extends Component {
         var items
         var shoulJoin
         if(this.state.hackathonlist!=null) {
-        items = this.state.hackathonlist.map((item, key) => <div className="row text-center mt-4 ml-5">
-            <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
-            {this.shouldJoin(item.teams, key)}
-        </div>
-        );}
+        items = this.state.hackathonlist.map(
+            (item, key)=>{
+              
+            if(item.finalized==true)
+                return(
+                    <div className="row text-center mt-4 ml-5">
+                    <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
+                    <button className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg" 
+                    onClick={()=> this.OpenTeamFunction(item.id)}>Results are here! View</button>
+                </div>)
+             else 
+                return(
+                    <div className="row text-center mt-4 ml-5">
+                    <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
+                    {this.shouldJoin(item.teams, key)}
+                </div>)
+                
+                }
+              )
+            }
+        // if(this.state.hackathonlist!=null) {
+        // items = this.state.hackathonlist.map((item, key) => <div className="row text-center mt-4 ml-5">
+        //     <span className="mt-2 ml-5 text-info pull-right font-weight-bold btn-lg">{item.name}</span>
+        //     {this.shouldJoin(item.teams, key)}
+        // </div>
+        // );}
 
         var userList
         if(this.state.users!=null){
