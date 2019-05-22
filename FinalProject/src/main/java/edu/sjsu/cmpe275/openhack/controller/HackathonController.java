@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe275.openhack.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -139,6 +142,12 @@ public class HackathonController {
 		try {
 			Hackathon h = hackathonService.getHackathonById(hackId);
 			h.setOpen(status);
+			if(status == true) {
+				Date date = Calendar.getInstance().getTime();
+				if(h.getStartDate().compareTo(date)>0) {
+					h.setStartDate(date);
+				}
+			}
 			hackathonService.addHackathon(h);
 		}
 		catch (Exception e) {
