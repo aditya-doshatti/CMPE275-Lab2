@@ -93,11 +93,8 @@ class HackathonList extends Component {
         users: newShareholders,
         lenMatch : (this.state.users.length +1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length +1 <= this.state.currentHackathonMaxTeamSize)
         }, function () {
-            console.log(this.state.users)
             this.checkValid(this.state.users);
-            console.log(this.state.checkValid)
         });
-        console.log(this.state.users, newShareholders)
     };
 
 
@@ -134,9 +131,7 @@ class HackathonList extends Component {
             users: this.state.users.filter((s, sidx) => idx !== sidx),
             lenMatch : (this.state.users.length+1 >= this.state.currentHackathonMinTeamSize) && (this.state.users.length+1 <= this.state.currentHackathonMaxTeamSize)
         }, function () {
-            console.log(this.state.users)
             this.checkValid(this.state.users);
-            console.log(this.state.checkValid)
         });
     };
 
@@ -249,8 +244,6 @@ class HackathonList extends Component {
                     retVal = <div>
                         {join}
                         {pay}
-                        {/* <button disabled={!this.isAllPaymentDone(team) || !this.state.hackathonlist[key].open} onClick={()=>this.handleCode(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Code</button>
-                        <button disabled={this.isPaymentDone(team)} onClick={()=>this.handlePay(key)} className="mb-4 ml-5 btn btn-submit bg-success text-white btn-lg ">Pay</button> */}
                         </div>
                     return retVal
                 }
@@ -305,7 +298,8 @@ class HackathonList extends Component {
         if(this.state.users!=null){
             userList=this.state.allUsers.map((u) => {
                 if(u.role == 'hacker' && u.id != this.state.owner.id && !u.judgesHackathons.some(item => this.state.currentHackathonId === item.id) 
-                    && !u.participantTeam.some(item => this.state.currentHackathonId === item.hackathon.id))
+                    && !u.participantTeam.some(item => this.state.currentHackathonId === item.hackathon.id)
+                    && u.isVerified==="true")
                     return(
                         <option value={u.id}>{u.name} : ({u.email})</option>
                     )

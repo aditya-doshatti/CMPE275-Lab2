@@ -58,17 +58,27 @@ class HackerDashboard extends Component {
         axios.get(url+`/user/profile/${this.state.userEmail}`)
         .then((response) => {
         }).catch((error) => {
-            console.log("Iske andar Error",error.status)
+            console.log("Error", error.response)
+            if(error.response.status == 404) {
             axios.post(url+'/user/invite', data)
                 .then((response, error) => {
                     this.setState({
-                        userEmail:''
+                        userEmail:'',
+                        inviteModal:false
                     })
                     swal("User Invited","Invitation Email sent!","success")
                 }).catch((error) => {
-                    console.log("Iske andar Error",error.code)
+                    console.log("Error",error.code)
                 });
-        });;
+            }
+            else {
+                swal("User Not Invited","","error")
+            }
+        });
+        this.setState({
+            userEmail:'',
+            inviteModal:false
+        })
     }
 
 
