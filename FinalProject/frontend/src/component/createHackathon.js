@@ -29,6 +29,7 @@ class CreateHackathon extends Component {
             userID:[],
             judges:[],
             sponsors:[],
+            spon_name:[],
             user_name:[],
             hackNameUnique:false,
             todaysDate: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]
@@ -82,9 +83,14 @@ class CreateHackathon extends Component {
     setSponser(e){
         console.log("value",e.target.value)
         console.log("name",e.target.name)
-        var sponsors = this.state.sponsors.concat([{id:e.target.value}]);
-        var joined = this.state.orgID.concat(e.target.value);
-        var joined_name = this.state.org_name.concat(e.target.id);
+        console.log(e.target.value.split(" "))
+        var res=e.target.value.split(" ")
+        var userid=res[0];
+        var emailid=res[1];
+
+        var sponsors = this.state.sponsors.concat([{id:userid}]);
+        var joined = this.state.orgID.concat(userid);
+        var joined_name = this.state.spon_name.concat("["+emailid+"], ");
 
         const uniqueTags = [];
         const uniqueTag_name = [];
@@ -103,17 +109,25 @@ class CreateHackathon extends Component {
 
         this.setState({
             orgID:uniqueTags,
-            sponsors:sponsors
+            sponsors:sponsors,
+            spon_name:uniqueTag_name
+
         })
     }
         
         setJudge(e){
             console.log("value",e.target.value)
             console.log("name",e.target.name)
-            var judges = this.state.judges.concat([{id:e.target.value}]);
-            console.log("tetst",judges)
-            var joined = this.state.userID.concat(e.target.value);
-            var joined_name = this.state.org_name.concat(e.target.id);
+
+            console.log(e.target.value.split(" "))
+            var res=e.target.value.split(" ")
+            var userid=res[0];
+            var emailid=res[1];
+          
+            var judges = this.state.judges.concat([{id:userid}]);
+            console.log("test",judges)
+            var joined = this.state.userID.concat(userid);
+            var joined_name = this.state.org_name.concat("["+emailid+"], ");
     
             const uniqueTags = [];
             const uniqueTag_name = [];
@@ -132,8 +146,10 @@ class CreateHackathon extends Component {
 
 
         console.log(joined)
-        this.setState({
+        console.log("combined name",joined_name,uniqueTag_name)
+         this.setState({
             userID:uniqueTags,
+            org_name:uniqueTag_name,
             user_name:uniqueTag_name,
             judges:judges
         })
@@ -221,7 +237,7 @@ class CreateHackathon extends Component {
                 if(this.state.organization!=null){
                 organizationList=this.state.organization.map((org) => {
                     return(
-                        <option value={org.id} name={org.name}>{org.name}</option>
+                        <option value={org.id+" "+org.name} name={org.name}>{org.name}</option>
                     )
                 })
             }
@@ -232,7 +248,7 @@ class CreateHackathon extends Component {
             if(this.state.user!=null){
             userList=this.state.user.map((u) => {
                 return(
-                    <option value={u.id}>{u.name} : ({u.email})</option>
+                    <option value={u.id+" "+u.email}>{u.name} : ({u.email})</option>
                 )
             })
             }
@@ -298,10 +314,10 @@ class CreateHackathon extends Component {
                     </div>
                     <div class="form-group col-md-8">
                     <select id="inputSponsor" name="inputSponsor" className="w-50 btn-md"  onChange={this.setJudge}>
-                    <option default>--default--</option>
+                    <option selected="true" disabled="disabled">--default--</option>
                        {userList}
                     </select>
-                    <h6 className="ml-4 mr-2 text-primary">{this.state.userID}</h6>
+                    <h6 className="ml-4 mr-2 text-primary">{this.state.org_name}</h6>
                     </div>
                 </div>
     
@@ -330,7 +346,7 @@ class CreateHackathon extends Component {
                         <option default>--default--</option>
                        {organizationList}
                     </select>
-                    <h6 className="ml-4 mr-2 text-primary">{this.state.orgID}</h6>
+                    <h6 className="ml-4 mr-2 text-primary">{this.state.spon_name}</h6>
                     </div>
                 </div>
                 <div class="form-row">

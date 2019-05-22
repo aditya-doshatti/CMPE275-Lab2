@@ -31,7 +31,8 @@ class Signup extends Component {
             businessTitle:'',
             aboutMe:'',
             address:'',
-            error_message:" "
+            error_message:" ",
+            unique:false
          }
          this.setField=this.setField.bind(this);
          this.submitEvent=this.submitEvent.bind(this);
@@ -66,10 +67,12 @@ class Signup extends Component {
         axios.get(url+`/user/profile/sn/${e.target.value}`)
         .then((response) => {
             if(response.status==201){
-              this.setState({error_message:" Screen Name is available"})
+              this.setState({error_message:" Screen Name is available",
+            unique:true})
             }
             if(response.status==200){
-                this.setState({error_message:"Not available"})
+                this.setState({error_message:"Not available",
+                unique:false})
             }
          }).catch(function(error) {
             console.log("error occured",error)
@@ -88,9 +91,7 @@ class Signup extends Component {
         var password=this.state.password
         console.log("submitin request",email,this.state.screenName)
 
-        if(this.state.error_message!=" ")
-            swal("Sreen Name requirements not followed","Try Again","error")
-        else{
+       
         const data = {
             screenName:this.state.screenName,
             name:this.state.name,
@@ -132,7 +133,6 @@ class Signup extends Component {
             else
                 console.log(error.code)
         });
-    }
     }
 
     render() { 
@@ -203,7 +203,7 @@ class Signup extends Component {
                 </div>  */}
 
 
-                <button class="btn btn-submit text-white btn-large custom mt-4"><strong>Sign Me Up</strong></button> 
+                <button disabled={!this.state.unique} class="btn btn-submit text-white btn-large custom mt-4"><strong>Sign Me Up</strong></button> 
             
                
              </form>
