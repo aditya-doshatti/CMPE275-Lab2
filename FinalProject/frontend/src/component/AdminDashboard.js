@@ -382,10 +382,10 @@ class AdminDashboard extends Component {
                     <td>
                         <button className="btn btn-info" onClick={this.onOpenJoinModal}>Judges</button>
                         <button className="btn btn-info ml-2"  onClick={this.onOpenSponsorModal}>Organizers</button> 
-                        <button className="btn btn-info ml-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams</button>
+                        <button className="btn btn-info ml-2" onClick={()=> this.OpenTeamFunction(row.id)}>Teams/Result Status</button>
                         <br></br> <br></br>
                         <button className="btn btn-info mt-2" onClick={()=> this.openPaymentStatus(row.id)}>Payment Status</button>
-                        <button className="btn btn-info ml-2 mt-2" onClick={()=> this.openPointsStatus(row.id)}>Points Status</button>
+                        <button className="btn btn-info ml-2 mt-2" onClick={()=> this.openPointsStatus(row.id)}>Earning Report</button>
                         
                     </td> 
                        {c}         
