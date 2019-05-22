@@ -95,8 +95,8 @@ class JudgeHackathon extends Component {
             </td>
             else
             c2=  <td>
-            <button className=" btn btn-link" onClick={()=> window.open(row.submissionLink, "_blank")}><h6 className="text-primary">{row.submissionLink==null?"No link submitted":row.submissionLink}</h6>
-             </button>
+            <a className=" btn btn-link" href={row.submissionLink} target= "_blank"><h6> {row.submissionLink==null?"No link submitted":row.submissionLink}</h6>
+             </a>
           </td>
 
             return(                
