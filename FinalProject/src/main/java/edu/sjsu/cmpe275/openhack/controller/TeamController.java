@@ -78,7 +78,7 @@ public class TeamController {
 		try {
 			if(t.getSubmissionLink() != null)
 				temp.setSubmissionLink(t.getSubmissionLink());
-			if(t.getScore() != 0)
+			if(t.getScore() != -1)
 				temp.setScore(t.getScore());
 			teamService.updateTeam(temp);
 			return ResponseEntity.ok(temp);
